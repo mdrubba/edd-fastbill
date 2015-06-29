@@ -22,67 +22,138 @@ function drubba_fb_register_settings( $settings ) {
 
 	$settings[] = array(
 		'id'   => 'drubba_fastbill',
-		'name' => '<strong>' . __( 'FastBill Settings', 'edd' ) . '</strong>',
+		'name' => '<strong>' . __( 'FastBill Settings', 'edd-fastbill' ) . '</strong>',
 		'desc' => '',
 		'type' => 'header',
 	);
 	$settings[] = array(
-		'id'   => 'drubba_fb_license_key',
-		'name' => __( 'License Key', 'edd' ),
-		'desc' => __( 'Enter your license for EDD FastBill Integration to receive automatic upgrades', 'edd' ),
-		'type' => 'text',
-	);
-	$settings[] = array(
 		'id'   => 'drubba_fb_fastbill_email',
-		'name' => __( 'FastBill Email', 'edd' ),
-		'desc' => __( 'The Email you use to login to your FastBill Account', 'edd' ),
+		'name' => __( 'FastBill Email', 'edd-fastbill' ),
+		'desc' => __( 'The Email you use to login to your FastBill Account', 'edd-fastbill' ),
 		'type' => 'text',
 	);
 	$settings[] = array(
 		'id'   => 'drubba_fb_fastbill_api_key',
-		'name' => __( 'FastBill API Key', 'edd' ),
-		'desc' => __( 'Get this from your FastBill settings.  Account > Settings', 'edd' ),
+		'name' => __( 'FastBill API Key', 'edd-fastbill' ),
+		'desc' => __( 'Get this from your FastBill settings.  Account > Settings', 'edd-fastbill' ),
 		'type' => 'text',
 	);
+
 	$settings[] = array(
 		'id'   => 'drubba_fb_fastbill_invoice',
-		'name' => __( 'Auto create invoice', 'edd' ),
-		'desc' => __( 'Check this box to create a invoice when the order is placed', 'edd' ),
+		'name' => __( 'Auto create invoice', 'edd-fastbill' ),
+		'desc' => __( 'Check this box to create a invoice when the order is placed', 'edd-fastbill' ),
 		'type' => 'checkbox',
 	);
 	$settings[] = array(
 		'id'   => 'drubba_fb_fastbill_payments',
-		'name' => __( 'Auto create payment', 'edd' ),
-		'desc' => __( 'Check the box to create a payment when order is placed. Requires Invoice Status COMPLETE.', 'edd' ),
+		'name' => __( 'Auto create payment', 'edd-fastbill' ),
+		'desc' => __( 'Check the box to create a payment when order is placed. Requires Invoice Status COMPLETE.', 'edd-fastbill' ),
 		'type' => 'checkbox',
 	);
 	$settings[] = array(
 		'id'      => 'drubba_fb_fastbill_invoice_status',
-		'name'    => __( 'Invoice Status', 'edd' ),
-		'desc'    => __( 'Status for the invoices being created in FastBill.', 'edd' ),
+		'name'    => __( 'Invoice Status', 'edd-fastbill' ),
+		'desc'    => __( 'Status for the invoices being created in FastBill.', 'edd-fastbill' ),
 		'std'     => 'draft',
 		'type'    => 'select',
 		'options' => array(
-			'draft'    => __( 'Draft', 'edd' ),
-			'complete' => __( 'Complete', 'edd' )
+			'draft'    => __( 'Draft', 'edd-fastbill' ),
+			'complete' => __( 'Complete', 'edd-fastbill' )
 		)
 	);
-	$settings[] = array(
-		'id'      => 'drubba_fb_fastbill_country_code',
-		'name'    => __( 'Country Code', 'edd' ),
-		'desc'    => __( 'The default country of your customers.', 'edd' ),
-		'std'     => 'de',
-		'type'    => 'select',
-		'options' => edd_get_country_list()
-	);
+
 	$settings[] = array(
 		'id'   => 'drubba_fb_fastbill_debug_on',
-		'name' => __( 'Enable Debug', 'edd' ),
-		'desc' => __( 'Check the box to create a log file for debug purposes.', 'edd' ),
+		'name' => __( 'Enable Debug', 'edd-fastbill' ),
+		'desc' => __( 'Check the box to create a log file for debug purposes.', 'edd-fastbill' ),
 		'type' => 'checkbox',
 	);
+
+	if ( drubba_fb_cfm_active() ) { // @since 1.1.0
+
+
+		$settings[] = array( // @since 1.1.0
+			'id'   => 'drubba_fastbill_fields',
+			'name' => '<strong>' . __( 'FastBill Customer Fields', 'edd-fastbill' ) . '</strong>',
+			'desc' => '',
+			'type' => 'header',
+		);
+
+		$fields = drubba_fb_get_customer_fields();
+		if ( $fields ) {
+
+			foreach ( $fields as $key => $value ) {
+
+				$desc       = isset( $value['desc'] ) ? $value['desc'] : '';
+				$settings[] = array(
+					'id'      => 'drubba_fb_fastbill_' . $key,
+					'name'    => $value['name'],
+					'desc'    => $desc,
+					'type'    => 'select',
+					'options' => drubba_fb_get_checkout_fields()
+				);
+
+			}
+
+		}
+	}
+
 	return $settings;
 
 }
 
-add_filter( 'edd_settings_misc', 'drubba_fb_register_settings', 10, 1 );
+add_filter( 'edd_settings_extensions', 'drubba_fb_register_settings', 10, 1 );
+
+/**
+ * drubba_fb_cfm_active()
+ *
+ * check if edd-checkout-fields extension is active
+ *
+ * @since 1.1.0
+ * @return bool
+ */
+function drubba_fb_cfm_active() {
+	return class_exists( 'EDD_Checkout_Fields_Manager' );
+}
+
+/**
+ * drubba_fb_get_checkout_fields()
+ *
+ * get checkout fields from edd-checkout-fields extension
+ *
+ * @since 1.1.0
+ * @return array|bool
+ */
+function drubba_fb_get_checkout_fields() {
+	$cfm_id = get_option( 'edd_cfm_id' );
+	if ( ! $cfm_id )
+		return false;
+
+	$return     = array( '' => '' );
+	$cfm_fields = get_post_meta( $cfm_id, 'edd-checkout-fields', true );
+	foreach ( $cfm_fields as $field ) {
+		$return[$field['name']] = $field['label'];
+	}
+
+	return $return;
+}
+
+/**
+ * drubba_fb_get_customer_fields()
+ *
+ * define the default CUSTOMER fields for FASTBILL API
+ *
+ * @since 1.1.0
+ * @return array
+ */
+function drubba_fb_get_customer_fields() {
+	return array(
+		'ORGANIZATION' => array( 'name' => __( 'Organization', 'edd-fastbill' ), 'desc' => __( 'If set by customer, than Business', 'edd-fastbill' ) ), // (* if business )
+		'SALUTATION'   => array( 'name' => __( 'Salutation', 'edd-fastbill' ), 'desc' => __( 'Use Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs.', 'edd-fastbill' ) ), // (mr|mrs|family) // maybe we can check for common values, but it is not perfect
+		'PHONE'        => array( 'name' => __( 'Phone', 'edd-fastbill' ) ),
+		'FAX'          => array( 'name' => __( 'Fax', 'edd-fastbill' ) ),
+		'MOBILE'       => array( 'name' => __( 'Mobile', 'edd-fastbill' ) ),
+		'VAT_ID'       => array( 'name' => __( 'Vat-ID.', 'edd-fastbill' ) ),
+	);
+}

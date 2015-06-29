@@ -1,0 +1,16 @@
+Easy Digital Downloads - FastBill Integration
+
+= 2014-06-10  1.1.0 =
+
+* Added support for EDD Checkout Fields Manager
+* Added support for billing address
+* Added EDD_License_Handler classes (after updating the plugin, you need to set your licence key again)
+* Added german translation
+* Fix Discount calculation
+* Fix Tax calculation
+* Move settings from sisc to extensions tab
+* Updating EDD_SL_Plugin_Updater
+
+= 2013-05-30  1.0.0 =
+
+* Initial release
