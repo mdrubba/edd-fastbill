@@ -49,7 +49,7 @@ function drubba_fb_register_settings( $settings ) {
     $settings[] = array(
         'id'      => 'drubba_fb_fastbill_invoice_template',
         'name'    => __( 'Invoice Template', 'edd-fastbill' ),
-        'desc'    => __( 'Select an invoice template which will be taken.', 'edd-fastbill' ),
+        'desc'    => __( 'If a new change is made to the selected template within Fastbill, you have to update this field too.', 'edd-fastbill' ),
         'std'     => '0',
         'type'    => 'select',
         'options' => drubba_fb_get_invoice_templates()
@@ -179,14 +179,11 @@ function drubba_fb_get_customer_fields() {
  */
 function drubba_fb_get_invoice_templates() {
 
-    // TODO DEV
-    $template_id = dubba_fastbill_get_template_id();
-
     // Using transients and prevent unnecessary api refresh calls
     if ( false === ( $templates = get_transient( 'drubba_fb_fastbill_invoice_templates' ) ) ) {
 
         $templates = array(
-            '0' => __( 'Please select', 'edd-fastbill' )
+            '0' => __( 'Standard', 'edd-fastbill' )
         );
 
         $response_xml = drubba_fastbill_get_templates();
@@ -203,7 +200,7 @@ function drubba_fb_get_invoice_templates() {
             }
         }
 
-        set_transient( 'drubba_fb_fastbill_invoice_templates', $templates, 5/*60 * 5*/ );
+        set_transient( 'drubba_fb_fastbill_invoice_templates', $templates, 60 * 5 );
     }
 
     return $templates;

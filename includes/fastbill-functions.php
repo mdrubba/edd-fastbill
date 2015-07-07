@@ -56,14 +56,12 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 	$currency = isset( $edd_options['currency'] ) ? $edd_options['currency'] : 'EUR';
 	$xml .= "<CURRENCY_CODE>" . $currency . "</CURRENCY_CODE>";
 
-    // TODO
     // check if a specific template is selected
     $template_id = dubba_fastbill_get_template_id();
 
     if ( $template_id ) {
         $xml .= "<TEMPLATE_ID>" . $template_id . "</TEMPLATE_ID>";
     }
-    // TODO $edd_options['drubba_fb_fastbill_email']
 
 	// add order discount as note to invoice items
 	if ( $user_info['discount'] != 'none' ) {
@@ -491,7 +489,7 @@ function drubba_fastbill_get_templates() {
 /**
  * dubba_fastbill_get_template_id()
  *
- * Check if template id is selected and validate
+ * Get selected template id and validate
  *
  * @access public
  * @return string/bol
@@ -508,6 +506,10 @@ function dubba_fastbill_get_template_id() {
 
     global $edd_options;
     $template_selected = $edd_options['drubba_fb_fastbill_invoice_template'];
+
+    if ( $template_selected == 0 )
+        return false;
+
     $templates_available = array();
 
     foreach ( $response_array['TEMPLATE'] as $template ) {
@@ -517,22 +519,10 @@ function dubba_fastbill_get_template_id() {
         }
     }
 
-    /* TODO DEV
-    echo 'Selected template: ' . $template_selected . '<br>';
-
-    echo '<pre>';
-    print_r($templates_available);
-    echo '</pre>';
-
-    echo 'Check manually: ' . $templates_available['604103'] . '<br>';
-    echo 'Check if available: ' . $templates_available[$template_selected] . '<br>';
-    */
-
-
     if ( array_key_exists($template_selected, $templates_available) ) {
         return $template_selected;
     } else {
-        // Fallback: template id might changed?
+        // TODO: Implement fallback, because template id might have changed
     }
 
     return false;
