@@ -56,6 +56,15 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 	$currency = isset( $edd_options['currency'] ) ? $edd_options['currency'] : 'EUR';
 	$xml .= "<CURRENCY_CODE>" . $currency . "</CURRENCY_CODE>";
 
+    // TODO
+    // check if a specific template is selected
+    $template_id = dubba_fastbill_get_template_id();
+
+    if ( $template_id ) {
+        $xml .= "<TEMPLATE_ID>" . $template_id . "</TEMPLATE_ID>";
+    }
+    // TODO $edd_options['drubba_fb_fastbill_email']
+
 	// add order discount as note to invoice items
 	if ( $user_info['discount'] != 'none' ) {
 		$discount = __( 'Discount used: ', 'edd-fastbill' ) . $user_info['discount'];
@@ -429,6 +438,104 @@ function drubba_fastbill_lookup_customer( $customer_email ) {
 		return 0;
 	}
 
+}
+
+/**
+ * drubba_fastbill_get_templates()
+ *
+ * Receive all available templates from Fastbill
+ *
+ * @access public
+ * @return array
+ *
+ **/
+function drubba_fastbill_get_templates() {
+
+    $xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+    $xml .= "<FBAPI>";
+    $xml .= "<SERVICE>template.get</SERVICE>";
+    $xml .= "<FILTER/>";
+    $xml .= "</FBAPI>";
+
+    try {
+
+        $result = drubba_fastbill_apicall( $xml );
+
+    } catch ( Exception $e ) {
+
+        drubba_fastbill_addlog( $e->getMessage() );
+        return;
+
+    }
+    $response = new SimpleXMLElement( $result );
+    $is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+
+    if ( ! $is_error ) {
+        // get the first client
+        if ( isset( $response->RESPONSE->TEMPLATES ) ) {
+            return $response->RESPONSE->TEMPLATES;
+        } else {
+            return 0;
+        }
+
+    } else {
+        // An error occured
+        $error_string = __( 'There was an error when receiving templates from FastBill:', 'edd-fastbill' ) . "\n" .
+            __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+
+        drubba_fastbill_addlog( $error_string );
+        return 0;
+    }
+}
+
+/**
+ * dubba_fastbill_get_template_id()
+ *
+ * Check if template id is selected and validate
+ *
+ * @access public
+ * @return string/bol
+ *
+ **/
+function dubba_fastbill_get_template_id() {
+
+    $response_xml = drubba_fastbill_get_templates();
+    $response_json = json_encode($response_xml);
+    $response_array = json_decode($response_json,TRUE);
+
+    if ( !isset( $response_array['TEMPLATE'] ) )
+        return false;
+
+    global $edd_options;
+    $template_selected = $edd_options['drubba_fb_fastbill_invoice_template'];
+    $templates_available = array();
+
+    foreach ( $response_array['TEMPLATE'] as $template ) {
+
+        if ( isset( $template['TEMPLATE_ID'] ) && isset( $template['TEMPLATE_NAME'] ) ) {
+            $templates_available[$template['TEMPLATE_ID']] = $template['TEMPLATE_NAME'];
+        }
+    }
+
+    /* TODO DEV
+    echo 'Selected template: ' . $template_selected . '<br>';
+
+    echo '<pre>';
+    print_r($templates_available);
+    echo '</pre>';
+
+    echo 'Check manually: ' . $templates_available['604103'] . '<br>';
+    echo 'Check if available: ' . $templates_available[$template_selected] . '<br>';
+    */
+
+
+    if ( array_key_exists($template_selected, $templates_available) ) {
+        return $template_selected;
+    } else {
+        // Fallback: template id might changed?
+    }
+
+    return false;
 }
 
 

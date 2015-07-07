@@ -45,12 +45,23 @@ function drubba_fb_register_settings( $settings ) {
 		'desc' => __( 'Check this box to create a invoice when the order is placed', 'edd-fastbill' ),
 		'type' => 'checkbox',
 	);
+
+    $settings[] = array(
+        'id'      => 'drubba_fb_fastbill_invoice_template',
+        'name'    => __( 'Invoice Template', 'edd-fastbill' ),
+        'desc'    => __( 'Select an invoice template which will be taken.', 'edd-fastbill' ),
+        'std'     => '0',
+        'type'    => 'select',
+        'options' => drubba_fb_get_invoice_templates()
+    );
+
 	$settings[] = array(
 		'id'   => 'drubba_fb_fastbill_payments',
 		'name' => __( 'Auto create payment', 'edd-fastbill' ),
 		'desc' => __( 'Check the box to create a payment when order is placed. Requires Invoice Status COMPLETE.', 'edd-fastbill' ),
 		'type' => 'checkbox',
 	);
+
 	$settings[] = array(
 		'id'      => 'drubba_fb_fastbill_invoice_status',
 		'name'    => __( 'Invoice Status', 'edd-fastbill' ),
@@ -156,4 +167,44 @@ function drubba_fb_get_customer_fields() {
 		'MOBILE'       => array( 'name' => __( 'Mobile', 'edd-fastbill' ) ),
 		'VAT_ID'       => array( 'name' => __( 'Vat-ID.', 'edd-fastbill' ) ),
 	);
+}
+
+/**
+ * drubba_fb_get_invoice_templates()
+ *
+ * get invoice templates out of the fastbill account
+ *
+ * @since 1.1.0
+ * @return array|bool
+ */
+function drubba_fb_get_invoice_templates() {
+
+    // TODO DEV
+    $template_id = dubba_fastbill_get_template_id();
+
+    // Using transients and prevent unnecessary api refresh calls
+    if ( false === ( $templates = get_transient( 'drubba_fb_fastbill_invoice_templates' ) ) ) {
+
+        $templates = array(
+            '0' => __( 'Please select', 'edd-fastbill' )
+        );
+
+        $response_xml = drubba_fastbill_get_templates();
+        $response_json = json_encode($response_xml);
+        $response_array = json_decode($response_json,TRUE);
+
+        if ( !isset( $response_array['TEMPLATE'] ) )
+            return $templates;
+
+        foreach ( $response_array['TEMPLATE'] as $template ) {
+
+            if ( isset( $template['TEMPLATE_ID'] ) && isset( $template['TEMPLATE_NAME'] ) ) {
+                $templates[$template['TEMPLATE_ID']] = $template['TEMPLATE_NAME'];
+            }
+        }
+
+        set_transient( 'drubba_fb_fastbill_invoice_templates', $templates, 5/*60 * 5*/ );
+    }
+
+    return $templates;
 }
