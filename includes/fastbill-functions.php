@@ -489,7 +489,7 @@ function drubba_fastbill_get_templates() {
 /**
  * dubba_fastbill_get_template_id()
  *
- * Get selected template id and validate
+ * Get selected template id by looping the available templates
  *
  * @access public
  * @return string/bol
@@ -507,22 +507,14 @@ function dubba_fastbill_get_template_id() {
     global $edd_options;
     $template_selected = $edd_options['drubba_fb_fastbill_invoice_template'];
 
-    if ( $template_selected == 0 )
+    if ( $template_selected == '' )
         return false;
-
-    $templates_available = array();
 
     foreach ( $response_array['TEMPLATE'] as $template ) {
 
-        if ( isset( $template['TEMPLATE_ID'] ) && isset( $template['TEMPLATE_NAME'] ) ) {
-            $templates_available[$template['TEMPLATE_ID']] = $template['TEMPLATE_NAME'];
+        if ( isset( $template['TEMPLATE_NAME'] ) && $template['TEMPLATE_NAME'] == $template_selected ) {
+            return $template['TEMPLATE_ID'];
         }
-    }
-
-    if ( array_key_exists($template_selected, $templates_available) ) {
-        return $template_selected;
-    } else {
-        // TODO: Implement fallback, because template id might have changed
     }
 
     return false;
@@ -589,7 +581,7 @@ function drubba_fastbill_addlog( $log_string ) {
 
 	global $edd_options;
 
-	if ( $edd_options['drubba_fb_fastbill_debug_on'] == 1 ) {
+	if ( isset( $edd_options['drubba_fb_fastbill_debug_on'] ) && $edd_options['drubba_fb_fastbill_debug_on'] == 1 ) {
 		$path       = DRUBBAFASTBILL_DIR . "log/fastbill_debug.log";
 		$log_string = "Log Date: " . date( "r" ) . "\n" . $log_string . "\n";
 		if ( file_exists( $path ) ) {

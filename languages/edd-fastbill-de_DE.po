@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy Digital Downloads - FastBill Integration v1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-07 16:46+0100\n"
-"PO-Revision-Date: 2015-07-07 16:47+0100\n"
+"POT-Creation-Date: 2015-07-08 19:25+0100\n"
+"PO-Revision-Date: 2015-07-08 19:27+0100\n"
 "Last-Translator: Dots United <info@dotsunited.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -11,117 +11,114 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 1.8.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
-"X-Poedit-Basepath: /Users/floriandaugalies/playground/edd-fastbill\n"
+"X-Poedit-Basepath: ../\n"
 "X-Textdomain-Support: yes\n"
-"X-Poedit-SearchPath-0: /Users/floriandaugalies/playground/edd-fastbill\n"
+"X-Poedit-SearchPath-0: .\n"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:68
+#: includes/fastbill-functions.php:68
 msgid "Discount used: "
 msgstr "Verwendeter Gutschein-Code: "
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:143
+#: includes/fastbill-functions.php:143
 msgid "There was an error adding the invocie to FastBill:"
 msgstr "Es gab einen Fehler beim Erstellen der Rechnung bei FastBill:"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:144
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:198
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:253
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:380
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:433
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:482
+#: includes/fastbill-functions.php:144 includes/fastbill-functions.php:198
+#: includes/fastbill-functions.php:253 includes/fastbill-functions.php:380
+#: includes/fastbill-functions.php:433 includes/fastbill-functions.php:482
 msgid "Error: "
 msgstr "Fehler: "
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:197
+#: includes/fastbill-functions.php:197
 msgid "There was an error completing invoice in FastBill:"
 msgstr "Es gab einen Fehler beim finalen Erstellen der Rechnung:"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:252
+#: includes/fastbill-functions.php:252
 msgid "There was an error creating a payment in FastBill:"
 msgstr "Es gab einen Fehler beim setzen der Rechnung als bezahlt:"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:379
+#: includes/fastbill-functions.php:379
 msgid "There was an error creating this customer in FastBill:"
 msgstr "Es gab einen Fehler beim Erstellen des Kunden bei FastBill:"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:432
+#: includes/fastbill-functions.php:432
 msgid "There was an error looking up this customer in FastBill:"
 msgstr "Es gab einen Fehler beim Suchen des Kunden bei FastBill:"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/fastbill-functions.php:481
+#: includes/fastbill-functions.php:481
 msgid "There was an error when receiving templates from FastBill:"
 msgstr ""
 "Es gab einen Fehler bei der Abfrage der Rechnungs-Vorlagen von Fastbild:"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:25
+#: includes/register-settings.php:25
 msgid "FastBill Settings"
 msgstr "FastBill Einstellungen"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:31
+#: includes/register-settings.php:31
 msgid "FastBill Email"
 msgstr "FastBill E-Mail"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:32
+#: includes/register-settings.php:32
 msgid "The Email you use to login to your FastBill Account"
 msgstr "Die E-Mail-Adresse die du für deinen FastBill-Login verwendest"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:37
+#: includes/register-settings.php:37
 msgid "FastBill API Key"
 msgstr "FastBill API-Key"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:38
+#: includes/register-settings.php:38
 msgid "Get this from your FastBill settings.  Account > Settings"
 msgstr "Den API-Key findest du unter Konto-Einstellungen > Einstellungen"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:44
+#: includes/register-settings.php:44
 msgid "Auto create invoice"
 msgstr "Rechnung automatisch erstellen"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:45
+#: includes/register-settings.php:45
 msgid "Check this box to create a invoice when the order is placed"
 msgstr ""
 "Aktiviere dieses Kontrollkästchen um eine Rechnung zu erstellen, wenn eine "
 "Bestellung durchgeführt wird."
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:51
+#: includes/register-settings.php:51
 msgid "Invoice Template"
 msgstr "Rechnungsvorlage"
 
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:52
+#: includes/register-settings.php:52
 msgid ""
-"If a new change is made to the selected template within Fastbill, you have "
-"to update this field too."
+"If you change the name of the selected template within Fastbill, you have to "
+"update this field too."
 msgstr ""
-"Sobald du die Vorlage bei Fastbill aktualisierst, musst du sie hier erneut "
-"auswählen."
+"Wenn du den Namen der hier ausgewählte Vorlage in Fastbill änderst, musst du "
+"sie hier ebenfalls aktualisieren."
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:60
+#: includes/register-settings.php:60
 msgid "Auto create payment"
 msgstr "Zahlungseingang erfassen"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:61
+#: includes/register-settings.php:61
 msgid ""
 "Check the box to create a payment when order is placed. Requires Invoice "
 "Status COMPLETE."
@@ -131,84 +128,95 @@ msgstr ""
 "ABGESCHLOSSEN."
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:67
+#: includes/register-settings.php:67
 msgid "Invoice Status"
 msgstr "Rechnungsstatus"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:68
+#: includes/register-settings.php:68
 msgid "Status for the invoices being created in FastBill."
 msgstr "Status der erstellten Rechnungen bei FastBill."
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:72
+#: includes/register-settings.php:72
 msgid "Draft"
 msgstr "Entwurf"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:73
+#: includes/register-settings.php:73
 msgid "Complete"
 msgstr "Abgeschlossen"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:79
+#: includes/register-settings.php:79
 msgid "Enable Debug"
 msgstr "Debug-Modus aktivieren"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:80
+#: includes/register-settings.php:80
 msgid "Check the box to create a log file for debug purposes."
 msgstr "Aktiviere dieses Kontrollkästchen um eine Log-Datei zu erzeugen."
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:89
+#: includes/register-settings.php:89
 msgid "FastBill Customer Fields"
 msgstr "FastBill Kunden-Details"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:163
+#: includes/register-settings.php:163
 msgid "Organization"
 msgstr "Firmenname"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:163
+#: includes/register-settings.php:163
 msgid "If set by customer, than Business"
 msgstr "Wenn vom Kunden gesetzt, dann Geschäftlich"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:164
+#: includes/register-settings.php:164
 msgid "Salutation"
 msgstr "Anrede"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:164
+#: includes/register-settings.php:164
 msgid "Use Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs."
 msgstr ""
 "Verwende Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs."
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:165
+#: includes/register-settings.php:165
 msgid "Phone"
 msgstr "Telefonnummer"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:166
+#: includes/register-settings.php:166
 msgid "Fax"
 msgstr "Telefaxnummer"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:167
+#: includes/register-settings.php:167
 msgid "Mobile"
 msgstr "Mobiltelefonnummer"
 
 # @ edd-fastbill
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:168
+#: includes/register-settings.php:168
 msgid "Vat-ID."
 msgstr "USt-ID."
 
-#: /Users/floriandaugalies/playground/edd-fastbill/includes/register-settings.php:186
+#: includes/register-settings.php:186
+msgid "Please enter your API credentials."
+msgstr "Bitte gib deine API Zugangsdaten ein."
+
+#: includes/register-settings.php:193
 msgid "Standard"
 msgstr "Standard"
+
+#~ msgid ""
+#~ "If a new change is made to the selected template within Fastbill, you "
+#~ "have to update this field too."
+#~ msgstr ""
+#~ "Sobald du die Vorlage bei Fastbill aktualisierst, musst du sie hier "
+#~ "erneut auswählen."
 
 #~ msgid "Please select"
 #~ msgstr "Bitte auswählen"
