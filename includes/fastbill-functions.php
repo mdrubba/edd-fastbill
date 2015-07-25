@@ -260,6 +260,77 @@ function drubba_fastbill_create_payment( $payment_id ) {
 }
 
 /**
+ * drubba_fastbill_invoice_sendbyemail()
+ *
+ * Send created and completed invoice by mail to the customer.
+ *
+ * @param  $payment_id
+ *
+ * @access public
+ * @return void
+ *
+ **/
+function drubba_fastbill_invoice_sendbyemail( $payment_id ) {
+
+    $fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
+
+    if ( $fb_invoice_id > 0 ) {
+        // there is an invoice ID, send invoice to customer
+        drubba_fastbill_addlog( 'START - Sending invoice ID: ' . $fb_invoice_id . ' to customer by email.' );
+
+        // Get values
+        $to = 'ddjjmm@©mx.de';
+        $subject = ( isset( $edd_options['drubba_fb_fastbill_sendbyemail_subject'] ) && !empty( $edd_options['drubba_fb_fastbill_sendbyemail_subject'] ) ) ? $edd_options['drubba_fb_fastbill_sendbyemail_subject'] : drubba_fb_get_sendbyemail_subject_default();
+        $message = ( isset( $edd_options['drubba_fb_fastbill_sendbyemail_text'] ) && !empty( $edd_options['drubba_fb_fastbill_sendbyemail_text'] ) ) ? $edd_options['drubba_fb_fastbill_sendbyemail_text'] : drubba_fb_get_sendbyemail_text_default();
+        $confirmation = 0;
+
+        // Handle placeholders
+        $subject = drubba_fastbill_replace_placeholder_values( $subject, $payment_id );
+        $message = drubba_fastbill_replace_placeholder_values( $message, $payment_id );
+
+        // Build request
+        $xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+        $xml .= "<FBAPI>";
+        $xml .= "<SERVICE>invoice.sendbyemail</SERVICE>";
+        $xml .= "<DATA>";
+        $xml .= "<INVOICE_ID>" . $fb_invoice_id . "</INVOICE_ID>";
+        $xml .= "<RECIPIENT>";
+            $xml .= "<TO>" . $to . "</TO>";
+        $xml .="</RECIPIENT>";
+        $xml .= "<SUBJECT>" . $subject . "</SUBJECT>";
+        $xml .= "<MESSAGE>" . $message . "</MESSAGE>";
+        $xml .= "<RECEIPT_CONFIRMATION>" . $confirmation . "</RECEIPT_CONFIRMATION>";
+        $xml .= "</DATA>";
+        $xml .= "</FBAPI>";
+
+        try {
+
+            $result = drubba_fastbill_apicall( $xml );
+
+        } catch ( Exception $e ) {
+
+            drubba_fastbill_addlog( $e->getMessage() );
+            return;
+
+        }
+        $response = new SimpleXMLElement( $result );
+        $is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+
+        if ( ! $is_error ) {
+            drubba_fastbill_addlog( 'END - Invoice for order #' . $payment_id . ' sent to customer.' );
+        } else {
+            // An error occured
+            $error_string = __( 'There was an error sending an invoice via FastBill:', 'edd-fastbill' ) . "\n" .
+                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+            drubba_fastbill_addlog( $error_string );
+        }
+    } else {
+        // no invoice id so exit.
+        return;
+    }
+}
+
+/**
  * drubba_fastbill_create_customer()
  *
  * Create a client record in FastBill for the given order.

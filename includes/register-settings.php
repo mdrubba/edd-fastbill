@@ -74,6 +74,29 @@ function drubba_fb_register_settings( $settings ) {
 		)
 	);
 
+    $settings[] = array(
+        'id'   => 'drubba_fb_fastbill_sendbyemail',
+        'name' => __( 'Send invoice to customer', 'edd-fastbill' ),
+        'desc' => __( 'Check the box to send a completed invoice to the customer.', 'edd-fastbill' ),
+        'type' => 'checkbox',
+    );
+
+    $settings[] = array(
+        'id'   => 'drubba_fb_fastbill_sendbyemail_subject',
+        'name' => __( 'Subject', 'edd-fastbill' ),
+        'desc' => __( 'Feel free to use the EDD placeholders.', 'edd-fastbill' ),
+        'type' => 'text',
+        'std' => drubba_fb_get_sendbyemail_subject_default()
+    );
+
+    $settings[] = array(
+        'id'   => 'drubba_fb_fastbill_sendbyemail_text',
+        'name' => __( 'E-Mail', 'edd-fastbill' ),
+        'desc' => __( 'blub.', 'edd-fastbill' ),
+        'type' => 'rich_editor',
+        'std'  => drubba_fb_get_sendbyemail_text_default()
+    );
+
 	$settings[] = array(
 		'id'   => 'drubba_fb_fastbill_debug_on',
 		'name' => __( 'Enable Debug', 'edd-fastbill' ),
@@ -211,4 +234,31 @@ function drubba_fb_get_invoice_templates() {
     }
 
     return $templates;
+}
+
+/**
+ * drubba_fb_get_sendbyemail_subject_default()
+ *
+ * Get default sendbyemail subject
+ *
+ * @since 1.1.0
+ * @return string
+ */
+function drubba_fb_get_sendbyemail_subject_default() {
+
+    return __('Invoice No. {fastbill_invoice_id}');
+}
+
+
+/**
+ * drubba_fb_get_default_sendbyemail_text()
+ *
+ * Get default sendbyemail text
+ *
+ * @since 1.1.0
+ * @return string
+ */
+function drubba_fb_get_sendbyemail_text_default() {
+
+    return __('Dear customer, attached you can find your invoice to order {payment_id}.');
 }
