@@ -305,6 +305,10 @@ function drubba_fastbill_create_customer( $payment_id ) {
 		$xml .= "<ZIPCODE>" . $user_info['address']['zip'] . "</ZIPCODE>";
 	}
 
+	if ( isset( $user_info['vat_number'] ) && trim( $user_info['vat_number'] ) != '' ) {
+		$xml .= "<VAT_ID>" . $user_info['vat_number'] . "</VAT_ID>";
+	}
+
 	if ( ! drubba_fb_cfm_active() ) {
 
 		$xml .= "<CUSTOMER_TYPE>consumer</CUSTOMER_TYPE>";
