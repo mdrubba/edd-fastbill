@@ -74,6 +74,7 @@ function drubba_fb_register_settings( $settings ) {
 		)
 	);
 
+    /*
     $settings[] = array(
         'id'   => 'drubba_fb_fastbill_sendbyemail',
         'name' => __( 'Send invoice to customer', 'edd-fastbill' ),
@@ -84,7 +85,6 @@ function drubba_fb_register_settings( $settings ) {
     $settings[] = array(
         'id'   => 'drubba_fb_fastbill_sendbyemail_subject',
         'name' => __( 'Subject', 'edd-fastbill' ),
-        'desc' => __( 'Feel free to use the EDD placeholders.', 'edd-fastbill' ),
         'type' => 'text',
         'std' => drubba_fb_get_sendbyemail_subject_default()
     );
@@ -92,10 +92,11 @@ function drubba_fb_register_settings( $settings ) {
     $settings[] = array(
         'id'   => 'drubba_fb_fastbill_sendbyemail_text',
         'name' => __( 'E-Mail', 'edd-fastbill' ),
-        'desc' => __( 'blub.', 'edd-fastbill' ),
+        'desc' => drubba_fb_get_sendbyemail_placeholders(true),
         'type' => 'rich_editor',
         'std'  => drubba_fb_get_sendbyemail_text_default()
     );
+    */
 
 	$settings[] = array(
 		'id'   => 'drubba_fb_fastbill_debug_on',
@@ -209,9 +210,6 @@ function drubba_fb_get_invoice_templates() {
             '' => __( 'Please enter your API credentials.', 'edd-fastbill' )
         );
 
-    // Using transients and prevent unnecessary api refresh calls
-    if ( false === ( $templates = get_transient( 'drubba_fb_fastbill_invoice_templates' ) ) ) {
-
         $templates = array(
             '' => __( 'Standard', 'edd-fastbill' )
         );
@@ -229,9 +227,6 @@ function drubba_fb_get_invoice_templates() {
                 $templates[$template['TEMPLATE_NAME']] = $template['TEMPLATE_NAME'];
             }
         }
-
-        set_transient( 'drubba_fb_fastbill_invoice_templates', $templates, 60 * 5 );
-    }
 
     return $templates;
 }
@@ -261,4 +256,63 @@ function drubba_fb_get_sendbyemail_subject_default() {
 function drubba_fb_get_sendbyemail_text_default() {
 
     return __('Dear customer, attached you can find your invoice to order {payment_id}.');
+}
+
+/**
+ * drubba_fb_get_sendbyemail_placeholders()
+ *
+ * Get supported sendbyemail placeholders
+ *
+ * @since 1.1.0
+ * @return string
+ */
+function drubba_fb_get_sendbyemail_placeholders( $return_html = false ) {
+
+    $placeholders = array(
+        array(
+            'tag'         => 'name',
+            'description' => __( "The buyer's first name", 'edd' ),
+        ),
+        array(
+            'tag'         => 'fullname',
+            'description' => __( "The buyer's full name, first and last", 'edd' ),
+        ),
+        array(
+            'tag'         => 'user_email',
+            'description' => __( "The buyer's email address", 'edd' ),
+        ),
+        array(
+            'tag'         => 'billing_address',
+            'description' => __( 'The buyer\'s billing address', 'edd' ),
+        ),
+        array(
+            'tag'         => 'price',
+            'description' => __( 'The total price of the purchase', 'edd' ),
+        ),
+        array(
+            'tag'         => 'payment_id',
+            'description' => __( 'The unique ID number for this purchase', 'edd' ),
+        ),
+        array(
+            'tag'         => 'fastbill_invoice_id',
+            'description' => __( 'Fastbill Invoice ID', 'edd-fastbill' ),
+        )
+    );
+
+    if ( $return_html ) {
+        $html = '';
+
+        // Return as html list
+        foreach ($placeholders as $placeholder) {
+
+            if ($html != '')
+                $html .= '<br />';
+
+            $html .= '{' . $placeholder['tag'] . '} - ' . $placeholder['description'];
+        }
+
+        return $html;
+    }
+
+    return $placeholders;
 }

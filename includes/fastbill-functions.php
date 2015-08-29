@@ -272,14 +272,24 @@ function drubba_fastbill_create_payment( $payment_id ) {
  **/
 function drubba_fastbill_invoice_sendbyemail( $payment_id ) {
 
+    global $edd_options;
+
     $fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
 
     if ( $fb_invoice_id > 0 ) {
         // there is an invoice ID, send invoice to customer
         drubba_fastbill_addlog( 'START - Sending invoice ID: ' . $fb_invoice_id . ' to customer by email.' );
 
-        // Get values
-        $to = 'ddjjmm@©mx.de';
+        // Prepare email
+        $payment_meta = get_post_meta( $payment_id, '_edd_payment_meta', true );
+        $customer_email = ( isset( $payment_meta['user_info']['email'] ) ) ? $payment_meta['user_info']['email'] : null;
+
+        if (!$customer_email) {
+            drubba_fastbill_addlog( __( 'Error: ', 'edd-fastbill' ) . 'Customer email address was not found.' );
+            return;
+        }
+
+        $to = $customer_email;
         $subject = ( isset( $edd_options['drubba_fb_fastbill_sendbyemail_subject'] ) && !empty( $edd_options['drubba_fb_fastbill_sendbyemail_subject'] ) ) ? $edd_options['drubba_fb_fastbill_sendbyemail_subject'] : drubba_fb_get_sendbyemail_subject_default();
         $message = ( isset( $edd_options['drubba_fb_fastbill_sendbyemail_text'] ) && !empty( $edd_options['drubba_fb_fastbill_sendbyemail_text'] ) ) ? $edd_options['drubba_fb_fastbill_sendbyemail_text'] : drubba_fb_get_sendbyemail_text_default();
         $confirmation = 0;
@@ -299,9 +309,11 @@ function drubba_fastbill_invoice_sendbyemail( $payment_id ) {
         $xml .="</RECIPIENT>";
         $xml .= "<SUBJECT>" . $subject . "</SUBJECT>";
         $xml .= "<MESSAGE>" . $message . "</MESSAGE>";
-        $xml .= "<RECEIPT_CONFIRMATION>" . $confirmation . "</RECEIPT_CONFIRMATION>";
+        $xml .= "<RECEIPT_CONFIRMATION>0</RECEIPT_CONFIRMATION>";
         $xml .= "</DATA>";
         $xml .= "</FBAPI>";
+
+        var_dump($xml);
 
         try {
 
