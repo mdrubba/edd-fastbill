@@ -27,7 +27,7 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 	$payment      = get_post( $payment_id );
 	$payment_meta = get_post_meta( $payment->ID, '_edd_payment_meta', true );
 	$user_info    = maybe_unserialize( $payment_meta['user_info'] );
-
+    
 	drubba_fastbill_addlog( 'START - Creating invoice for order #' . $payment_id );
 
 	// Check if client exists with customer's email address
@@ -80,10 +80,16 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 		foreach ( $cart_items as $key => $cart_item ) {
 			// retrieve the ID of the download
 			$id = isset( $payment_meta['cart_details'] ) ? $cart_item['id'] : $cart_item;
-            
+
+            // retrieve price option name if available
+            if ( isset($cart_item['item_number']['options']['price_id']) ) {
+                $option_name = edd_get_price_option_name( $id, $cart_item['item_number']['options']['price_id'] );
+            }
+
             // Build XML
 			$xml .= "<ITEM>";
 			$xml .= "<DESCRIPTION>" . get_the_title( $id );
+            if ( isset( $option_name ) ) $xml .= ' (' . $option_name . ')';
 			if ( isset( $discount ) ) $xml .= ' ' . $discount;
 			$xml .= "</DESCRIPTION>";
 			$xml .= "<UNIT_PRICE>" . $cart_item['price'] . "</UNIT_PRICE>";
