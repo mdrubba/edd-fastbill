@@ -80,25 +80,13 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 		foreach ( $cart_items as $key => $cart_item ) {
 			// retrieve the ID of the download
 			$id = isset( $payment_meta['cart_details'] ) ? $cart_item['id'] : $cart_item;
-
-			// if download has variable prices, override the default price
-			$price_override = isset( $payment_meta['cart_details'] ) ? $cart_item['item_price'] : null;
-
-			// get the user information
-			$user_info = edd_get_payment_meta_user_info( $payment->ID );
-
-			// calculate the final item price
-			if ( isset( $user_info['discount'] ) && $user_info['discount'] != 'none' ) {
-				$price = edd_get_discounted_amount( $user_info['discount'], $cart_item['item_price'] );
-			} else {
-				$price = edd_get_download_final_price( $id, $user_info, $price_override );
-			}
-
+            
+            // Build XML
 			$xml .= "<ITEM>";
 			$xml .= "<DESCRIPTION>" . get_the_title( $id );
 			if ( isset( $discount ) ) $xml .= ' ' . $discount;
 			$xml .= "</DESCRIPTION>";
-			$xml .= "<UNIT_PRICE>" . $price . "</UNIT_PRICE>";
+			$xml .= "<UNIT_PRICE>" . $cart_item['price'] . "</UNIT_PRICE>";
 			$xml .= "<QUANTITY>" . $cart_item['quantity'] . "</QUANTITY>";
 			if ( edd_use_taxes() ) {
 				$tax_rate = edd_get_tax_rate() * 100;
