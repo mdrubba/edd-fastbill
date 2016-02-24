@@ -1,5 +1,10 @@
 Easy Digital Downloads - FastBill Integration
 
+= 2015-08-07  1.2.0 =
+
+* Added support for EDD EU VAT Extension
+* Send VAT ID from EU VAT Extension to FastBill
+
 = 2014-06-10  1.1.0 =
 
 * Added support for EDD Checkout Fields Manager

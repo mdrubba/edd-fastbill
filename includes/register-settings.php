@@ -154,6 +154,5 @@ function drubba_fb_get_customer_fields() {
 		'PHONE'        => array( 'name' => __( 'Phone', 'edd-fastbill' ) ),
 		'FAX'          => array( 'name' => __( 'Fax', 'edd-fastbill' ) ),
 		'MOBILE'       => array( 'name' => __( 'Mobile', 'edd-fastbill' ) ),
-		'VAT_ID'       => array( 'name' => __( 'Vat-ID.', 'edd-fastbill' ) ),
 	);
 }
