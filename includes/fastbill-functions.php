@@ -27,7 +27,7 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 	$payment      = get_post( $payment_id );
 	$payment_meta = get_post_meta( $payment->ID, '_edd_payment_meta', true );
 	$user_info    = maybe_unserialize( $payment_meta['user_info'] );
-
+    
 	drubba_fastbill_addlog( 'START - Creating invoice for order #' . $payment_id );
 
 	// Check if client exists with customer's email address
@@ -56,6 +56,13 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 	$currency = isset( $edd_options['currency'] ) ? $edd_options['currency'] : 'EUR';
 	$xml .= "<CURRENCY_CODE>" . $currency . "</CURRENCY_CODE>";
 
+    // check if a specific template is selected
+    $template_id = dubba_fastbill_get_template_id();
+
+    if ( $template_id ) {
+        $xml .= "<TEMPLATE_ID>" . $template_id . "</TEMPLATE_ID>";
+    }
+
 	// add order discount as note to invoice items
 	if ( $user_info['discount'] != 'none' ) {
 		$discount = __( 'Discount used: ', 'edd-fastbill' ) . $user_info['discount'];
@@ -74,24 +81,18 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 			// retrieve the ID of the download
 			$id = isset( $payment_meta['cart_details'] ) ? $cart_item['id'] : $cart_item;
 
-			// if download has variable prices, override the default price
-			$price_override = isset( $payment_meta['cart_details'] ) ? $cart_item['item_price'] : null;
+            // retrieve price option name if available
+            if ( isset($cart_item['item_number']['options']['price_id']) ) {
+                $option_name = edd_get_price_option_name( $id, $cart_item['item_number']['options']['price_id'] );
+            }
 
-			// get the user information
-			$user_info = edd_get_payment_meta_user_info( $payment->ID );
-
-			// calculate the final item price
-			if ( isset( $user_info['discount'] ) && $user_info['discount'] != 'none' ) {
-				$price = edd_get_discounted_amount( $user_info['discount'], $cart_item['item_price'] );
-			} else {
-				$price = edd_get_download_final_price( $id, $user_info, $price_override );
-			}
-
+            // Build XML
 			$xml .= "<ITEM>";
 			$xml .= "<DESCRIPTION>" . get_the_title( $id );
+            if ( isset( $option_name ) ) $xml .= ' (' . $option_name . ')';
 			if ( isset( $discount ) ) $xml .= ' ' . $discount;
 			$xml .= "</DESCRIPTION>";
-			$xml .= "<UNIT_PRICE>" . $price . "</UNIT_PRICE>";
+			$xml .= "<UNIT_PRICE>" . $cart_item['price'] . "</UNIT_PRICE>";
 			$xml .= "<QUANTITY>" . $cart_item['quantity'] . "</QUANTITY>";
 			if ( edd_use_taxes() ) {
 				$tax_rate = edd_get_tax_rate() * 100;
@@ -250,6 +251,89 @@ function drubba_fastbill_create_payment( $payment_id ) {
 		// no invoice id so exit.				
 		return;
 	}
+}
+
+/**
+ * drubba_fastbill_invoice_sendbyemail()
+ *
+ * Send created and completed invoice by mail to the customer.
+ *
+ * @param  $payment_id
+ *
+ * @access public
+ * @return void
+ *
+ **/
+function drubba_fastbill_invoice_sendbyemail( $payment_id ) {
+
+    global $edd_options;
+
+    $fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
+
+    if ( $fb_invoice_id > 0 ) {
+        // there is an invoice ID, send invoice to customer
+        drubba_fastbill_addlog( 'START - Sending invoice ID: ' . $fb_invoice_id . ' to customer by email.' );
+
+        // Prepare email
+        $payment_meta = get_post_meta( $payment_id, '_edd_payment_meta', true );
+        $customer_email = ( isset( $payment_meta['user_info']['email'] ) ) ? $payment_meta['user_info']['email'] : null;
+
+        if (!$customer_email) {
+            drubba_fastbill_addlog( __( 'Error: ', 'edd-fastbill' ) . 'Customer email address was not found.' );
+            return;
+        }
+
+        $to = $customer_email;
+        $subject = ( isset( $edd_options['drubba_fb_fastbill_sendbyemail_subject'] ) && !empty( $edd_options['drubba_fb_fastbill_sendbyemail_subject'] ) ) ? $edd_options['drubba_fb_fastbill_sendbyemail_subject'] : drubba_fb_get_sendbyemail_subject_default();
+        $message = ( isset( $edd_options['drubba_fb_fastbill_sendbyemail_text'] ) && !empty( $edd_options['drubba_fb_fastbill_sendbyemail_text'] ) ) ? $edd_options['drubba_fb_fastbill_sendbyemail_text'] : drubba_fb_get_sendbyemail_text_default();
+        $confirmation = 0;
+
+        // Handle placeholders
+        $subject = drubba_fastbill_replace_placeholder_values( $subject, $payment_id );
+        $message = drubba_fastbill_replace_placeholder_values( $message, $payment_id );
+
+        // Build request
+        $xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+        $xml .= "<FBAPI>";
+        $xml .= "<SERVICE>invoice.sendbyemail</SERVICE>";
+        $xml .= "<DATA>";
+        $xml .= "<INVOICE_ID>" . $fb_invoice_id . "</INVOICE_ID>";
+        $xml .= "<RECIPIENT>";
+            $xml .= "<TO>" . $to . "</TO>";
+        $xml .="</RECIPIENT>";
+        $xml .= "<SUBJECT>" . $subject . "</SUBJECT>";
+        $xml .= "<MESSAGE>" . $message . "</MESSAGE>";
+        $xml .= "<RECEIPT_CONFIRMATION>0</RECEIPT_CONFIRMATION>";
+        $xml .= "</DATA>";
+        $xml .= "</FBAPI>";
+
+        var_dump($xml);
+
+        try {
+
+            $result = drubba_fastbill_apicall( $xml );
+
+        } catch ( Exception $e ) {
+
+            drubba_fastbill_addlog( $e->getMessage() );
+            return;
+
+        }
+        $response = new SimpleXMLElement( $result );
+        $is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+
+        if ( ! $is_error ) {
+            drubba_fastbill_addlog( 'END - Invoice for order #' . $payment_id . ' sent to customer.' );
+        } else {
+            // An error occured
+            $error_string = __( 'There was an error sending an invoice via FastBill:', 'edd-fastbill' ) . "\n" .
+                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+            drubba_fastbill_addlog( $error_string );
+        }
+    } else {
+        // no invoice id so exit.
+        return;
+    }
 }
 
 /**
@@ -435,6 +519,88 @@ function drubba_fastbill_lookup_customer( $customer_email ) {
 
 }
 
+/**
+ * drubba_fastbill_get_templates()
+ *
+ * Receive all available templates from Fastbill
+ *
+ * @access public
+ * @return array
+ *
+ **/
+function drubba_fastbill_get_templates() {
+
+    $xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+    $xml .= "<FBAPI>";
+    $xml .= "<SERVICE>template.get</SERVICE>";
+    $xml .= "<FILTER/>";
+    $xml .= "</FBAPI>";
+
+    try {
+
+        $result = drubba_fastbill_apicall( $xml );
+
+    } catch ( Exception $e ) {
+
+        drubba_fastbill_addlog( $e->getMessage() );
+        return;
+
+    }
+    $response = new SimpleXMLElement( $result );
+    $is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+
+    if ( ! $is_error ) {
+        // get the first client
+        if ( isset( $response->RESPONSE->TEMPLATES ) ) {
+            return $response->RESPONSE->TEMPLATES;
+        } else {
+            return 0;
+        }
+
+    } else {
+        // An error occured
+        $error_string = __( 'There was an error when receiving templates from FastBill:', 'edd-fastbill' ) . "\n" .
+            __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+
+        drubba_fastbill_addlog( $error_string );
+        return 0;
+    }
+}
+
+/**
+ * dubba_fastbill_get_template_id()
+ *
+ * Get selected template id by looping the available templates
+ *
+ * @access public
+ * @return string/bol
+ *
+ **/
+function dubba_fastbill_get_template_id() {
+
+    $response_xml = drubba_fastbill_get_templates();
+    $response_json = json_encode($response_xml);
+    $response_array = json_decode($response_json,TRUE);
+
+    if ( !isset( $response_array['TEMPLATE'] ) )
+        return false;
+
+    global $edd_options;
+    $template_selected = $edd_options['drubba_fb_fastbill_invoice_template'];
+
+    if ( $template_selected == '' )
+        return false;
+
+    foreach ( $response_array['TEMPLATE'] as $template ) {
+
+        if ( isset( $template['TEMPLATE_NAME'] ) && $template['TEMPLATE_NAME'] == $template_selected ) {
+            return $template['TEMPLATE_ID'];
+        }
+    }
+
+    return false;
+}
+
 
 /**
  * drubba_fastbill_apicall()
@@ -496,7 +662,7 @@ function drubba_fastbill_addlog( $log_string ) {
 
 	global $edd_options;
 
-	if ( $edd_options['drubba_fb_fastbill_debug_on'] == 1 ) {
+	if ( isset( $edd_options['drubba_fb_fastbill_debug_on'] ) && $edd_options['drubba_fb_fastbill_debug_on'] == 1 ) {
 		$path       = DRUBBAFASTBILL_DIR . "log/fastbill_debug.log";
 		$log_string = "Log Date: " . date( "r" ) . "\n" . $log_string . "\n";
 		if ( file_exists( $path ) ) {

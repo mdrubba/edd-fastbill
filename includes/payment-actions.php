@@ -39,6 +39,13 @@ function drubba_fastbill_complete_purchase( $payment_id, $new_status, $old_statu
 	if ( $create_payment == 1 && $invoice_status == 'complete' && $new_status == 'publish' ) {
 		drubba_fastbill_create_payment( $payment_id );
 	}
+
+    /*
+    $send_invoice = isset( $edd_options['drubba_fb_fastbill_sendbyemail'] ) ? $edd_options['drubba_fb_fastbill_sendbyemail'] : 0;
+    if ( $send_invoice == 1 && $invoice_status == 'complete' && $new_status == 'publish' ) {
+        drubba_fastbill_invoice_sendbyemail( $payment_id );
+    }
+    */
 }
 
 add_action( 'edd_update_payment_status', 'drubba_fastbill_complete_purchase', 10, 3 );
