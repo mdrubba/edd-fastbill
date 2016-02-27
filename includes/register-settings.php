@@ -9,6 +9,14 @@
  * @since       1.0.0
  */
 
+function drubba_fb_register_fastbill_section( $sections ) {
+	$sections['edd-fastbill'] = __( 'FastBill', 'edd-fastbill' );
+
+	return $sections;
+}
+
+add_filter( 'edd_settings_sections_extensions', 'drubba_fb_register_fastbill_section', 10, 1 );
+
 /**
  * Register Settings
  *
@@ -19,96 +27,95 @@
  * @return      void
  */
 function drubba_fb_register_settings( $settings ) {
+	$fastbill_settings = array(
+		array(
+			'id'   => 'drubba_fastbill',
+			'name' => '<strong>' . __( 'FastBill Settings', 'edd-fastbill' ) . '</strong>',
+			'desc' => '',
+			'type' => 'header',
+		),
+		array(
+			'id'   => 'drubba_fb_fastbill_email',
+			'name' => __( 'FastBill Email', 'edd-fastbill' ),
+			'desc' => __( 'The Email you use to login to your FastBill Account', 'edd-fastbill' ),
+			'type' => 'text',
+		),
+		array(
+			'id'   => 'drubba_fb_fastbill_api_key',
+			'name' => __( 'FastBill API Key', 'edd-fastbill' ),
+			'desc' => __( 'Get this from your FastBill settings.  Account > Settings', 'edd-fastbill' ),
+			'type' => 'text',
+		),
 
-	$settings[] = array(
-		'id'   => 'drubba_fastbill',
-		'name' => '<strong>' . __( 'FastBill Settings', 'edd-fastbill' ) . '</strong>',
-		'desc' => '',
-		'type' => 'header',
-	);
-	$settings[] = array(
-		'id'   => 'drubba_fb_fastbill_email',
-		'name' => __( 'FastBill Email', 'edd-fastbill' ),
-		'desc' => __( 'The Email you use to login to your FastBill Account', 'edd-fastbill' ),
-		'type' => 'text',
-	);
-	$settings[] = array(
-		'id'   => 'drubba_fb_fastbill_api_key',
-		'name' => __( 'FastBill API Key', 'edd-fastbill' ),
-		'desc' => __( 'Get this from your FastBill settings.  Account > Settings', 'edd-fastbill' ),
-		'type' => 'text',
-	);
+		array(
+			'id'   => 'drubba_fb_fastbill_invoice',
+			'name' => __( 'Auto create invoice', 'edd-fastbill' ),
+			'desc' => __( 'Check this box to create a invoice when the order is placed', 'edd-fastbill' ),
+			'type' => 'checkbox',
+		),
 
-	$settings[] = array(
-		'id'   => 'drubba_fb_fastbill_invoice',
-		'name' => __( 'Auto create invoice', 'edd-fastbill' ),
-		'desc' => __( 'Check this box to create a invoice when the order is placed', 'edd-fastbill' ),
-		'type' => 'checkbox',
-	);
+		array(
+			'id'      => 'drubba_fb_fastbill_invoice_template',
+			'name'    => __( 'Invoice Template', 'edd-fastbill' ),
+			'desc'    => __( 'If you change the name of the selected template within Fastbill, you have to update this field too.', 'edd-fastbill' ),
+			'std'     => '',
+			'type'    => 'select',
+			'options' => drubba_fb_get_invoice_templates()
+		),
 
-    $settings[] = array(
-        'id'      => 'drubba_fb_fastbill_invoice_template',
-        'name'    => __( 'Invoice Template', 'edd-fastbill' ),
-        'desc'    => __( 'If you change the name of the selected template within Fastbill, you have to update this field too.', 'edd-fastbill' ),
-        'std'     => '',
-        'type'    => 'select',
-        'options' => drubba_fb_get_invoice_templates()
-    );
+		array(
+			'id'   => 'drubba_fb_fastbill_payments',
+			'name' => __( 'Auto create payment', 'edd-fastbill' ),
+			'desc' => __( 'Check the box to create a payment when order is placed. Requires Invoice Status COMPLETE.', 'edd-fastbill' ),
+			'type' => 'checkbox',
+		),
 
-	$settings[] = array(
-		'id'   => 'drubba_fb_fastbill_payments',
-		'name' => __( 'Auto create payment', 'edd-fastbill' ),
-		'desc' => __( 'Check the box to create a payment when order is placed. Requires Invoice Status COMPLETE.', 'edd-fastbill' ),
-		'type' => 'checkbox',
-	);
+		array(
+			'id'      => 'drubba_fb_fastbill_invoice_status',
+			'name'    => __( 'Invoice Status', 'edd-fastbill' ),
+			'desc'    => __( 'Status for the invoices being created in FastBill.', 'edd-fastbill' ),
+			'std'     => 'draft',
+			'type'    => 'select',
+			'options' => array(
+				'draft'    => __( 'Draft', 'edd-fastbill' ),
+				'complete' => __( 'Complete', 'edd-fastbill' )
+			)
+		),
 
-	$settings[] = array(
-		'id'      => 'drubba_fb_fastbill_invoice_status',
-		'name'    => __( 'Invoice Status', 'edd-fastbill' ),
-		'desc'    => __( 'Status for the invoices being created in FastBill.', 'edd-fastbill' ),
-		'std'     => 'draft',
-		'type'    => 'select',
-		'options' => array(
-			'draft'    => __( 'Draft', 'edd-fastbill' ),
-			'complete' => __( 'Complete', 'edd-fastbill' )
-		)
-	);
+		array(
+			'id'   => 'drubba_fb_fastbill_sendbyemail',
+			'name' => __( 'Send invoice to customer', 'edd-fastbill' ),
+			'desc' => __( 'Check the box to send a completed invoice to the customer.', 'edd-fastbill' ),
+			'type' => 'checkbox',
+		),
 
-    /*
-    $settings[] = array(
-        'id'   => 'drubba_fb_fastbill_sendbyemail',
-        'name' => __( 'Send invoice to customer', 'edd-fastbill' ),
-        'desc' => __( 'Check the box to send a completed invoice to the customer.', 'edd-fastbill' ),
-        'type' => 'checkbox',
-    );
+		array(
+			'id'   => 'drubba_fb_fastbill_sendbyemail_subject',
+			'name' => __( 'Subject', 'edd-fastbill' ),
+			'type' => 'text',
+			'std'  => drubba_fb_get_sendbyemail_subject_default()
+		),
 
-    $settings[] = array(
-        'id'   => 'drubba_fb_fastbill_sendbyemail_subject',
-        'name' => __( 'Subject', 'edd-fastbill' ),
-        'type' => 'text',
-        'std' => drubba_fb_get_sendbyemail_subject_default()
-    );
+		array(
+			'id'   => 'drubba_fb_fastbill_sendbyemail_text',
+			'name' => __( 'E-Mail', 'edd-fastbill' ),
+			'desc' => drubba_fb_get_sendbyemail_placeholders( true ),
+			'type' => 'rich_editor',
+			'std'  => drubba_fb_get_sendbyemail_text_default()
+		),
 
-    $settings[] = array(
-        'id'   => 'drubba_fb_fastbill_sendbyemail_text',
-        'name' => __( 'E-Mail', 'edd-fastbill' ),
-        'desc' => drubba_fb_get_sendbyemail_placeholders(true),
-        'type' => 'rich_editor',
-        'std'  => drubba_fb_get_sendbyemail_text_default()
-    );
-    */
-
-	$settings[] = array(
-		'id'   => 'drubba_fb_fastbill_debug_on',
-		'name' => __( 'Enable Debug', 'edd-fastbill' ),
-		'desc' => __( 'Check the box to create a log file for debug purposes.', 'edd-fastbill' ),
-		'type' => 'checkbox',
+		array(
+			'id'   => 'drubba_fb_fastbill_debug_on',
+			'name' => __( 'Enable Debug', 'edd-fastbill' ),
+			'desc' => __( 'Check the box to create a log file for debug purposes.', 'edd-fastbill' ),
+			'type' => 'checkbox',
+		),
 	);
 
 	if ( drubba_fb_cfm_active() ) { // @since 1.1.0
 
 
-		$settings[] = array( // @since 1.1.0
+		$fastbill_settings[] = array( // @since 1.1.0
 			'id'   => 'drubba_fastbill_fields',
 			'name' => '<strong>' . __( 'FastBill Customer Fields', 'edd-fastbill' ) . '</strong>',
 			'desc' => '',
@@ -120,8 +127,8 @@ function drubba_fb_register_settings( $settings ) {
 
 			foreach ( $fields as $key => $value ) {
 
-				$desc       = isset( $value['desc'] ) ? $value['desc'] : '';
-				$settings[] = array(
+				$desc                = isset( $value['desc'] ) ? $value['desc'] : '';
+				$fastbill_settings[] = array(
 					'id'      => 'drubba_fb_fastbill_' . $key,
 					'name'    => $value['name'],
 					'desc'    => $desc,
@@ -134,8 +141,11 @@ function drubba_fb_register_settings( $settings ) {
 		}
 	}
 
-	return $settings;
+	if ( version_compare( EDD_VERSION, 2.5, '>=' ) ) {
+		$fastbill_settings = array( 'edd-fastbill' => $fastbill_settings );
+	}
 
+	return array_merge( $settings, $fastbill_settings );
 }
 
 add_filter( 'edd_settings_extensions', 'drubba_fb_register_settings', 10, 1 );
@@ -162,13 +172,14 @@ function drubba_fb_cfm_active() {
  */
 function drubba_fb_get_checkout_fields() {
 	$cfm_id = get_option( 'edd_cfm_id' );
-	if ( ! $cfm_id )
+	if ( ! $cfm_id ) {
 		return false;
+	}
 
 	$return     = array( '' => '' );
 	$cfm_fields = get_post_meta( $cfm_id, 'edd-checkout-fields', true );
 	foreach ( $cfm_fields as $field ) {
-		$return[$field['name']] = $field['label'];
+		$return[ $field['name'] ] = $field['label'];
 	}
 
 	return $return;
@@ -184,8 +195,14 @@ function drubba_fb_get_checkout_fields() {
  */
 function drubba_fb_get_customer_fields() {
 	return array(
-		'ORGANIZATION' => array( 'name' => __( 'Organization', 'edd-fastbill' ), 'desc' => __( 'If set by customer, than Business', 'edd-fastbill' ) ), // (* if business )
-		'SALUTATION'   => array( 'name' => __( 'Salutation', 'edd-fastbill' ), 'desc' => __( 'Use Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs.', 'edd-fastbill' ) ), // (mr|mrs|family) // maybe we can check for common values, but it is not perfect
+		'ORGANIZATION' => array(
+			'name' => __( 'Organization', 'edd-fastbill' ),
+			'desc' => __( 'If set by customer, than Business', 'edd-fastbill' )
+		), // (* if business )
+		'SALUTATION'   => array(
+			'name' => __( 'Salutation', 'edd-fastbill' ),
+			'desc' => __( 'Use Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs.', 'edd-fastbill' )
+		), // (mr|mrs|family) // maybe we can check for common values, but it is not perfect
 		'PHONE'        => array( 'name' => __( 'Phone', 'edd-fastbill' ) ),
 		'FAX'          => array( 'name' => __( 'Fax', 'edd-fastbill' ) ),
 		'MOBILE'       => array( 'name' => __( 'Mobile', 'edd-fastbill' ) ),
@@ -202,32 +219,34 @@ function drubba_fb_get_customer_fields() {
  */
 function drubba_fb_get_invoice_templates() {
 
-    global $edd_options;
+	global $edd_options;
 
-    if ( !isset( $edd_options['drubba_fb_fastbill_email'] ) || !isset( $edd_options['drubba_fb_fastbill_api_key'] ) )
-        return array(
-            '' => __( 'Please enter your API credentials.', 'edd-fastbill' )
-        );
+	if ( ! isset( $edd_options['drubba_fb_fastbill_email'] ) || ! isset( $edd_options['drubba_fb_fastbill_api_key'] ) ) {
+		return array(
+			'' => __( 'Please enter your API credentials.', 'edd-fastbill' )
+		);
+	}
 
-        $templates = array(
-            '' => __( 'Standard', 'edd-fastbill' )
-        );
+	$templates = array(
+		'' => __( 'Standard', 'edd-fastbill' )
+	);
 
-        $response_xml = drubba_fastbill_get_templates();
-        $response_json = json_encode($response_xml);
-        $response_array = json_decode($response_json,TRUE);
+	$response_xml   = drubba_fastbill_get_templates();
+	$response_json  = json_encode( $response_xml );
+	$response_array = json_decode( $response_json, true );
 
-        if ( !isset( $response_array['TEMPLATE'] ) )
-            return $templates;
+	if ( ! isset( $response_array['TEMPLATE'] ) ) {
+		return $templates;
+	}
 
-        foreach ( $response_array['TEMPLATE'] as $template ) {
+	foreach ( $response_array['TEMPLATE'] as $template ) {
 
-            if ( isset( $template['TEMPLATE_NAME'] ) ) {
-                $templates[$template['TEMPLATE_NAME']] = $template['TEMPLATE_NAME'];
-            }
-        }
+		if ( isset( $template['TEMPLATE_NAME'] ) ) {
+			$templates[ $template['TEMPLATE_NAME'] ] = $template['TEMPLATE_NAME'];
+		}
+	}
 
-    return $templates;
+	return $templates;
 }
 
 /**
@@ -240,7 +259,7 @@ function drubba_fb_get_invoice_templates() {
  */
 function drubba_fb_get_sendbyemail_subject_default() {
 
-    return __('Invoice No. {fastbill_invoice_id}');
+	return __( 'Invoice No. {fastbill_invoice_id}', 'edd-fastbill' );
 }
 
 
@@ -254,7 +273,7 @@ function drubba_fb_get_sendbyemail_subject_default() {
  */
 function drubba_fb_get_sendbyemail_text_default() {
 
-    return __('Dear customer, attached you can find your invoice to order {payment_id}.');
+	return __( 'Dear customer, attached you can find your invoice to order {payment_id}.', 'edd-fastbill' );
 }
 
 /**
@@ -267,51 +286,52 @@ function drubba_fb_get_sendbyemail_text_default() {
  */
 function drubba_fb_get_sendbyemail_placeholders( $return_html = false ) {
 
-    $placeholders = array(
-        array(
-            'tag'         => 'name',
-            'description' => __( "The buyer's first name", 'edd' ),
-        ),
-        array(
-            'tag'         => 'fullname',
-            'description' => __( "The buyer's full name, first and last", 'edd' ),
-        ),
-        array(
-            'tag'         => 'user_email',
-            'description' => __( "The buyer's email address", 'edd' ),
-        ),
-        array(
-            'tag'         => 'billing_address',
-            'description' => __( 'The buyer\'s billing address', 'edd' ),
-        ),
-        array(
-            'tag'         => 'price',
-            'description' => __( 'The total price of the purchase', 'edd' ),
-        ),
-        array(
-            'tag'         => 'payment_id',
-            'description' => __( 'The unique ID number for this purchase', 'edd' ),
-        ),
-        array(
-            'tag'         => 'fastbill_invoice_id',
-            'description' => __( 'Fastbill Invoice ID', 'edd-fastbill' ),
-        )
-    );
+	$placeholders = array(
+		array(
+			'tag'         => 'name',
+			'description' => __( "The buyer's first name", 'edd' ),
+		),
+		array(
+			'tag'         => 'fullname',
+			'description' => __( "The buyer's full name, first and last", 'edd' ),
+		),
+		array(
+			'tag'         => 'user_email',
+			'description' => __( "The buyer's email address", 'edd' ),
+		),
+		array(
+			'tag'         => 'billing_address',
+			'description' => __( 'The buyer\'s billing address', 'edd' ),
+		),
+		array(
+			'tag'         => 'price',
+			'description' => __( 'The total price of the purchase', 'edd' ),
+		),
+		array(
+			'tag'         => 'payment_id',
+			'description' => __( 'The unique ID number for this purchase', 'edd' ),
+		),
+		array(
+			'tag'         => 'fastbill_invoice_id',
+			'description' => __( 'Fastbill Invoice ID', 'edd-fastbill' ),
+		)
+	);
 
-    if ( $return_html ) {
-        $html = '';
+	if ( $return_html ) {
+		$html = '';
 
-        // Return as html list
-        foreach ($placeholders as $placeholder) {
+		// Return as html list
+		foreach ( $placeholders as $placeholder ) {
 
-            if ($html != '')
-                $html .= '<br />';
+			if ( $html != '' ) {
+				$html .= '<br />';
+			}
 
-            $html .= '{' . $placeholder['tag'] . '} - ' . $placeholder['description'];
-        }
+			$html .= '{' . $placeholder['tag'] . '} - ' . $placeholder['description'];
+		}
 
-        return $html;
-    }
+		return $html;
+	}
 
-    return $placeholders;
+	return $placeholders;
 }
