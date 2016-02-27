@@ -24,10 +24,11 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 
 	global $edd_options;
 
-	$payment      = get_post( $payment_id );
-	$payment_meta = get_post_meta( $payment->ID, '_edd_payment_meta', true );
-	$user_info    = maybe_unserialize( $payment_meta['user_info'] );
-    
+	$payment_meta = edd_get_payment_meta( $payment_id );
+	$user_info    = $payment_meta['user_info'];
+	$cart_items   = isset( $payment_meta['cart_details'] ) ? maybe_unserialize( $payment_meta['cart_details'] ) : false;
+
+
 	drubba_fastbill_addlog( 'START - Creating invoice for order #' . $payment_id );
 
 	// Check if client exists with customer's email address
@@ -43,6 +44,7 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 		} catch ( Exception $e ) {
 			drubba_fastbill_addlog( $e->getMessage() );
 			drubba_fastbill_addlog( 'END - Creating invoice for order #' . $payment_id );
+
 			return;
 		}
 	}
@@ -52,7 +54,7 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 	$xml .= "<SERVICE>invoice.create</SERVICE>";
 	$xml .= "<DATA>";
 	$xml .= "<CUSTOMER_ID>" . $client_id . "</CUSTOMER_ID>";
-	$xml .= "<INVOICE_DATE>" . $payment->post_date . "</INVOICE_DATE>";
+	$xml .= "<INVOICE_DATE>" . $payment_meta['date'] . "</INVOICE_DATE>";
 	$currency = isset( $edd_options['currency'] ) ? $edd_options['currency'] : 'EUR';
 	$xml .= "<CURRENCY_CODE>" . $currency . "</CURRENCY_CODE>";
 
@@ -70,7 +72,7 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 
 	$xml .= "<ITEMS>";
 
-	$cart_items = isset( $payment_meta['cart_details'] ) ? maybe_unserialize( $payment_meta['cart_details'] ) : false;
+
 	if ( empty( $cart_items ) || ! $cart_items ) {
 		$cart_items = maybe_unserialize( $payment_meta['downloads'] );
 	}
