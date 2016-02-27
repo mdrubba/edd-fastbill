@@ -58,12 +58,12 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 	$currency = isset( $edd_options['currency'] ) ? $edd_options['currency'] : 'EUR';
 	$xml .= "<CURRENCY_CODE>" . $currency . "</CURRENCY_CODE>";
 
-    // check if a specific template is selected
-    $template_id = dubba_fastbill_get_template_id();
+	// check if a specific template is selected
+	$template_id = drubba_fastbill_get_template_id();
 
-    if ( $template_id ) {
-        $xml .= "<TEMPLATE_ID>" . $template_id . "</TEMPLATE_ID>";
-    }
+	if ( $template_id ) {
+		$xml .= "<TEMPLATE_ID>" . $template_id . "</TEMPLATE_ID>";
+	}
 
 	// add order discount as note to invoice items
 	if ( $user_info['discount'] != 'none' ) {
@@ -578,29 +578,31 @@ function drubba_fastbill_get_templates() {
  * @return string/bol
  *
  **/
-function dubba_fastbill_get_template_id() {
+function drubba_fastbill_get_template_id() {
 
-    $response_xml = drubba_fastbill_get_templates();
-    $response_json = json_encode($response_xml);
-    $response_array = json_decode($response_json,TRUE);
+	$response_xml   = drubba_fastbill_get_templates();
+	$response_json  = json_encode( $response_xml );
+	$response_array = json_decode( $response_json, true );
 
-    if ( !isset( $response_array['TEMPLATE'] ) )
-        return false;
+	if ( ! isset( $response_array['TEMPLATE'] ) ) {
+		return false;
+	}
 
-    global $edd_options;
-    $template_selected = $edd_options['drubba_fb_fastbill_invoice_template'];
+	global $edd_options;
+	$template_selected = $edd_options['drubba_fb_fastbill_invoice_template'];
 
-    if ( $template_selected == '' )
-        return false;
+	if ( $template_selected == '' ) {
+		return false;
+	}
 
-    foreach ( $response_array['TEMPLATE'] as $template ) {
+	foreach ( $response_array['TEMPLATE'] as $template ) {
 
-        if ( isset( $template['TEMPLATE_NAME'] ) && $template['TEMPLATE_NAME'] == $template_selected ) {
-            return $template['TEMPLATE_ID'];
-        }
-    }
+		if ( isset( $template['TEMPLATE_NAME'] ) && $template['TEMPLATE_NAME'] == $template_selected ) {
+			return $template['TEMPLATE_ID'];
+		}
+	}
 
-    return false;
+	return false;
 }
 
 
