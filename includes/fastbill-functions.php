@@ -83,18 +83,39 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 			// retrieve the ID of the download
 			$id = isset( $payment_meta['cart_details'] ) ? $cart_item['id'] : $cart_item;
 
-            // retrieve price option name if available
-            if ( isset($cart_item['item_number']['options']['price_id']) ) {
-                $option_name = edd_get_price_option_name( $id, $cart_item['item_number']['options']['price_id'] );
-            }
+			// calculate price for item and pay attention to discounts
+			$price = $cart_item['subtotal'] - $cart_item['discount'];
+			if ( $price < 0 ) {
+				$price = 0;
+			}
 
-            // Build XML
+			// retrieve price option name if available
+			if ( isset( $cart_item['item_number']['options']['price_id'] ) ) {
+				$option_name = edd_get_price_option_name( $id, $cart_item['item_number']['options']['price_id'] );
+			}
+
+			// check for renewal and append renewal string if renewals are discounted
+			$renewal_discount = edd_get_option( 'edd_sl_renewal_discount', false );
+			if ( isset( $cart_item['item_number']['options']['is_renewal'] ) && $renewal_discount ) {
+				$renewal = __( 'renewal', 'edd-fastbill' );
+				if ( isset( $option_name ) ) {
+					$option_name += ', ' + $renewal;
+				} else {
+					$option_name += $renewal;
+				}
+			}
+
+			// Build XML
 			$xml .= "<ITEM>";
 			$xml .= "<DESCRIPTION>" . get_the_title( $id );
-            if ( isset( $option_name ) ) $xml .= ' (' . $option_name . ')';
-			if ( isset( $discount ) ) $xml .= ' ' . $discount;
+			if ( isset( $option_name ) ) {
+				$xml .= ' (' . $option_name . ')';
+			}
+			if ( isset( $discount ) ) {
+				$xml .= ' ' . $discount;
+			}
 			$xml .= "</DESCRIPTION>";
-			$xml .= "<UNIT_PRICE>" . $cart_item['price'] . "</UNIT_PRICE>";
+			$xml .= "<UNIT_PRICE>" . $price . "</UNIT_PRICE>";
 			$xml .= "<QUANTITY>" . $cart_item['quantity'] . "</QUANTITY>";
 			if ( edd_use_taxes() ) {
 				$tax_rate = edd_get_tax_rate() * 100;
