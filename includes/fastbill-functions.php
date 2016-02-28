@@ -323,13 +323,6 @@ function drubba_fastbill_invoice_sendbyemail( $payment_id ) {
 		return;
 	}
 
-	$subject = ( isset( $edd_options['drubba_fb_fastbill_sendbyemail_subject'] ) && ! empty( $edd_options['drubba_fb_fastbill_sendbyemail_subject'] ) ) ? $edd_options['drubba_fb_fastbill_sendbyemail_subject'] : drubba_fb_get_sendbyemail_subject_default();
-	$message = ( isset( $edd_options['drubba_fb_fastbill_sendbyemail_text'] ) && ! empty( $edd_options['drubba_fb_fastbill_sendbyemail_text'] ) ) ? $edd_options['drubba_fb_fastbill_sendbyemail_text'] : drubba_fb_get_sendbyemail_text_default();
-
-	// Handle placeholders
-	$subject = drubba_fastbill_replace_placeholder_values( $subject, $payment_id );
-	$message = drubba_fastbill_replace_placeholder_values( $message, $payment_id );
-
 	// Build request
 	$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 	$xml .= "<FBAPI>";
@@ -339,9 +332,7 @@ function drubba_fastbill_invoice_sendbyemail( $payment_id ) {
 	$xml .= "<RECIPIENT>";
 	$xml .= "<TO>" . $customer_email . "</TO>";
 	$xml .= "</RECIPIENT>";
-	$xml .= "<SUBJECT>" . $subject . "</SUBJECT>";
-	$xml .= "<MESSAGE>" . $message . "</MESSAGE>";
-	$xml .= "<RECEIPT_CONFIRMATION>0</RECEIPT_CONFIRMATION>";
+	$xml .= "<RECEIPT_CONFIRMATION>1</RECEIPT_CONFIRMATION>";
 	$xml .= "</DATA>";
 	$xml .= "</FBAPI>";
 

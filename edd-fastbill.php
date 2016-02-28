@@ -62,4 +62,3 @@ add_action( 'plugins_loaded', 'drubba_fastbill_localization' );
 include_once( DRUBBAFASTBILL_DIR . 'includes/register-settings.php' );
 include_once( DRUBBAFASTBILL_DIR . 'includes/fastbill-functions.php' );
 include_once( DRUBBAFASTBILL_DIR . 'includes/payment-actions.php' );
-include_once( DRUBBAFASTBILL_DIR . 'includes/common-functions.php' );
