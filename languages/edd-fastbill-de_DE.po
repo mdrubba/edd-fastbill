@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy Digital Downloads - FastBill Integration v1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-28 23:00+0100\n"
-"PO-Revision-Date: 2016-02-28 23:00+0100\n"
+"POT-Creation-Date: 2016-02-28 23:21+0100\n"
+"PO-Revision-Date: 2016-02-28 23:26+0100\n"
 "Last-Translator: Markus Drubba <kontakt@markusdrubba.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -71,6 +71,14 @@ msgstr "Es gab einen Fehler beim Suchen des Kunden bei FastBill:"
 msgid "There was an error when receiving templates from FastBill:"
 msgstr ""
 "Es gab einen Fehler bei der Abfrage der Rechnungs-Vorlagen von Fastbild:"
+
+#: includes/frontend-functions.php:13 includes/frontend-functions.php:61
+msgid "Invoice"
+msgstr "Rechnung"
+
+#: includes/frontend-functions.php:37 includes/frontend-functions.php:63
+msgid "Download Invoice"
+msgstr "Download"
 
 #: includes/register-settings.php:13
 msgid "FastBill"
