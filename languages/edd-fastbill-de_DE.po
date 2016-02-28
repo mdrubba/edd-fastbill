@@ -2,160 +2,140 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy Digital Downloads - FastBill Integration v1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-08 19:25+0100\n"
-"PO-Revision-Date: 2015-07-08 19:27+0100\n"
-"Last-Translator: Dots United <info@dotsunited.de>\n"
+"POT-Creation-Date: 2016-02-28 23:00+0100\n"
+"PO-Revision-Date: 2016-02-28 23:00+0100\n"
+"Last-Translator: Markus Drubba <kontakt@markusdrubba.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.8.1\n"
+"X-Generator: Poedit 1.8.5\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
-"X-Poedit-Basepath: ../\n"
+"X-Poedit-Basepath: ..\n"
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: .\n"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:68
+#: includes/fastbill-functions.php:70
 msgid "Discount used: "
 msgstr "Verwendeter Gutschein-Code: "
 
+#: includes/fastbill-functions.php:100
+msgid "renewal"
+msgstr "Lizenzverlängerung"
+
 # @ edd-fastbill
-#: includes/fastbill-functions.php:143
+#: includes/fastbill-functions.php:162
 msgid "There was an error adding the invocie to FastBill:"
 msgstr "Es gab einen Fehler beim Erstellen der Rechnung bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:144 includes/fastbill-functions.php:198
-#: includes/fastbill-functions.php:253 includes/fastbill-functions.php:380
-#: includes/fastbill-functions.php:433 includes/fastbill-functions.php:482
+#: includes/fastbill-functions.php:163 includes/fastbill-functions.php:218
+#: includes/fastbill-functions.php:274 includes/fastbill-functions.php:314
+#: includes/fastbill-functions.php:321 includes/fastbill-functions.php:358
+#: includes/fastbill-functions.php:485 includes/fastbill-functions.php:539
+#: includes/fastbill-functions.php:598
 msgid "Error: "
 msgstr "Fehler: "
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:197
+#: includes/fastbill-functions.php:217
 msgid "There was an error completing invoice in FastBill:"
 msgstr "Es gab einen Fehler beim finalen Erstellen der Rechnung:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:252
+#: includes/fastbill-functions.php:273
 msgid "There was an error creating a payment in FastBill:"
 msgstr "Es gab einen Fehler beim setzen der Rechnung als bezahlt:"
 
+#: includes/fastbill-functions.php:357
+msgid "There was an error sending an invoice via FastBill:"
+msgstr "Es gab einen Fehler beim senden der Rechnung via FastBill:"
+
 # @ edd-fastbill
-#: includes/fastbill-functions.php:379
+#: includes/fastbill-functions.php:484
 msgid "There was an error creating this customer in FastBill:"
 msgstr "Es gab einen Fehler beim Erstellen des Kunden bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:432
+#: includes/fastbill-functions.php:538
 msgid "There was an error looking up this customer in FastBill:"
 msgstr "Es gab einen Fehler beim Suchen des Kunden bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:481
+#: includes/fastbill-functions.php:597
 msgid "There was an error when receiving templates from FastBill:"
 msgstr ""
 "Es gab einen Fehler bei der Abfrage der Rechnungs-Vorlagen von Fastbild:"
 
+#: includes/register-settings.php:13
+msgid "FastBill"
+msgstr "FastBill"
+
 # @ edd-fastbill
-#: includes/register-settings.php:25
+#: includes/register-settings.php:33
 msgid "FastBill Settings"
 msgstr "FastBill Einstellungen"
 
 # @ edd-fastbill
-#: includes/register-settings.php:31
+#: includes/register-settings.php:39
 msgid "FastBill Email"
 msgstr "FastBill E-Mail"
 
 # @ edd-fastbill
-#: includes/register-settings.php:32
-msgid "The Email you use to login to your FastBill Account"
-msgstr "Die E-Mail-Adresse die du für deinen FastBill-Login verwendest"
-
-# @ edd-fastbill
-#: includes/register-settings.php:37
+#: includes/register-settings.php:44
 msgid "FastBill API Key"
 msgstr "FastBill API-Key"
 
 # @ edd-fastbill
-#: includes/register-settings.php:38
-msgid "Get this from your FastBill settings.  Account > Settings"
-msgstr "Den API-Key findest du unter Konto-Einstellungen > Einstellungen"
-
-# @ edd-fastbill
-#: includes/register-settings.php:44
-msgid "Auto create invoice"
-msgstr "Rechnung automatisch erstellen"
-
-# @ edd-fastbill
-#: includes/register-settings.php:45
-msgid "Check this box to create a invoice when the order is placed"
-msgstr ""
-"Aktiviere dieses Kontrollkästchen um eine Rechnung zu erstellen, wenn eine "
-"Bestellung durchgeführt wird."
-
-# @ edd-fastbill
-#: includes/register-settings.php:51
+#: includes/register-settings.php:50
 msgid "Invoice Template"
 msgstr "Rechnungsvorlage"
 
-#: includes/register-settings.php:52
-msgid ""
-"If you change the name of the selected template within Fastbill, you have to "
-"update this field too."
-msgstr ""
-"Wenn du den Namen der hier ausgewählte Vorlage in Fastbill änderst, musst du "
-"sie hier ebenfalls aktualisieren."
+#: includes/register-settings.php:51
+msgid "Choose invoice template"
+msgstr "Rechnungstemplate auswählen"
 
 # @ edd-fastbill
-#: includes/register-settings.php:60
-msgid "Auto create payment"
-msgstr "Zahlungseingang erfassen"
-
-# @ edd-fastbill
-#: includes/register-settings.php:61
-msgid ""
-"Check the box to create a payment when order is placed. Requires Invoice "
-"Status COMPLETE."
-msgstr ""
-"Aktiviere dieses Kontrollkästchen um die Rechnung als bezahlt zu markieren, "
-"wenn die Bestellung durchgeführt wird. Erfordert den Rechnungsstatus "
-"ABGESCHLOSSEN."
-
-# @ edd-fastbill
-#: includes/register-settings.php:67
+#: includes/register-settings.php:59
 msgid "Invoice Status"
 msgstr "Rechnungsstatus"
 
-# @ edd-fastbill
-#: includes/register-settings.php:68
-msgid "Status for the invoices being created in FastBill."
-msgstr "Status der erstellten Rechnungen bei FastBill."
+#: includes/register-settings.php:60
+msgid "Status for invoices being created in FastBill"
+msgstr "Status für Rechnungen in FastBill"
 
 # @ edd-fastbill
-#: includes/register-settings.php:72
+#: includes/register-settings.php:64
 msgid "Draft"
 msgstr "Entwurf"
 
 # @ edd-fastbill
-#: includes/register-settings.php:73
+#: includes/register-settings.php:65
 msgid "Complete"
 msgstr "Abgeschlossen"
 
 # @ edd-fastbill
-#: includes/register-settings.php:79
-msgid "Enable Debug"
-msgstr "Debug-Modus aktivieren"
+#: includes/register-settings.php:71
+msgid "Auto create payment"
+msgstr "Zahlungseingang erfassen"
 
-# @ edd-fastbill
-#: includes/register-settings.php:80
-msgid "Check the box to create a log file for debug purposes."
-msgstr "Aktiviere dieses Kontrollkästchen um eine Log-Datei zu erzeugen."
+#: includes/register-settings.php:72
+msgid "Create payment when order is placed, requires invoice status COMPLETE"
+msgstr ""
+"Rechnung als bezahlt markieren, setzt Rechnungsstatus ABGESCHLOSSEN voraus"
+
+#: includes/register-settings.php:78
+msgid "Send invoice"
+msgstr "Rechnung versenden"
+
+#: includes/register-settings.php:79
+msgid "Send invoice to customer via email"
+msgstr "Rechnung per E-Mail an Käufer senden"
 
 # @ edd-fastbill
 #: includes/register-settings.php:89
@@ -163,53 +143,103 @@ msgid "FastBill Customer Fields"
 msgstr "FastBill Kunden-Details"
 
 # @ edd-fastbill
-#: includes/register-settings.php:163
+#: includes/register-settings.php:168
 msgid "Organization"
 msgstr "Firmenname"
 
 # @ edd-fastbill
-#: includes/register-settings.php:163
+#: includes/register-settings.php:169
 msgid "If set by customer, than Business"
 msgstr "Wenn vom Kunden gesetzt, dann Geschäftlich"
 
 # @ edd-fastbill
-#: includes/register-settings.php:164
+#: includes/register-settings.php:172
 msgid "Salutation"
 msgstr "Anrede"
 
 # @ edd-fastbill
-#: includes/register-settings.php:164
+#: includes/register-settings.php:173
 msgid "Use Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs."
 msgstr ""
 "Verwende Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs."
 
 # @ edd-fastbill
-#: includes/register-settings.php:165
+#: includes/register-settings.php:175
 msgid "Phone"
 msgstr "Telefonnummer"
 
 # @ edd-fastbill
-#: includes/register-settings.php:166
+#: includes/register-settings.php:176
 msgid "Fax"
 msgstr "Telefaxnummer"
 
 # @ edd-fastbill
-#: includes/register-settings.php:167
+#: includes/register-settings.php:177
 msgid "Mobile"
 msgstr "Mobiltelefonnummer"
 
-# @ edd-fastbill
-#: includes/register-settings.php:168
-msgid "Vat-ID."
-msgstr "USt-ID."
-
-#: includes/register-settings.php:186
-msgid "Please enter your API credentials."
-msgstr "Bitte gib deine API Zugangsdaten ein."
-
-#: includes/register-settings.php:193
-msgid "Standard"
+#: includes/register-settings.php:191
+msgid "Default"
 msgstr "Standard"
+
+#~ msgid "Standard"
+#~ msgstr "Standard"
+
+#~ msgid "Send invoice to customer"
+#~ msgstr "Rechnung an Käufer schicken"
+
+# @ edd-fastbill
+#~ msgid "The Email you use to login to your FastBill Account"
+#~ msgstr "Die E-Mail-Adresse die du für deinen FastBill-Login verwendest"
+
+# @ edd-fastbill
+#~ msgid "Get this from your FastBill settings.  Account > Settings"
+#~ msgstr "Den API-Key findest du unter Konto-Einstellungen > Einstellungen"
+
+# @ edd-fastbill
+#~ msgid "Auto create invoice"
+#~ msgstr "Rechnung automatisch erstellen"
+
+# @ edd-fastbill
+#~ msgid "Check this box to create a invoice when the order is placed"
+#~ msgstr ""
+#~ "Aktiviere dieses Kontrollkästchen um eine Rechnung zu erstellen, wenn "
+#~ "eine Bestellung durchgeführt wird."
+
+#~ msgid ""
+#~ "If you change the name of the selected template within Fastbill, you have "
+#~ "to update this field too."
+#~ msgstr ""
+#~ "Wenn du den Namen der hier ausgewählte Vorlage in Fastbill änderst, musst "
+#~ "du sie hier ebenfalls aktualisieren."
+
+# @ edd-fastbill
+#~ msgid ""
+#~ "Check the box to create a payment when order is placed. Requires Invoice "
+#~ "Status COMPLETE."
+#~ msgstr ""
+#~ "Aktiviere dieses Kontrollkästchen um die Rechnung als bezahlt zu "
+#~ "markieren, wenn die Bestellung durchgeführt wird. Erfordert den "
+#~ "Rechnungsstatus ABGESCHLOSSEN."
+
+# @ edd-fastbill
+#~ msgid "Status for the invoices being created in FastBill."
+#~ msgstr "Status der erstellten Rechnungen bei FastBill."
+
+# @ edd-fastbill
+#~ msgid "Enable Debug"
+#~ msgstr "Debug-Modus aktivieren"
+
+# @ edd-fastbill
+#~ msgid "Check the box to create a log file for debug purposes."
+#~ msgstr "Aktiviere dieses Kontrollkästchen um eine Log-Datei zu erzeugen."
+
+# @ edd-fastbill
+#~ msgid "Vat-ID."
+#~ msgstr "USt-ID."
+
+#~ msgid "Please enter your API credentials."
+#~ msgstr "Bitte gib deine API Zugangsdaten ein."
 
 #~ msgid ""
 #~ "If a new change is made to the selected template within Fastbill, you "

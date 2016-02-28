@@ -29,8 +29,7 @@ function drubba_fastbill_complete_purchase( $payment_id, $new_status, $old_statu
 
 	global $edd_options;
 
-	$create_invoice = isset( $edd_options['drubba_fb_fastbill_invoice'] ) ? $edd_options['drubba_fb_fastbill_invoice'] : 0;
-	if ( $create_invoice == 1 && $new_status == 'publish' ) {
+	if ( $new_status == 'publish' ) {
 		drubba_fastbill_create_invoice( $payment_id );
 	}
 

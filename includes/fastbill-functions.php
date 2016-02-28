@@ -365,11 +365,10 @@ function drubba_fastbill_invoice_sendbyemail( $payment_id ) {
  *
  * Create a client record in FastBill for the given order.
  *
- * @param  $payment_id
+ * @param $payment_id
  *
- * @access public
- * @return $customer_id
- * @throws Excption on error
+ * @return mixed
+ * @throws Exception
  *
  **/
 function drubba_fastbill_create_customer( $payment_id ) {
@@ -499,7 +498,7 @@ function drubba_fastbill_create_customer( $payment_id ) {
  * @param  $customer_email
  *
  * @access public
- * @return $customer_id or 0 if customer does not exist in FastBill
+ * @return int|void customer_id or 0 if customer does not exist in FastBill
  *
  **/
 function drubba_fastbill_lookup_customer( $customer_email ) {
@@ -557,6 +556,14 @@ function drubba_fastbill_lookup_customer( $customer_email ) {
  **/
 function drubba_fastbill_get_templates() {
 
+	$cache_key        = 'edd_fastbill_templates';
+	$cache_time       = 60 * 60;
+	$cached_templates = get_transient( $cache_key );
+
+	if ( $cached_templates ) {
+		return $cached_templates;
+	}
+
 	$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 	$xml .= "<FBAPI>";
 	$xml .= "<SERVICE>template.get</SERVICE>";
@@ -571,16 +578,16 @@ function drubba_fastbill_get_templates() {
 
 		drubba_fastbill_addlog( $e->getMessage() );
 
-		return;
-
+		return false;
 	}
 	$response = new SimpleXMLElement( $result );
-	$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
 
-	if ( ! $is_error ) {
-		// get the first client
+	if ( ! isset( $response->RESPONSE->ERRORS ) ) {
 		if ( isset( $response->RESPONSE->TEMPLATES ) ) {
-			return $response->RESPONSE->TEMPLATES;
+			$templates = json_decode( json_encode( $response->RESPONSE->TEMPLATES ), true );
+			set_transient( $cache_key, $templates, $cache_time );
+
+			return $templates;
 		} else {
 			return 0;
 		}
@@ -597,7 +604,7 @@ function drubba_fastbill_get_templates() {
 }
 
 /**
- * dubba_fastbill_get_template_id()
+ * drubba_fastbill_get_template_id()
  *
  * Get selected template id by looping the available templates
  *
@@ -606,42 +613,26 @@ function drubba_fastbill_get_templates() {
  *
  **/
 function drubba_fastbill_get_template_id() {
-
-	$response_xml   = drubba_fastbill_get_templates();
-	$response_json  = json_encode( $response_xml );
-	$response_array = json_decode( $response_json, true );
-
-	if ( ! isset( $response_array['TEMPLATE'] ) ) {
-		return false;
-	}
-
 	global $edd_options;
-	$template_selected = $edd_options['drubba_fb_fastbill_invoice_template'];
 
-	if ( $template_selected == '' ) {
+	$selected_template = $edd_options['drubba_fb_fastbill_invoice_template'];
+
+	if ( empty( $selected_template ) ) {
 		return false;
 	}
 
-	foreach ( $response_array['TEMPLATE'] as $template ) {
-
-		if ( isset( $template['TEMPLATE_NAME'] ) && $template['TEMPLATE_NAME'] == $template_selected ) {
-			return $template['TEMPLATE_ID'];
-		}
-	}
-
-	return false;
+	return $selected_template;
 }
-
 
 /**
  * drubba_fastbill_apicall()
  *
  * Send an XML request to the FastBill API
  *
- * @param  $xml
+ * @param $xml
  *
- * @access public
- * @return $response
+ * @return string
+ * @throws Exception
  *
  **/
 function drubba_fastbill_apicall( $xml ) {
@@ -690,10 +681,7 @@ function drubba_fastbill_apicall( $xml ) {
  *
  **/
 function drubba_fastbill_addlog( $log_string ) {
-
-	global $edd_options;
-
-	if ( isset( $edd_options['drubba_fb_fastbill_debug_on'] ) && $edd_options['drubba_fb_fastbill_debug_on'] == 1 ) {
+	if ( WP_DEBUG ) {
 		$path       = DRUBBAFASTBILL_DIR . "log/fastbill_debug.log";
 		$log_string = "Log Date: " . date( "r" ) . "\n" . $log_string . "\n";
 		if ( file_exists( $path ) ) {

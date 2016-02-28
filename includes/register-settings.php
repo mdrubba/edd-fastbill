@@ -37,43 +37,27 @@ function drubba_fb_register_settings( $settings ) {
 		array(
 			'id'   => 'drubba_fb_fastbill_email',
 			'name' => __( 'FastBill Email', 'edd-fastbill' ),
-			'desc' => __( 'The Email you use to login to your FastBill Account', 'edd-fastbill' ),
 			'type' => 'text',
 		),
 		array(
 			'id'   => 'drubba_fb_fastbill_api_key',
 			'name' => __( 'FastBill API Key', 'edd-fastbill' ),
-			'desc' => __( 'Get this from your FastBill settings.  Account > Settings', 'edd-fastbill' ),
 			'type' => 'text',
-		),
-
-		array(
-			'id'   => 'drubba_fb_fastbill_invoice',
-			'name' => __( 'Auto create invoice', 'edd-fastbill' ),
-			'desc' => __( 'Check this box to create a invoice when the order is placed', 'edd-fastbill' ),
-			'type' => 'checkbox',
 		),
 
 		array(
 			'id'      => 'drubba_fb_fastbill_invoice_template',
 			'name'    => __( 'Invoice Template', 'edd-fastbill' ),
-			'desc'    => __( 'If you change the name of the selected template within Fastbill, you have to update this field too.', 'edd-fastbill' ),
+			'desc'    => __( 'Choose invoice template', 'edd-fastbill' ),
 			'std'     => '',
 			'type'    => 'select',
 			'options' => drubba_fb_get_invoice_templates()
 		),
 
 		array(
-			'id'   => 'drubba_fb_fastbill_payments',
-			'name' => __( 'Auto create payment', 'edd-fastbill' ),
-			'desc' => __( 'Check the box to create a payment when order is placed. Requires Invoice Status COMPLETE.', 'edd-fastbill' ),
-			'type' => 'checkbox',
-		),
-
-		array(
 			'id'      => 'drubba_fb_fastbill_invoice_status',
 			'name'    => __( 'Invoice Status', 'edd-fastbill' ),
-			'desc'    => __( 'Status for the invoices being created in FastBill.', 'edd-fastbill' ),
+			'desc'    => __( 'Status for invoices being created in FastBill', 'edd-fastbill' ),
 			'std'     => 'draft',
 			'type'    => 'select',
 			'options' => array(
@@ -83,16 +67,16 @@ function drubba_fb_register_settings( $settings ) {
 		),
 
 		array(
-			'id'   => 'drubba_fb_fastbill_sendbyemail',
-			'name' => __( 'Send invoice to customer', 'edd-fastbill' ),
-			'desc' => __( 'Check the box to send a completed invoice to the customer via email.', 'edd-fastbill' ),
+			'id'   => 'drubba_fb_fastbill_payments',
+			'name' => __( 'Auto create payment', 'edd-fastbill' ),
+			'desc' => __( 'Create payment when order is placed, requires invoice status COMPLETE', 'edd-fastbill' ),
 			'type' => 'checkbox',
 		),
 
 		array(
-			'id'   => 'drubba_fb_fastbill_debug_on',
-			'name' => __( 'Enable Debug', 'edd-fastbill' ),
-			'desc' => __( 'Check the box to create a log file for debug purposes.', 'edd-fastbill' ),
+			'id'   => 'drubba_fb_fastbill_sendbyemail',
+			'name' => __( 'Send invoice', 'edd-fastbill' ),
+			'desc' => __( 'Send invoice to customer via email', 'edd-fastbill' ),
 			'type' => 'checkbox',
 		),
 	);
@@ -203,31 +187,19 @@ function drubba_fb_get_customer_fields() {
  * @return array|bool
  */
 function drubba_fb_get_invoice_templates() {
-
-	global $edd_options;
-
-	if ( ! isset( $edd_options['drubba_fb_fastbill_email'] ) || ! isset( $edd_options['drubba_fb_fastbill_api_key'] ) ) {
-		return array(
-			'' => __( 'Please enter your API credentials.', 'edd-fastbill' )
-		);
-	}
-
 	$templates = array(
-		'' => __( 'Standard', 'edd-fastbill' )
+		'' => __( 'Default', 'edd-fastbill' )
 	);
 
-	$response_xml   = drubba_fastbill_get_templates();
-	$response_json  = json_encode( $response_xml );
-	$response_array = json_decode( $response_json, true );
+	$templates_array = drubba_fastbill_get_templates();
 
-	if ( ! isset( $response_array['TEMPLATE'] ) ) {
+	if ( ! isset( $templates_array['TEMPLATE'] ) ) {
 		return $templates;
 	}
 
-	foreach ( $response_array['TEMPLATE'] as $template ) {
-
-		if ( isset( $template['TEMPLATE_NAME'] ) ) {
-			$templates[ $template['TEMPLATE_NAME'] ] = $template['TEMPLATE_NAME'];
+	foreach ( $templates_array['TEMPLATE'] as $template ) {
+		if ( isset( $template['TEMPLATE_NAME'] ) && isset( $template['TEMPLATE_ID'] ) ) {
+			$templates[ $template['TEMPLATE_ID'] ] = $template['TEMPLATE_NAME'];
 		}
 	}
 
