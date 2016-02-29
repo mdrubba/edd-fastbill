@@ -79,6 +79,13 @@ function drubba_fb_register_settings( $settings ) {
 			'desc' => __( 'Send invoice to customer via email', 'edd-fastbill' ),
 			'type' => 'checkbox',
 		),
+
+		array(
+			'id'   => 'drubba_fb_fastbill_online_invoice',
+			'name' => __( 'Online invoice', 'edd-fastbill' ),
+			'desc' => __( 'I activated the online invoice functionalty within my Fastbill account.', 'edd-fastbill' ),
+			'type' => 'checkbox',
+		),
 	);
 
 	if ( drubba_fb_cfm_active() ) { // @since 1.1.0

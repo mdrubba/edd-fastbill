@@ -10,6 +10,11 @@
  * @since 1.0
  */
 function drubba_fastbill_purchase_history_header() {
+	global $edd_options;
+
+	if ( ! isset( $edd_options['drubba_fb_fastbill_online_invoice'] ) )
+		return;
+
 	echo '<th class="edd-fb-invoice">' . __( 'Invoice', 'edd-fastbill' ) . '</th>';
 }
 
@@ -27,14 +32,20 @@ add_action( 'edd_purchase_history_header_after', 'drubba_fastbill_purchase_histo
  * @param array $purchase_data All the purchase data
  */
 function drubba_fastbill_purchase_history_link( $post_id, $purchase_data ) {
-	$link_available = true;
-	if ( ! $link_available ) {
+	global $edd_options;
+
+	if ( ! isset( $edd_options['drubba_fb_fastbill_online_invoice'] ) )
+		return;
+
+	$fb_document_url = get_post_meta( $post_id, '_fastbill_document_url', true );
+
+	if ( empty( $fb_document_url ) ) {
 		echo '<td>-</td>';
 
 		return;
 	}
 
-	echo '<td class="edd_invoice"><a class="edd_invoice_link" title="' . __( 'Download Invoice', 'edd-fastbill' ) . '" href="' . esc_url( '#' ) . '">' . __( 'Download Invoice', 'edd-fastbill' ) . '</td>';
+	echo '<td class="edd_invoice"><a class="edd_invoice_link" title="' . __( 'Download Invoice', 'edd-fastbill' ) . '" href="' . esc_url( $fb_document_url ) . '">' . __( 'Download Invoice', 'edd-fastbill' ) . '</td>';
 }
 
 add_action( 'edd_purchase_history_row_end', 'drubba_fastbill_purchase_history_link', 10, 2 );
@@ -49,18 +60,21 @@ add_action( 'edd_purchase_history_row_end', 'drubba_fastbill_purchase_history_li
  * @param object $payment All the payment data
  */
 function drubba_fastbill_receipt_shortcode_link( $payment ) {
-	// TODO implement check if lin is available
-	$link_available = true;
-	if ( ! $link_available ) {
-		return;
-	}
+	global $edd_options;
 
-	$purchase_data = edd_get_payment_meta( $payment->ID );
+	if ( ! isset( $edd_options['drubba_fb_fastbill_online_invoice'] ) )
+		return;
+
+	$fb_document_url = get_post_meta( $payment->ID, '_fastbill_document_url', true );
+
+	if ( empty( $fb_document_url ) )
+		return;
+
 	?>
 	<tr>
 		<td><strong><?php _e( 'Invoice', 'edd-fastbill' ); ?>:</strong></td>
 		<td>
-			<a class="edd_invoice_link" title="<?php _e( 'Download Invoice', 'edd-fastbill' ); ?>" href="<?php echo esc_url( '#' ); ?>"><?php _e( 'Download Invoice', 'edd-fastbill' ); ?></a>
+			<a class="edd_invoice_link" title="<?php _e( 'Download Invoice', 'edd-fastbill' ); ?>" href="<?php echo esc_url( $fb_document_url ); ?>"><?php _e( 'Download Invoice', 'edd-fastbill' ); ?></a>
 		</td>
 	</tr>
 	<?php
