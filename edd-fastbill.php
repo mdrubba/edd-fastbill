@@ -64,3 +64,4 @@ include_once( DRUBBAFASTBILL_DIR . 'includes/template-tags.php' );
 include_once( DRUBBAFASTBILL_DIR . 'includes/fastbill-functions.php' );
 include_once( DRUBBAFASTBILL_DIR . 'includes/payment-actions.php' );
 include_once( DRUBBAFASTBILL_DIR . 'includes/frontend-functions.php' );
+include_once( DRUBBAFASTBILL_DIR . 'includes/payment-history.php' );

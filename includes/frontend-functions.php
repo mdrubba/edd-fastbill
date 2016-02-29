@@ -81,3 +81,4 @@ function drubba_fastbill_receipt_shortcode_link( $payment ) {
 }
 
 add_action( 'edd_payment_receipt_after', 'drubba_fastbill_receipt_shortcode_link', 10 );
+

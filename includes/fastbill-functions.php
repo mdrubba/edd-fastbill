@@ -78,16 +78,19 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 	}
 
 	if ( $cart_items ) {
-
+		$added_items = 0;
 		foreach ( $cart_items as $key => $cart_item ) {
 			// retrieve the ID of the download
 			$id = isset( $payment_meta['cart_details'] ) ? $cart_item['id'] : $cart_item;
 
 			// calculate price for item and pay attention to discounts
 			$price = $cart_item['subtotal'] - $cart_item['discount'];
-			if ( $price < 0 ) {
-				$price = 0;
+
+			// if item is for free, don't process the item
+			if ( $price <= 0 ) {
+				continue;
 			}
+			$added_items ++;
 
 			// retrieve price option name if available
 			if ( isset( $cart_item['item_number']['options']['price_id'] ) ) {
@@ -108,10 +111,10 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 			// Build XML
 			$xml .= "<ITEM>";
 			$xml .= "<DESCRIPTION>" . get_the_title( $id );
-			if ( isset( $option_name ) ) {
+			if ( ! empty( $option_name ) ) {
 				$xml .= ' (' . $option_name . ')';
 			}
-			if ( isset( $discount ) ) {
+			if ( ! empty( $discount ) ) {
 				$xml .= ' ' . $discount;
 			}
 			$xml .= "</DESCRIPTION>";
@@ -123,6 +126,12 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 			}
 			$xml .= "</ITEM>";
 		}
+	}
+
+	if ( ! $added_items ) {
+		drubba_fastbill_addlog( 'END - Invoice for order #' . $payment_id . ' was not created. Only free items included.' );
+		return;
+
 	}
 
 	$xml .= "</ITEMS>";
@@ -138,7 +147,7 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 
 	} catch ( Exception $e ) {
 
-		drubba_fastbill_addlog( $e->getMessage() );
+		drubba_fastbill_addlog( print_r( $e, true ) );
 
 		return;
 
@@ -154,14 +163,7 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 		update_post_meta( $payment_id, '_fastbill_invoice_id', $fb_invoice_id );
 		edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id );
 
-		if ( isset( $edd_options['drubba_fb_fastbill_online_invoice'] ) ) {
-			$invoice = drubba_fastbill_get_invoice($fb_invoice_id);
-			if ( !empty( $invoice->DOCUMENT_URL ) ) {
-				$fb_document_url = (string) $invoice->DOCUMENT_URL;
-				update_post_meta( $payment_id, '_fastbill_document_url', $fb_document_url );
-				edd_insert_payment_note( $payment_id, 'FastBill Document URL: ' . $fb_document_url );
-			}
-		}
+		drubba_fastbill_add_invoice_url( $payment_id, $fb_invoice_id );
 
 		drubba_fastbill_addlog( 'END - Creating invoice for order #' . $payment_id );
 
@@ -177,6 +179,35 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 		drubba_fastbill_addlog( 'END - Creating invoice for order #' . $payment_id );
 	}
 
+}
+
+/**
+ * drubba_fastbill_add_invoice_url()
+ *
+ * save url to invoice
+ *
+ * @param $payment_id
+ * @param $fb_invoice_id
+ *
+ * @return bool|string
+ */
+function drubba_fastbill_add_invoice_url( $payment_id, $fb_invoice_id ) {
+	global $edd_options;
+
+	if ( ! isset( $edd_options['drubba_fb_fastbill_online_invoice'] ) ) {
+		return false;
+	}
+
+	$invoice = drubba_fastbill_get_invoice( $fb_invoice_id );
+	if ( empty( $invoice->DOCUMENT_URL ) ) {
+		return false;
+	}
+
+	$fb_document_url = (string) $invoice->DOCUMENT_URL;
+	update_post_meta( $payment_id, '_fastbill_document_url', $fb_document_url );
+	edd_insert_payment_note( $payment_id, 'FastBill Document URL: ' . $fb_document_url );
+
+	return $fb_document_url;
 }
 
 /**
@@ -221,12 +252,14 @@ function drubba_fastbill_get_invoice( $invoice_id ) {
 
 		if ( ! $is_error ) {
 			drubba_fastbill_addlog( 'END - Complete get invoice ID: ' . $invoice_id );
-			return ( !empty( $response->RESPONSE->INVOICES->INVOICE ) ) ? $response->RESPONSE->INVOICES->INVOICE : null;
+
+			return ( ! empty( $response->RESPONSE->INVOICES->INVOICE ) ) ? $response->RESPONSE->INVOICES->INVOICE : null;
 		} else {
 			// An error occured
 			$error_string = __( 'There was an error completing invoice in FastBill:', 'edd-fastbill' ) . "\n" .
-				__( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+			                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
 			drubba_fastbill_addlog( $error_string );
+
 			return null;
 		}
 	} else {
