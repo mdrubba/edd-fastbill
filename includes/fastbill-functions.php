@@ -130,6 +130,7 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 
 	if ( ! $added_items ) {
 		drubba_fastbill_addlog( 'END - Invoice for order #' . $payment_id . ' was not created. Only free items included.' );
+
 		return;
 
 	}
@@ -392,14 +393,11 @@ function drubba_fastbill_create_payment( $payment_id ) {
  *
  **/
 function drubba_fastbill_invoice_sendbyemail( $payment_id ) {
-
-	global $edd_options;
-
 	$fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
 
 	// no invoice id so exit.
 	if ( $fb_invoice_id <= 0 ) {
-		return;
+		return false;
 	}
 
 	// there is an invoice ID, send invoice to customer
@@ -413,14 +411,14 @@ function drubba_fastbill_invoice_sendbyemail( $payment_id ) {
 	if ( ! $customer_email ) {
 		drubba_fastbill_addlog( __( 'Error: ', 'edd-fastbill' ) . 'Customer email address was not found.' );
 
-		return;
+		return false;
 	}
 
 	// customer email not valid
 	if ( ! is_email( $customer_email ) ) {
 		drubba_fastbill_addlog( __( 'Error: ', 'edd-fastbill' ) . 'Customer email address is not valid.' );
 
-		return;
+		return false;
 	}
 
 	// Build request
@@ -444,13 +442,13 @@ function drubba_fastbill_invoice_sendbyemail( $payment_id ) {
 
 		drubba_fastbill_addlog( $e->getMessage() );
 
-		return;
+		return false;
 
 	}
 	$response = new SimpleXMLElement( $result );
-	$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+	$success  = isset( $response->RESPONSE->ERRORS ) ? false : true;
 
-	if ( ! $is_error ) {
+	if ( $success ) {
 		drubba_fastbill_addlog( 'END - Invoice for order #' . $payment_id . ' sent to customer.' );
 	} else {
 		// An error occured
@@ -458,6 +456,8 @@ function drubba_fastbill_invoice_sendbyemail( $payment_id ) {
 		                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
 		drubba_fastbill_addlog( $error_string );
 	}
+
+	return $success;
 }
 
 /**

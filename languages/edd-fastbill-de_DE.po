@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy Digital Downloads - FastBill Integration v1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-29 23:32+0100\n"
-"PO-Revision-Date: 2016-02-29 23:32+0100\n"
+"POT-Creation-Date: 2016-03-01 00:18+0100\n"
+"PO-Revision-Date: 2016-03-01 00:18+0100\n"
 "Last-Translator: Markus Drubba <kontakt@markusdrubba.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -29,45 +29,45 @@ msgid "renewal"
 msgstr "Lizenzverlängerung"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:175
+#: includes/fastbill-functions.php:176
 msgid "There was an error adding the invocie to FastBill:"
 msgstr "Es gab einen Fehler beim Erstellen der Rechnung bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:176 includes/fastbill-functions.php:250
-#: includes/fastbill-functions.php:308 includes/fastbill-functions.php:364
-#: includes/fastbill-functions.php:404 includes/fastbill-functions.php:411
-#: includes/fastbill-functions.php:448 includes/fastbill-functions.php:575
-#: includes/fastbill-functions.php:629 includes/fastbill-functions.php:688
+#: includes/fastbill-functions.php:177 includes/fastbill-functions.php:261
+#: includes/fastbill-functions.php:319 includes/fastbill-functions.php:375
+#: includes/fastbill-functions.php:412 includes/fastbill-functions.php:419
+#: includes/fastbill-functions.php:456 includes/fastbill-functions.php:585
+#: includes/fastbill-functions.php:639 includes/fastbill-functions.php:698
 msgid "Error: "
 msgstr "Fehler: "
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:249 includes/fastbill-functions.php:307
+#: includes/fastbill-functions.php:260 includes/fastbill-functions.php:318
 msgid "There was an error completing invoice in FastBill:"
 msgstr "Es gab einen Fehler beim finalen Erstellen der Rechnung:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:363
+#: includes/fastbill-functions.php:374
 msgid "There was an error creating a payment in FastBill:"
 msgstr "Es gab einen Fehler beim setzen der Rechnung als bezahlt:"
 
-#: includes/fastbill-functions.php:447
+#: includes/fastbill-functions.php:455
 msgid "There was an error sending an invoice via FastBill:"
 msgstr "Es gab einen Fehler beim senden der Rechnung via FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:574
+#: includes/fastbill-functions.php:584
 msgid "There was an error creating this customer in FastBill:"
 msgstr "Es gab einen Fehler beim Erstellen des Kunden bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:628
+#: includes/fastbill-functions.php:638
 msgid "There was an error looking up this customer in FastBill:"
 msgstr "Es gab einen Fehler beim Suchen des Kunden bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:687
+#: includes/fastbill-functions.php:697
 msgid "There was an error when receiving templates from FastBill:"
 msgstr ""
 "Es gab einen Fehler bei der Abfrage der Rechnungs-Vorlagen von Fastbild:"
@@ -77,21 +77,33 @@ msgid "Invoice"
 msgstr "Rechnung"
 
 #: includes/frontend-functions.php:48 includes/frontend-functions.php:77
-#: includes/payment-history.php:25 includes/template-tags.php:47
+#: includes/payment-history.php:33 includes/template-tags.php:50
 msgid "Download Invoice"
 msgstr "Rechnung herunterladen"
 
-#: includes/payment-history.php:73
-msgid "The invoice link was generated."
-msgstr "Der Link zur Rechnung wurde erstellt und gespeichert."
+#: includes/payment-history.php:28 includes/payment-history.php:161
+msgid "Set invoice link"
+msgstr "Link zur Rechnung erstellen"
 
-#: includes/payment-history.php:77
+#: includes/payment-history.php:52
+msgid "Resend invoice"
+msgstr "Rechnung erneut senden"
+
+#: includes/payment-history.php:132
 msgid "The invoice link could not be generated."
 msgstr "Der Link zur Rechnung konnte nicht erstellt werden."
 
-#: includes/payment-history.php:86
-msgid "Set invoice link"
-msgstr "Link zur Rechnung erstellen"
+#: includes/payment-history.php:135
+msgid "The invoice link was generated."
+msgstr "Der Link zur Rechnung wurde erstellt und gespeichert."
+
+#: includes/payment-history.php:139
+msgid "The invoice could not be sent."
+msgstr "Die Rechnung konnte nicht gesendet werden."
+
+#: includes/payment-history.php:143
+msgid "The invoice was sent."
+msgstr "Die Rechnung wurde erneut gesendet."
 
 #: includes/register-settings.php:13
 msgid "FastBill"
@@ -212,7 +224,7 @@ msgstr "Mobiltelefonnummer"
 msgid "Default"
 msgstr "Standard"
 
-#: includes/template-tags.php:27
+#: includes/template-tags.php:28
 msgid "Creates a link to the downloadable Fastbill invoice"
 msgstr "Erzeugt einen Link zur FastBill PDF Rechnung"
 

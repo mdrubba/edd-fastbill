@@ -3,7 +3,7 @@
  *
  * drubba_fastbill_invoice_link
  *
- * Creates a link on the payment history page in the backend
+ * Creates a invoice get / invoice donwload link on the payment history page in the backend
  *
  * @param $row_actions
  * @param $payment_meta
@@ -36,6 +36,35 @@ function drubba_fastbill_invoice_link( $row_actions, $payment_meta ) {
 }
 
 add_filter( 'edd_payment_row_actions', 'drubba_fastbill_invoice_link', 10, 2 );
+
+/**
+ * drubba_fastbill_invoice_email()
+ *
+ * Creates a resend invoice link on the payment history page in the backend
+ *
+ * @param $row_actions
+ * @param $payment_meta
+ *
+ * @return mixed
+ */
+function drubba_fastbill_invoice_email( $row_actions, $payment_meta ) {
+	global $edd_options;
+
+	if ( ! isset( $edd_options['drubba_fb_fastbill_sendbyemail'] ) ) {
+		return $row_actions;
+	}
+
+	$nonce                       = wp_create_nonce( 'edd-fastbill-mail-invoice' );
+	$row_actions['mail_invoice'] = '<a href="' . add_query_arg( array(
+			'edd-action'  => 'mail_fastbill_invoice',
+			'purchase_id' => $payment_meta->ID,
+			'_wpnonce'    => $nonce
+		) ) . '">' . __( 'Resend invoice', 'edd-fastbill' ) . '</a>';
+
+	return $row_actions;
+}
+
+add_filter( 'edd_payment_row_actions', 'drubba_fastbill_invoice_email', 10, 2 );
 
 /**
  * Resend the Email Purchase Receipt. (This can be done from the Payment History page)
@@ -77,17 +106,57 @@ function drubba_fastbill_get_invoice_link( $data ) {
 add_action( 'edd_set_fastbill_invoice', 'drubba_fastbill_get_invoice_link' );
 
 /**
+ * drubba_fastbill_mail_invoice()
+ *
+ * resend invoice via mail to customer
+ *
+ * @param $data
+ */
+function drubba_fastbill_mail_invoice( $data ) {
+
+	$purchase_id = absint( $data['purchase_id'] );
+
+	if ( empty( $purchase_id ) ) {
+		return;
+	}
+
+	if ( ! is_admin() || ! isset( $data['_wpnonce'] ) || ! wp_verify_nonce( $data['_wpnonce'], 'edd-fastbill-mail-invoice' ) ) {
+		return;
+	}
+
+	$success = drubba_fastbill_invoice_sendbyemail( $purchase_id );
+	$message = $success ? 'mailed_fastbill_invoice' : 'mailed_fastbill_invoice_error';
+
+	wp_redirect( add_query_arg( array(
+		'edd-message' => $message,
+		'edd-action'  => false,
+		'purchase_id' => false
+	) ) );
+	exit;
+}
+
+add_action( 'edd_mail_fastbill_invoice', 'drubba_fastbill_mail_invoice' );
+
+/**
  * drubba_fastbill_admin_messages()
  *
  * show admin messages for different actions
  */
 function drubba_fastbill_admin_messages() {
+
+	if ( isset( $_GET['edd-message'] ) && 'got_fastbill_invoice_error' == $_GET['edd-message'] && current_user_can( 'view_shop_reports' ) ) {
+		add_settings_error( 'edd-notices', 'fastbill-invoice-retrieved-error', __( 'The invoice link could not be generated.', 'edd-fastbill' ), 'error' );
+	}
 	if ( isset( $_GET['edd-message'] ) && 'got_fastbill_invoice' == $_GET['edd-message'] && current_user_can( 'view_shop_reports' ) ) {
 		add_settings_error( 'edd-notices', 'fastbill-invoice-retrieved', __( 'The invoice link was generated.', 'edd-fastbill' ), 'updated' );
 	}
 
-	if ( isset( $_GET['edd-message'] ) && 'got_fastbill_invoice_error' == $_GET['edd-message'] && current_user_can( 'view_shop_reports' ) ) {
-		add_settings_error( 'edd-notices', 'fastbill-invoice-retrieved-error', __( 'The invoice link could not be generated.', 'edd-fastbill' ), 'error' );
+	if ( isset( $_GET['edd-message'] ) && 'mailed_fastbill_invoice_error' == $_GET['edd-message'] && current_user_can( 'view_shop_reports' ) ) {
+		add_settings_error( 'edd-notices', 'fastbill-invoice-retrieved', __( 'The invoice could not be sent.', 'edd-fastbill' ), 'error' );
+	}
+
+	if ( isset( $_GET['edd-message'] ) && 'mailed_fastbill_invoice' == $_GET['edd-message'] && current_user_can( 'view_shop_reports' ) ) {
+		add_settings_error( 'edd-notices', 'fastbill-invoice-retrieved', __( 'The invoice was sent.', 'edd-fastbill' ), 'updated' );
 	}
 
 	settings_errors( 'edd-notices' );
