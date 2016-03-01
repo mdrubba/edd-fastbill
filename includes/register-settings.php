@@ -48,7 +48,7 @@ function drubba_fb_register_settings( $settings ) {
 		array(
 			'id'      => 'drubba_fb_fastbill_invoice_template',
 			'name'    => __( 'Invoice Template', 'edd-fastbill' ),
-			'desc'    => __( 'Choose invoice template', 'edd-fastbill' ),
+			'desc'    => __( 'Choose invoice template. If you edit a Template in FastBill, you have to reassign it here.', 'edd-fastbill' ),
 			'std'     => '',
 			'type'    => 'select',
 			'options' => drubba_fb_get_invoice_templates()
@@ -69,17 +69,26 @@ function drubba_fb_register_settings( $settings ) {
 		array(
 			'id'   => 'drubba_fb_fastbill_payments',
 			'name' => __( 'Auto create payment', 'edd-fastbill' ),
-			'desc' => __( 'Create payment when order is placed, requires invoice status COMPLETE', 'edd-fastbill' ),
+			'desc' => __( 'Create payment in FastBill when order is placed, requires invoice status COMPLETE', 'edd-fastbill' ),
 			'type' => 'checkbox',
 		),
 
 		array(
 			'id'   => 'drubba_fb_fastbill_sendbyemail',
 			'name' => __( 'Send invoice', 'edd-fastbill' ),
-			'desc' => __( 'Send invoice to customer via email', 'edd-fastbill' ),
+			'desc' => __( 'Send invoice to customer via email (is sent via FastBill)', 'edd-fastbill' ),
+			'type' => 'checkbox',
+		),
+
+		array(
+			'id'   => 'drubba_fb_fastbill_online_invoice',
+			'name' => __( 'Online invoice', 'edd-fastbill' ),
+			'desc' => __( 'I activated the online invoice functionalty within my Fastbill account to accessing the generated invoice.', 'edd-fastbill' ),
 			'type' => 'checkbox',
 		),
 	);
+
+
 
 	if ( drubba_fb_cfm_active() ) { // @since 1.1.0
 
