@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Easy Digital Downloads - FastBill Integration
+Plugin Name: Easy Digital Downloads - FastBill
 Plugin URI: https://easydigitaldownloads.com/extensions/fastbill-integration/?ref=2325
 Description: Integrates <a href="https://easydigitaldownloads.com/" target="_blank">Easy Digital Downloads</a> with the <a href="http://www.fastbill.com" target="_blank">FastBill - fast money</a> accounting software. 
 Author: Markus Drubba

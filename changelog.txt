@@ -1,4 +1,11 @@
-Easy Digital Downloads - FastBill Integration
+Easy Digital Downloads - FastBill
+
+= 2016-03-01 1.3.0
+
+* New: send invoice via email
+* New: download invoice
+* New: select invoice template
+* Tweak: improved settings section
 
 = 2015-08-07  1.2.0 =
 
