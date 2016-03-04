@@ -739,6 +739,10 @@ function drubba_fastbill_apicall( $xml ) {
 
 	global $edd_options;
 
+	if ( ! isset( $edd_options['drubba_fb_fastbill_email'] ) || ! isset( $edd_options['drubba_fb_fastbill_api_key'] ) ) {
+		throw new Exception( 'An error occured: Credentials are not set' );
+	}
+
 	drubba_fastbill_addlog( "SENDING XML:\n" . $xml );
 
 	$url = 'https://my.fastbill.com/api/1.0/api.php';
