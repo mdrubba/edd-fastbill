@@ -13,6 +13,10 @@
 
 == Changelog ==
 
+= 2016-04-06 1.3.1
+* Fix: minor fix to settings
+
+
 = 2016-03-01 1.3.0
 
 * New: send invoice via email

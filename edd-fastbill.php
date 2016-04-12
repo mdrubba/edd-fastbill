@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: Easy Digital Downloads - FastBill
+Plugin Name: Easy Digital Downloads - FastBill Integration
 Plugin URI: https://easydigitaldownloads.com/extensions/fastbill-integration/?ref=2325
 Description: Integrates <a href="https://easydigitaldownloads.com/" target="_blank">Easy Digital Downloads</a> with the <a href="http://www.fastbill.com" target="_blank">FastBill - fast money</a> accounting software. 
 Author: Markus Drubba
 Author URI: http://markusdrubba.de
-Version: 1.2.0
+Version: 1.3.1
 
 Easy Digital Downloads is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ define( 'DRUBBAFASTBILL_DIR', plugin_dir_path( __FILE__ ) );
 |--------------------------------------------------------------------------
 */
 if ( class_exists( 'EDD_License' ) ) {
-	$license = new EDD_License( __FILE__, DRUBBAFASTBILL_PRODUCT_NAME, '1.2.0', 'Markus Drubba' );
+	$license = new EDD_License( __FILE__, DRUBBAFASTBILL_PRODUCT_NAME, '1.3.1', 'Markus Drubba' );
 }
 
 

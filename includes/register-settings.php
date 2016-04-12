@@ -157,7 +157,9 @@ function drubba_fb_get_checkout_fields() {
 	$return     = array( '' => '' );
 	$cfm_fields = get_post_meta( $cfm_id, 'edd-checkout-fields', true );
 	foreach ( $cfm_fields as $field ) {
-		$return[ $field['name'] ] = $field['label'];
+		if ( isset( $field['name'] ) && isset( $field['label'] ) ) {
+			$return[ $field['name'] ] = $field['label'];
+		}
 	}
 
 	return $return;
