@@ -1,23 +1,52 @@
+=== EDD - FastBill Integration ===
+Contributors: drumba
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BCVM7FZ6ZCM2A
+Tags: Digital Downloads, EDD, Fastbill, Accounting, Invoice
+Requires at least: 4.5
+Tested up to: 4.5.3
+Stable tag: 1.4.1
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
+
+Automatically create invoices, clients, and payments in your FastBill account when purchases are made.
+
+== Description ==
+
+[FastBill](https://www.fastbill.com/) is a web based invoicing system for tracking clients, payments, projects, and more.
+This extension connects an EDD store to a FastBill account. When a download is purchased an Invoice, Payment and Client are created in FastBill.
+With this integration, you will save a significant amount of time on keeping your records up to date.
+
+Store owners can set the status of the FastBill invoice to draft or completed, sending Email with the invoice, let users Download the invoice from there Users Account..
+
 == Installation ==
 
- * Unzip the files and upload the folder into your plugins folder (wp-content/plugins/)
- * Activate the plugin in your WordPress admin area.
+* Unzip the files and upload the folder into your plugins folder (wp-content/plugins/)
+* Activate the plugin in your WordPress admin area.
 
 == Configuration ==
 
- * Navigate to Downloads > Settings 
- * Click on the tab labeled "Misc"
- * Find the settings area with heading of "FastBill"
- * Configure these settings and add your FastBill credentials
- * You find the FastBill credentials in the main settings, of your FastBill account
+* Navigate to Downloads > Settings
+* Click on the tab labeled "Extensions"
+* Open the Section named "FastBill"
+* Configure these settings and add your FastBill credentials
+* You find the FastBill credentials in the main settings, of your FastBill account
+
 
 == Changelog ==
 
-= 2016-04-06 1.3.1
+= 2016-07-04 1.4.1 =
+
+* Update Translation implementation
+
+= 2016-06-20 1.4.0 =
+
+* Remove EDD Licencing, Update for WordPress.org Plugin directory
+
+= 2016-04-06 1.3.1 =
+
 * Fix: minor fix to settings
 
-
-= 2016-03-01 1.3.0
+= 2016-03-01 1.3.0 =
 
 * New: send invoice via email
 * New: download invoice
