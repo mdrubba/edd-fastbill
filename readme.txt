@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: Digital Downloads, EDD, Fastbill, Accounting, Invoice
 Requires at least: 4.5
 Tested up to: 4.5.3
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -33,6 +33,10 @@ Store owners can set the status of the FastBill invoice to draft or completed, s
 
 
 == Changelog ==
+
+= 2016-07-04 1.4.2 =
+
+* Fix: optimize usage of tax country when creating invoice
 
 = 2016-07-04 1.4.1 =
 
