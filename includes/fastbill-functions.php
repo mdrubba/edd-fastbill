@@ -27,7 +27,7 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 	$payment_meta = edd_get_payment_meta( $payment_id );
 	$user_info    = $payment_meta['user_info'];
 	$cart_items   = isset( $payment_meta['cart_details'] ) ? maybe_unserialize( $payment_meta['cart_details'] ) : false;
-    $user_country = isset( $user_info['address']['country'] ) ? maybe_unserialize( $user_info['address']['country'] ) : false;
+	$user_country = isset( $user_info['address']['country'] ) ? maybe_unserialize( $user_info['address']['country'] ) : false;
 
 	drubba_fastbill_addlog( 'START - Creating invoice for order #' . $payment_id );
 
