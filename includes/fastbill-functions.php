@@ -27,7 +27,7 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 	$payment_meta = edd_get_payment_meta( $payment_id );
 	$user_info    = $payment_meta['user_info'];
 	$cart_items   = isset( $payment_meta['cart_details'] ) ? maybe_unserialize( $payment_meta['cart_details'] ) : false;
-
+    $user_country = isset( $user_info['address']['country'] ) ? maybe_unserialize( $user_info['address']['country'] ) : false;
 
 	drubba_fastbill_addlog( 'START - Creating invoice for order #' . $payment_id );
 
@@ -121,7 +121,7 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 			$xml .= "<UNIT_PRICE>" . $price . "</UNIT_PRICE>";
 			$xml .= "<QUANTITY>" . $cart_item['quantity'] . "</QUANTITY>";
 			if ( edd_use_taxes() ) {
-				$tax_rate = edd_get_tax_rate() * 100;
+				$tax_rate = edd_get_tax_rate( $user_country ) * 100;
 				$xml .= "<VAT_PERCENT>" . $tax_rate . "</VAT_PERCENT>";
 			}
 			$xml .= "</ITEM>";
