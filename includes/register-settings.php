@@ -89,7 +89,6 @@ function drubba_fb_register_settings( $settings ) {
 	);
 
 
-
 	if ( drubba_fb_cfm_active() ) { // @since 1.1.0
 
 
@@ -118,6 +117,20 @@ function drubba_fb_register_settings( $settings ) {
 
 		}
 	}
+
+	$fastbill_settings[] = array(
+		'id'   => 'drubba_fb_fastbill_debug_log',
+		'name' => __( 'Debug mode', 'edd-fastbill' ),
+		'desc' => __( 'Write debug logs into the database.', 'edd-fastbill' ),
+		'type' => 'checkbox',
+	);
+
+	$fastbill_settings[] = array(
+		'id'   => 'drubba_fb_fastbill_reset_debug_log',
+		'name' => __( 'Reset debug entries', 'edd-fastbill' ),
+		'desc' => __( 'Remove debug logs from database.', 'edd-fastbill' ),
+		'type' => 'checkbox',
+	);
 
 	if ( version_compare( EDD_VERSION, 2.5, '>=' ) ) {
 		$fastbill_settings = array( 'edd-fastbill' => $fastbill_settings );
@@ -216,3 +229,43 @@ function drubba_fb_get_invoice_templates() {
 
 	return $templates;
 }
+
+/**
+ * Display field for debug output
+ *
+ * @param $html
+ * @param $args
+ *
+ * @return string
+ */
+function drubba_fb_fastbill_show_debug_log_field( $html, $args ) {
+	if ( $args['id'] == 'drubba_fb_fastbill_debug_log' ) {
+		$current_log = get_option( 'edd_fastbill_error_log', '' );
+		if ( ! empty( $current_log ) ) {
+			$html = $html . '<br><br><textarea style="width:100%;height:400px;" readonly>' . $current_log . '</textarea>';
+		}
+	}
+
+	return $html;
+}
+
+add_filter( 'edd_after_setting_output', 'drubba_fb_fastbill_show_debug_log_field', 10, 2 );
+
+/**
+ * Reset database debug log
+ *
+ * @param $new_value
+ * @param $old_value
+ *
+ * @return mixed
+ */
+function drubba_fb_fastbill_reset_debug_log( $new_value, $old_value ) {
+	if ( $new_value['drubba_fb_fastbill_reset_debug_log'] == 1 ) {
+		update_option( 'edd_fastbill_error_log', '' );
+		$new_value['drubba_fb_fastbill_reset_debug_log'] = - 1;
+	}
+
+	return $new_value;
+}
+
+add_action( 'pre_update_option_edd_settings', 'drubba_fb_fastbill_reset_debug_log', 10, 2 );
