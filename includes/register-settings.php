@@ -260,7 +260,7 @@ add_filter( 'edd_after_setting_output', 'drubba_fb_fastbill_show_debug_log_field
  * @return mixed
  */
 function drubba_fb_fastbill_reset_debug_log( $new_value, $old_value ) {
-	if ( $new_value['drubba_fb_fastbill_reset_debug_log'] == 1 ) {
+	if ( isset( $new_value['drubba_fb_fastbill_reset_debug_log'] ) && $new_value['drubba_fb_fastbill_reset_debug_log'] == 1 ) {
 		update_option( 'edd_fastbill_error_log', '' );
 		$new_value['drubba_fb_fastbill_reset_debug_log'] = - 1;
 	}
