@@ -5,7 +5,7 @@ Plugin URI: https://easydigitaldownloads.com/extensions/fastbill-integration/?re
 Description: Integrates <a href="https://easydigitaldownloads.com/" target="_blank">Easy Digital Downloads</a> with the <a href="http://www.fastbill.com" target="_blank">FastBill - fast money</a> accounting software. 
 Author: Markus Drubba
 Author URI: http://markusdrubba.de
-Version: 1.4.2
+Version: 1.4.3
 Text Domain: edd-fastbill
 Domain Path: /languages
 

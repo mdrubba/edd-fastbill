@@ -382,6 +382,63 @@ function drubba_fastbill_create_payment( $payment_id ) {
 }
 
 /**
+ * drubba_fastbill_cancel_invoice()
+ *
+ * Cancel invoice in FastBill for the given order.
+ *
+ * @param  $payment_id
+ *
+ * @access public
+ * @return void
+ *
+ **/
+function drubba_fastbill_cancel_invoice( $payment_id ) {
+
+	$fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
+
+	if ( $fb_invoice_id > 0 ) {
+		// there is an invoice ID, so cancel invoice
+
+		drubba_fastbill_addlog( 'START - Canceling invoice in FastBill for invoice ID: ' . $fb_invoice_id );
+
+		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+		$xml .= "<FBAPI>";
+		$xml .= "<SERVICE>invoice.cancel</SERVICE>";
+		$xml .= "<DATA>";
+		$xml .= "<INVOICE_ID>" . $fb_invoice_id . "</INVOICE_ID>";
+		$xml .= "</DATA>";
+		$xml .= "</FBAPI>";
+
+		try {
+
+			$result = drubba_fastbill_apicall( $xml );
+
+		} catch ( Exception $e ) {
+
+			drubba_fastbill_addlog( $e->getMessage() );
+
+			return;
+
+		}
+		$response = new SimpleXMLElement( $result );
+		$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+
+		if ( ! $is_error ) {
+			drubba_fastbill_addlog( 'END - Canceling invoice for order #' . $payment_id );
+		} else {
+			// An error occured
+			$error_string = __( 'There was an error canceling an invoice in FastBill:', 'edd-fastbill' ) . "\n" .
+			                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+			drubba_fastbill_addlog( $error_string );
+		}
+	} else {
+		// no invoice id so exit.
+		return;
+	}
+}
+
+
+/**
  * drubba_fastbill_invoice_sendbyemail()
  *
  * Send created and completed invoice by mail to the customer.
@@ -785,19 +842,16 @@ function drubba_fastbill_apicall( $xml ) {
  *
  **/
 function drubba_fastbill_addlog( $log_string ) {
-	if ( WP_DEBUG ) {
-		$path       = DRUBBAFASTBILL_DIR . "log/fastbill_debug.log";
-		$log_string = "Log Date: " . date( "r" ) . "\n" . $log_string . "\n";
-		if ( file_exists( $path ) ) {
-			if ( $log = fopen( $path, "a" ) ) {
-				fwrite( $log, $log_string, strlen( $log_string ) );
-				fclose( $log );
-			}
-		} else {
-			if ( $log = fopen( $path, "c" ) ) {
-				fwrite( $log, $log_string, strlen( $log_string ) );
-				fclose( $log );
-			}
-		}
+	global $edd_options;
+
+	if ( isset( $edd_options['drubba_fb_fastbill_debug_log'] ) && 1 == $edd_options['drubba_fb_fastbill_debug_log'] ) {
+
+		$current_log = get_option( 'edd_fastbill_error_log', '' );
+		$log_string  = "Log Date: " . date( "r" ) . "\n" . trim( $log_string ) . "\n\n";
+
+		$final_log = $current_log . $log_string;
+
+		update_option( 'edd_fastbill_error_log', $final_log );
+
 	}
 }
