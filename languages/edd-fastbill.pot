@@ -1,16 +1,26 @@
 # Copyright (C) 2016 Easy Digital Downloads - FastBill Integration
 # This file is distributed under the same license as the Easy Digital Downloads - FastBill Integration package.
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Easy Digital Downloads - FastBill Integration 1.4.1\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/edd-fastbill\n"
-"POT-Creation-Date: 2016-07-19 20:21:24+00:00\n"
+"Project-Id-Version: EDD - FastBill\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-12-07 00:40+0100\n"
+"PO-Revision-Date: 2016-12-07 00:33+0100\n"
+"Last-Translator: Markus Drubba <kontakt@markusdrubba.de>\n"
+"Language-Team: \n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Poedit 1.8.5\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;"
+"_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
 
 #: includes/fastbill-functions.php:70
 msgid "Discount used: "
@@ -24,11 +34,10 @@ msgstr ""
 msgid "There was an error adding the invocie to FastBill:"
 msgstr ""
 
-#: includes/fastbill-functions.php:177 includes/fastbill-functions.php:261
-#: includes/fastbill-functions.php:319 includes/fastbill-functions.php:375
-#: includes/fastbill-functions.php:412 includes/fastbill-functions.php:419
-#: includes/fastbill-functions.php:456 includes/fastbill-functions.php:585
-#: includes/fastbill-functions.php:639 includes/fastbill-functions.php:698
+#: includes/fastbill-functions.php:177 includes/fastbill-functions.php:261 includes/fastbill-functions.php:319
+#: includes/fastbill-functions.php:375 includes/fastbill-functions.php:431 includes/fastbill-functions.php:469
+#: includes/fastbill-functions.php:476 includes/fastbill-functions.php:513 includes/fastbill-functions.php:642
+#: includes/fastbill-functions.php:696 includes/fastbill-functions.php:755
 msgid "Error: "
 msgstr ""
 
@@ -40,19 +49,23 @@ msgstr ""
 msgid "There was an error creating a payment in FastBill:"
 msgstr ""
 
-#: includes/fastbill-functions.php:455
+#: includes/fastbill-functions.php:430
+msgid "There was an error canceling an invoice in FastBill:"
+msgstr ""
+
+#: includes/fastbill-functions.php:512
 msgid "There was an error sending an invoice via FastBill:"
 msgstr ""
 
-#: includes/fastbill-functions.php:584
+#: includes/fastbill-functions.php:641
 msgid "There was an error creating this customer in FastBill:"
 msgstr ""
 
-#: includes/fastbill-functions.php:638
+#: includes/fastbill-functions.php:695
 msgid "There was an error looking up this customer in FastBill:"
 msgstr ""
 
-#: includes/fastbill-functions.php:697
+#: includes/fastbill-functions.php:754
 msgid "There was an error when receiving templates from FastBill:"
 msgstr ""
 
@@ -60,8 +73,8 @@ msgstr ""
 msgid "Invoice"
 msgstr ""
 
-#: includes/frontend-functions.php:48 includes/frontend-functions.php:77
-#: includes/payment-history.php:33 includes/template-tags.php:50
+#: includes/frontend-functions.php:48 includes/frontend-functions.php:77 includes/payment-history.php:33
+#: includes/template-tags.php:50
 msgid "Download Invoice"
 msgstr ""
 
@@ -110,9 +123,7 @@ msgid "Invoice Template"
 msgstr ""
 
 #: includes/register-settings.php:51
-msgid ""
-"Choose invoice template. If you edit a Template in FastBill, you have to "
-"reassign it here."
+msgid "Choose invoice template. If you edit a Template in FastBill, you have to reassign it here."
 msgstr ""
 
 #: includes/register-settings.php:59
@@ -136,9 +147,7 @@ msgid "Auto create payment"
 msgstr ""
 
 #: includes/register-settings.php:72
-msgid ""
-"Create payment in FastBill when order is placed, requires invoice status "
-"COMPLETE"
+msgid "Create payment in FastBill when order is placed, requires invoice status COMPLETE"
 msgstr ""
 
 #: includes/register-settings.php:78
@@ -155,70 +164,61 @@ msgstr ""
 
 #: includes/register-settings.php:86
 msgid ""
-"I activated the online invoice functionalty within my Fastbill account to "
-"accessing the generated invoice."
+"I activated the online invoice functionalty within my Fastbill account to accessing the generated invoice."
 msgstr ""
 
-#: includes/register-settings.php:98
+#: includes/register-settings.php:97
 msgid "FastBill Customer Fields"
 msgstr ""
 
-#: includes/register-settings.php:179
+#: includes/register-settings.php:123
+msgid "Debug mode"
+msgstr ""
+
+#: includes/register-settings.php:124
+msgid "Write debug logs into the database."
+msgstr ""
+
+#: includes/register-settings.php:130
+msgid "Reset debug entries"
+msgstr ""
+
+#: includes/register-settings.php:131
+msgid "Remove debug logs from database."
+msgstr ""
+
+#: includes/register-settings.php:192
 msgid "Organization"
 msgstr ""
 
-#: includes/register-settings.php:180
+#: includes/register-settings.php:193
 msgid "If set by customer, than Business"
 msgstr ""
 
-#: includes/register-settings.php:183
+#: includes/register-settings.php:196
 msgid "Salutation"
 msgstr ""
 
-#: includes/register-settings.php:184
+#: includes/register-settings.php:197
 msgid "Use Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs."
 msgstr ""
 
-#: includes/register-settings.php:186
+#: includes/register-settings.php:199
 msgid "Phone"
 msgstr ""
 
-#: includes/register-settings.php:187
+#: includes/register-settings.php:200
 msgid "Fax"
 msgstr ""
 
-#: includes/register-settings.php:188
+#: includes/register-settings.php:201
 msgid "Mobile"
 msgstr ""
 
-#: includes/register-settings.php:202
+#: includes/register-settings.php:215
 msgid "Default"
 msgstr ""
 
 #: includes/template-tags.php:28
 msgid "Creates a link to the downloadable Fastbill invoice"
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "Easy Digital Downloads - FastBill Integration"
-msgstr ""
-
-#. Plugin URI of the plugin/theme
-msgid ""
-"https://easydigitaldownloads.com/extensions/fastbill-integration/?ref=2325"
-msgstr ""
-
-#. Description of the plugin/theme
-msgid ""
-"Integrates <a href=\"https://easydigitaldownloads.com/\" target=\"_blank"
-"\">Easy Digital Downloads</a> with the <a href=\"http://www.fastbill.com\" "
-"target=\"_blank\">FastBill - fast money</a> accounting software."
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "Markus Drubba"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "http://markusdrubba.de"
 msgstr ""
