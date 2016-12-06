@@ -785,19 +785,16 @@ function drubba_fastbill_apicall( $xml ) {
  *
  **/
 function drubba_fastbill_addlog( $log_string ) {
-	if ( WP_DEBUG ) {
-		$path       = DRUBBAFASTBILL_DIR . "log/fastbill_debug.log";
-		$log_string = "Log Date: " . date( "r" ) . "\n" . $log_string . "\n";
-		if ( file_exists( $path ) ) {
-			if ( $log = fopen( $path, "a" ) ) {
-				fwrite( $log, $log_string, strlen( $log_string ) );
-				fclose( $log );
-			}
-		} else {
-			if ( $log = fopen( $path, "c" ) ) {
-				fwrite( $log, $log_string, strlen( $log_string ) );
-				fclose( $log );
-			}
-		}
+	global $edd_options;
+
+	if ( isset( $edd_options['drubba_fb_fastbill_debug_log'] ) && 1 == $edd_options['drubba_fb_fastbill_debug_log'] ) {
+
+		$current_log = get_option( 'edd_fastbill_error_log', '' );
+		$log_string  = "Log Date: " . date( "r" ) . "\n" . trim( $log_string ) . "\n\n";
+
+		$final_log = $current_log . $log_string;
+
+		update_option( 'edd_fastbill_error_log', $final_log );
+
 	}
 }
