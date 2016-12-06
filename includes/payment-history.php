@@ -145,21 +145,21 @@ add_action( 'edd_mail_fastbill_invoice', 'drubba_fastbill_mail_invoice' );
 function drubba_fastbill_admin_messages() {
 
 	if ( isset( $_GET['edd-message'] ) && 'got_fastbill_invoice_error' == $_GET['edd-message'] && current_user_can( 'view_shop_reports' ) ) {
-		add_settings_error( 'edd-notices', 'fastbill-invoice-retrieved-error', __( 'The invoice link could not be generated.', 'edd-fastbill' ), 'error' );
+		add_settings_error( 'edd-fastbill-notices', 'fastbill-invoice-retrieved-error', __( 'The invoice link could not be generated.', 'edd-fastbill' ), 'error' );
 	}
 	if ( isset( $_GET['edd-message'] ) && 'got_fastbill_invoice' == $_GET['edd-message'] && current_user_can( 'view_shop_reports' ) ) {
-		add_settings_error( 'edd-notices', 'fastbill-invoice-retrieved', __( 'The invoice link was generated.', 'edd-fastbill' ), 'updated' );
+		add_settings_error( 'edd-fastbill-notices', 'fastbill-invoice-retrieved', __( 'The invoice link was generated.', 'edd-fastbill' ), 'updated' );
 	}
 
 	if ( isset( $_GET['edd-message'] ) && 'mailed_fastbill_invoice_error' == $_GET['edd-message'] && current_user_can( 'view_shop_reports' ) ) {
-		add_settings_error( 'edd-notices', 'fastbill-invoice-retrieved', __( 'The invoice could not be sent.', 'edd-fastbill' ), 'error' );
+		add_settings_error( 'edd-fastbill-notices', 'fastbill-invoice-retrieved', __( 'The invoice could not be sent.', 'edd-fastbill' ), 'error' );
 	}
 
 	if ( isset( $_GET['edd-message'] ) && 'mailed_fastbill_invoice' == $_GET['edd-message'] && current_user_can( 'view_shop_reports' ) ) {
-		add_settings_error( 'edd-notices', 'fastbill-invoice-retrieved', __( 'The invoice was sent.', 'edd-fastbill' ), 'updated' );
+		add_settings_error( 'edd-fastbill-notices', 'fastbill-invoice-retrieved', __( 'The invoice was sent.', 'edd-fastbill' ), 'updated' );
 	}
 
-	settings_errors( 'edd-notices' );
+	settings_errors( 'edd-fastbill-notices' );
 }
 
 add_action( 'admin_notices', 'drubba_fastbill_admin_messages' );

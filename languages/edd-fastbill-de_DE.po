@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Easy Digital Downloads - FastBill Integration v1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-01 22:57+0100\n"
-"PO-Revision-Date: 2016-03-01 22:58+0100\n"
+"POT-Creation-Date: 2016-12-07 00:29+0100\n"
+"PO-Revision-Date: 2016-12-07 00:33+0100\n"
 "Last-Translator: Markus Drubba <kontakt@markusdrubba.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -36,9 +36,10 @@ msgstr "Es gab einen Fehler beim Erstellen der Rechnung bei FastBill:"
 # @ edd-fastbill
 #: includes/fastbill-functions.php:177 includes/fastbill-functions.php:261
 #: includes/fastbill-functions.php:319 includes/fastbill-functions.php:375
-#: includes/fastbill-functions.php:412 includes/fastbill-functions.php:419
-#: includes/fastbill-functions.php:456 includes/fastbill-functions.php:585
-#: includes/fastbill-functions.php:639 includes/fastbill-functions.php:698
+#: includes/fastbill-functions.php:431 includes/fastbill-functions.php:469
+#: includes/fastbill-functions.php:476 includes/fastbill-functions.php:513
+#: includes/fastbill-functions.php:642 includes/fastbill-functions.php:696
+#: includes/fastbill-functions.php:755
 msgid "Error: "
 msgstr "Fehler: "
 
@@ -52,22 +53,26 @@ msgstr "Es gab einen Fehler beim finalen Erstellen der Rechnung:"
 msgid "There was an error creating a payment in FastBill:"
 msgstr "Es gab einen Fehler beim setzen der Rechnung als bezahlt:"
 
-#: includes/fastbill-functions.php:455
+#: includes/fastbill-functions.php:430
+msgid "There was an error canceling an invoice in FastBill:"
+msgstr "Es gab einen Fehler beim canceln der Rechnung in FastBill:"
+
+#: includes/fastbill-functions.php:512
 msgid "There was an error sending an invoice via FastBill:"
 msgstr "Es gab einen Fehler beim senden der Rechnung via FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:584
+#: includes/fastbill-functions.php:641
 msgid "There was an error creating this customer in FastBill:"
 msgstr "Es gab einen Fehler beim Erstellen des Kunden bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:638
+#: includes/fastbill-functions.php:695
 msgid "There was an error looking up this customer in FastBill:"
 msgstr "Es gab einen Fehler beim Suchen des Kunden bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:697
+#: includes/fastbill-functions.php:754
 msgid "There was an error when receiving templates from FastBill:"
 msgstr ""
 "Es gab einen Fehler bei der Abfrage der Rechnungs-Vorlagen von Fastbild:"
@@ -191,47 +196,63 @@ msgstr ""
 "verlinkten Rechnungen zugreifen zu können."
 
 # @ edd-fastbill
-#: includes/register-settings.php:98
+#: includes/register-settings.php:97
 msgid "FastBill Customer Fields"
 msgstr "FastBill Kunden-Details"
 
+#: includes/register-settings.php:123
+msgid "Debug mode"
+msgstr "Debug Modus"
+
+#: includes/register-settings.php:124
+msgid "Write debug logs into the database."
+msgstr "Debug Einträge in Datenbank schreiben"
+
+#: includes/register-settings.php:130
+msgid "Reset debug entries"
+msgstr "Debug Einträge löschen"
+
+#: includes/register-settings.php:131
+msgid "Remove debug logs from database."
+msgstr "Debug Einträge aus Datenbank löschen"
+
 # @ edd-fastbill
-#: includes/register-settings.php:177
+#: includes/register-settings.php:192
 msgid "Organization"
 msgstr "Firmenname"
 
 # @ edd-fastbill
-#: includes/register-settings.php:178
+#: includes/register-settings.php:193
 msgid "If set by customer, than Business"
 msgstr "Wenn vom Kunden gesetzt, dann Geschäftskonto"
 
 # @ edd-fastbill
-#: includes/register-settings.php:181
+#: includes/register-settings.php:196
 msgid "Salutation"
 msgstr "Anrede"
 
 # @ edd-fastbill
-#: includes/register-settings.php:182
+#: includes/register-settings.php:197
 msgid "Use Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs."
 msgstr ""
 "Verwende Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs."
 
 # @ edd-fastbill
-#: includes/register-settings.php:184
+#: includes/register-settings.php:199
 msgid "Phone"
 msgstr "Telefonnummer"
 
 # @ edd-fastbill
-#: includes/register-settings.php:185
+#: includes/register-settings.php:200
 msgid "Fax"
 msgstr "Telefaxnummer"
 
 # @ edd-fastbill
-#: includes/register-settings.php:186
+#: includes/register-settings.php:201
 msgid "Mobile"
 msgstr "Mobiltelefonnummer"
 
-#: includes/register-settings.php:200
+#: includes/register-settings.php:215
 msgid "Default"
 msgstr "Standard"
 

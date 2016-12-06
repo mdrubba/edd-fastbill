@@ -46,3 +46,13 @@ function drubba_fastbill_complete_purchase( $payment_id, $new_status, $old_statu
 }
 
 add_action( 'edd_update_payment_status', 'drubba_fastbill_complete_purchase', 10, 3 );
+
+function drubba_fastbill_refund_purchase( $payment_id, $new_status, $old_status ) {
+	global $edd_options;
+
+	if ( $new_status == 'refunded' ) {
+		drubba_fastbill_cancel_invoice( $payment_id );
+	}
+}
+
+add_action( 'edd_update_payment_status', 'drubba_fastbill_refund_purchase', 10, 3 );
