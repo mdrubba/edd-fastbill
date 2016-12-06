@@ -1,10 +1,10 @@
 === EDD - FastBill Integration ===
 Contributors: drumba
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BCVM7FZ6ZCM2A
+Donate link: https://www.paypal.me/markusdrubba
 Tags: Digital Downloads, EDD, Fastbill, Accounting, Invoice
 Requires at least: 4.5
-Tested up to: 4.5.3
-Stable tag: 1.4.2
+Tested up to: 4.7
+Stable tag: 1.4.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -23,6 +23,11 @@ Store owners can set the status of the FastBill invoice to draft or completed, s
 * Unzip the files and upload the folder into your plugins folder (wp-content/plugins/)
 * Activate the plugin in your WordPress admin area.
 
+== Screenshots ==
+
+1. FastBill Settings
+2. Payment column
+
 == Configuration ==
 
 * Navigate to Downloads > Settings
@@ -33,6 +38,11 @@ Store owners can set the status of the FastBill invoice to draft or completed, s
 
 
 == Changelog ==
+
+= 2016-12-06 1.4.3 =
+
+* New: Cancel Payments when customer get a refund
+* Tweak: debug logs are written to the database
 
 = 2016-07-04 1.4.2 =
 
