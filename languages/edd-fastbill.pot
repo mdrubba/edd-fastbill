@@ -1,25 +1,17 @@
+# Copyright (C) 2016 Easy Digital Downloads - FastBill Integration
+# This file is distributed under the same license as the Easy Digital Downloads - FastBill Integration package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Easy Digital Downloads - FastBill Integration v1.1.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-01 22:57+0100\n"
-"PO-Revision-Date: 2016-03-01 23:04+0100\n"
-"Language-Team: \n"
+"Project-Id-Version: Easy Digital Downloads - FastBill Integration 1.4.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/edd-fastbill\n"
+"POT-Creation-Date: 2016-07-19 20:21:24+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.5\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
-"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
-"X-Poedit-Basepath: ..\n"
-"X-Textdomain-Support: yes\n"
-"Last-Translator: Markus Drubba <kontakt@markusdrubba.de>\n"
-"Language: en\n"
-"X-Poedit-SearchPath-0: .\n"
+"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 
-# @ edd-fastbill
 #: includes/fastbill-functions.php:70
 msgid "Discount used: "
 msgstr ""
@@ -28,12 +20,10 @@ msgstr ""
 msgid "renewal"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/fastbill-functions.php:176
 msgid "There was an error adding the invocie to FastBill:"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/fastbill-functions.php:177 includes/fastbill-functions.php:261
 #: includes/fastbill-functions.php:319 includes/fastbill-functions.php:375
 #: includes/fastbill-functions.php:412 includes/fastbill-functions.php:419
@@ -42,12 +32,10 @@ msgstr ""
 msgid "Error: "
 msgstr ""
 
-# @ edd-fastbill
 #: includes/fastbill-functions.php:260 includes/fastbill-functions.php:318
 msgid "There was an error completing invoice in FastBill:"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/fastbill-functions.php:374
 msgid "There was an error creating a payment in FastBill:"
 msgstr ""
@@ -56,17 +44,14 @@ msgstr ""
 msgid "There was an error sending an invoice via FastBill:"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/fastbill-functions.php:584
 msgid "There was an error creating this customer in FastBill:"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/fastbill-functions.php:638
 msgid "There was an error looking up this customer in FastBill:"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/fastbill-functions.php:697
 msgid "There was an error when receiving templates from FastBill:"
 msgstr ""
@@ -108,22 +93,18 @@ msgstr ""
 msgid "FastBill"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/register-settings.php:33
 msgid "FastBill Settings"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/register-settings.php:39
 msgid "FastBill Email"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/register-settings.php:44
 msgid "FastBill API Key"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/register-settings.php:50
 msgid "Invoice Template"
 msgstr ""
@@ -134,7 +115,6 @@ msgid ""
 "reassign it here."
 msgstr ""
 
-# @ edd-fastbill
 #: includes/register-settings.php:59
 msgid "Invoice Status"
 msgstr ""
@@ -143,17 +123,14 @@ msgstr ""
 msgid "Status for invoices being created in FastBill"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/register-settings.php:64
 msgid "Draft"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/register-settings.php:65
 msgid "Complete"
 msgstr ""
 
-# @ edd-fastbill
 #: includes/register-settings.php:71
 msgid "Auto create payment"
 msgstr ""
@@ -182,47 +159,39 @@ msgid ""
 "accessing the generated invoice."
 msgstr ""
 
-# @ edd-fastbill
 #: includes/register-settings.php:98
 msgid "FastBill Customer Fields"
 msgstr ""
 
-# @ edd-fastbill
-#: includes/register-settings.php:177
+#: includes/register-settings.php:179
 msgid "Organization"
 msgstr ""
 
-# @ edd-fastbill
-#: includes/register-settings.php:178
+#: includes/register-settings.php:180
 msgid "If set by customer, than Business"
 msgstr ""
 
-# @ edd-fastbill
-#: includes/register-settings.php:181
+#: includes/register-settings.php:183
 msgid "Salutation"
 msgstr ""
 
-# @ edd-fastbill
-#: includes/register-settings.php:182
+#: includes/register-settings.php:184
 msgid "Use Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs."
 msgstr ""
 
-# @ edd-fastbill
-#: includes/register-settings.php:184
+#: includes/register-settings.php:186
 msgid "Phone"
 msgstr ""
 
-# @ edd-fastbill
-#: includes/register-settings.php:185
+#: includes/register-settings.php:187
 msgid "Fax"
 msgstr ""
 
-# @ edd-fastbill
-#: includes/register-settings.php:186
+#: includes/register-settings.php:188
 msgid "Mobile"
 msgstr ""
 
-#: includes/register-settings.php:200
+#: includes/register-settings.php:202
 msgid "Default"
 msgstr ""
 
@@ -230,88 +199,26 @@ msgstr ""
 msgid "Creates a link to the downloadable Fastbill invoice"
 msgstr ""
 
-msgid "Choose invoice template"
-msgstr "Rechnungstemplate auswählen"
-
-msgid "Create payment when order is placed, requires invoice status COMPLETE"
+#. Plugin Name of the plugin/theme
+msgid "Easy Digital Downloads - FastBill Integration"
 msgstr ""
-"Rechnung als bezahlt markieren, setzt Rechnungsstatus ABGESCHLOSSEN voraus"
 
-msgid "Send invoice to customer via email"
-msgstr "Rechnung per E-Mail an Käufer senden"
-
-msgid "I activated the online invoice functionalty within my Fastbill account."
-msgstr ""
-"Ich habe die Funktion „Online-Rechnung“ in meinem Fastbill-Konto aktiviert."
-
-msgid "Download invoice"
-msgstr "Rechnung herunterladen"
-
-msgid "Standard"
-msgstr "Standard"
-
-msgid "Send invoice to customer"
-msgstr "Rechnung an Käufer schicken"
-
-# @ edd-fastbill
-msgid "The Email you use to login to your FastBill Account"
-msgstr "Die E-Mail-Adresse die du für deinen FastBill-Login verwendest"
-
-# @ edd-fastbill
-msgid "Get this from your FastBill settings.  Account > Settings"
-msgstr "Den API-Key findest du unter Konto-Einstellungen > Einstellungen"
-
-# @ edd-fastbill
-msgid "Auto create invoice"
-msgstr "Rechnung automatisch erstellen"
-
-# @ edd-fastbill
-msgid "Check this box to create a invoice when the order is placed"
-msgstr ""
-"Aktiviere dieses Kontrollkästchen um eine Rechnung zu erstellen, wenn eine "
-"Bestellung durchgeführt wird."
-
+#. Plugin URI of the plugin/theme
 msgid ""
-"If you change the name of the selected template within Fastbill, you have to "
-"update this field too."
+"https://easydigitaldownloads.com/extensions/fastbill-integration/?ref=2325"
 msgstr ""
-"Wenn du den Namen der hier ausgewählte Vorlage in Fastbill änderst, musst du "
-"sie hier ebenfalls aktualisieren."
 
-# @ edd-fastbill
+#. Description of the plugin/theme
 msgid ""
-"Check the box to create a payment when order is placed. Requires Invoice "
-"Status COMPLETE."
+"Integrates <a href=\"https://easydigitaldownloads.com/\" target=\"_blank"
+"\">Easy Digital Downloads</a> with the <a href=\"http://www.fastbill.com\" "
+"target=\"_blank\">FastBill - fast money</a> accounting software."
 msgstr ""
-"Aktiviere dieses Kontrollkästchen um die Rechnung als bezahlt zu markieren, "
-"wenn die Bestellung durchgeführt wird. Erfordert den Rechnungsstatus "
-"ABGESCHLOSSEN."
 
-# @ edd-fastbill
-msgid "Status for the invoices being created in FastBill."
-msgstr "Status der erstellten Rechnungen bei FastBill."
-
-# @ edd-fastbill
-msgid "Enable Debug"
-msgstr "Debug-Modus aktivieren"
-
-# @ edd-fastbill
-msgid "Check the box to create a log file for debug purposes."
-msgstr "Aktiviere dieses Kontrollkästchen um eine Log-Datei zu erzeugen."
-
-# @ edd-fastbill
-msgid "Vat-ID."
-msgstr "USt-ID."
-
-msgid "Please enter your API credentials."
-msgstr "Bitte gib deine API Zugangsdaten ein."
-
-msgid ""
-"If a new change is made to the selected template within Fastbill, you have "
-"to update this field too."
+#. Author of the plugin/theme
+msgid "Markus Drubba"
 msgstr ""
-"Sobald du die Vorlage bei Fastbill aktualisierst, musst du sie hier erneut "
-"auswählen."
 
-msgid "Please select"
-msgstr "Bitte auswählen"
+#. Author URI of the plugin/theme
+msgid "http://markusdrubba.de"
+msgstr ""
