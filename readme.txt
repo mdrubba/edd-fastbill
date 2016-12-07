@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/markusdrubba
 Tags: Digital Downloads, EDD, Fastbill, Accounting, Invoice
 Requires at least: 4.5
 Tested up to: 4.7
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -38,6 +38,10 @@ Store owners can set the status of the FastBill invoice to draft or completed, s
 
 
 == Changelog ==
+
+= 2016-12-07 1.4.4 =
+
+* Fix: PHP Notice
 
 = 2016-12-06 1.4.3 =
 
