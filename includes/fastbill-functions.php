@@ -425,6 +425,7 @@ function drubba_fastbill_cancel_invoice( $payment_id ) {
 
 		if ( ! $is_error ) {
 			drubba_fastbill_addlog( 'END - Canceling invoice for order #' . $payment_id );
+            edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' canceled due to refunding purchase.' );
 		} else {
 			// An error occured
 			$error_string = __( 'There was an error canceling an invoice in FastBill:', 'edd-fastbill' ) . "\n" .
