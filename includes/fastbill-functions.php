@@ -37,16 +37,14 @@ function drubba_fastbill_create_invoice( $payment_id ) {
 
 	$client_id = drubba_fastbill_lookup_customer( $user_info['email'] );
 
-	if ( $client_id == 0 ) {
-		try {
-			// client doesn't exist, so create a client record in FastBill
-			$client_id = drubba_fastbill_create_customer( $payment_id );
-		} catch ( Exception $e ) {
-			drubba_fastbill_addlog( $e->getMessage() );
-			drubba_fastbill_addlog( 'END - Creating invoice for order #' . $payment_id );
+	try {
+		// update exsiting client with $client_id or create new client if $client_id = 0
+		$client_id = drubba_fastbill_create_customer( $payment_id, $client_id );
+	} catch ( Exception $e ) {
+		drubba_fastbill_addlog( $e->getMessage() );
+		drubba_fastbill_addlog( 'END - Creating invoice for order #' . $payment_id );
 
-			return;
-		}
+		return;
 	}
 
 	$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
@@ -376,7 +374,7 @@ function drubba_fastbill_create_payment( $payment_id ) {
 			drubba_fastbill_addlog( $error_string );
 		}
 	} else {
-		// no invoice id so exit.				
+		// no invoice id so exit.
 		return;
 	}
 }
@@ -425,7 +423,7 @@ function drubba_fastbill_cancel_invoice( $payment_id ) {
 
 		if ( ! $is_error ) {
 			drubba_fastbill_addlog( 'END - Canceling invoice for order #' . $payment_id );
-            edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' canceled due to refunding purchase.' );
+			edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' canceled due to refunding purchase.' );
 		} else {
 			// An error occured
 			$error_string = __( 'There was an error canceling an invoice in FastBill:', 'edd-fastbill' ) . "\n" .
@@ -529,22 +527,27 @@ function drubba_fastbill_invoice_sendbyemail( $payment_id ) {
  * @throws Exception
  *
  **/
-function drubba_fastbill_create_customer( $payment_id ) {
+function drubba_fastbill_create_customer( $payment_id, $client_id = false ) {
 
 	global $edd_options;
 
-	$payment      = get_post( $payment_id );
-	$payment_meta = get_post_meta( $payment->ID, '_edd_payment_meta', true );
-	$user_info    = maybe_unserialize( $payment_meta['user_info'] );
-	$first_name   = ! empty( $user_info['first_name'] ) ? $user_info['first_name'] : 'unknown';
-	$last_name    = ! empty( $user_info['last_name'] ) ? $user_info['last_name'] : 'unknown';
+	$payment         = get_post( $payment_id );
+	$payment_meta    = get_post_meta( $payment->ID, '_edd_payment_meta', true );
+	$user_info       = maybe_unserialize( $payment_meta['user_info'] );
+	$first_name      = ! empty( $user_info['first_name'] ) ? $user_info['first_name'] : 'unknown';
+	$last_name       = ! empty( $user_info['last_name'] ) ? $user_info['last_name'] : 'unknown';
+	$customer_action = $client_id > 0 ? 'customer.update' : 'customer.create';
 
 	drubba_fastbill_addlog( 'Creating customer record in FastBill for email: ' . $user_info['email'] );
 
 	$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 	$xml .= "<FBAPI>";
-	$xml .= "<SERVICE>customer.create</SERVICE>";
+	$xml .= "<SERVICE>$customer_action</SERVICE>";
 	$xml .= "<DATA>";
+
+	if ( $client_id > 0 ) {
+		$xml .= "<CUSTOMER_ID>$client_id</CUSTOMER_ID>";
+	}
 
 	$xml .= "<FIRST_NAME>" . $first_name . "</FIRST_NAME>";
 	$xml .= "<LAST_NAME>" . $last_name . "</LAST_NAME>";
