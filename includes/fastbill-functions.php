@@ -11,6 +11,7 @@
 
 namespace drumba\EDD\FastBill;
 
+use drumba\EDD\FastBill\Helper\Logger;
 use SimpleXMLElement;
 
 class FastBill {
@@ -28,6 +29,7 @@ class FastBill {
 
 		$this->api_key   = $edd_options['drubba_fb_fastbill_api_key'];
 		$this->api_email = $edd_options['drubba_fb_fastbill_email'];
+		$this->logger    = new Logger( 'edd_fastbill_error_log' );
 
 		if ( empty( $this->api_key ) || empty( $this->api_email ) ) {
 			throw new \Exception( __( 'Invalid FastBill credentials supplied', 'edd-fastbill' ) );
@@ -54,7 +56,7 @@ class FastBill {
 		$last_name       = ! empty( $user_info['last_name'] ) ? $user_info['last_name'] : 'unknown';
 		$customer_action = $client_id > 0 ? 'customer.update' : 'customer.create';
 
-		$this->addlog( 'Creating customer record in FastBill for email: ' . $user_info['email'] );
+		$this->logger->add( 'Creating customer record in FastBill for email: ' . $user_info['email'] );
 
 		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 		$xml .= "<FBAPI>";
@@ -139,7 +141,7 @@ class FastBill {
 
 		} catch ( Exception $e ) {
 
-			$this->addlog( $e->getMessage() );
+			$this->logger->add( $e->getMessage() );
 
 			return;
 
@@ -152,7 +154,7 @@ class FastBill {
 			if ( isset( $response->RESPONSE->CUSTOMER_ID ) ) {
 				return $response->RESPONSE->CUSTOMER_ID;
 			} else {
-				$this->addlog( 'Unable to create client' . $response );
+				$this->logger->add( 'Unable to create client' . $response );
 				throw new Exception( 'Unable to create client' . $response );
 			}
 
@@ -161,7 +163,7 @@ class FastBill {
 			$error_string = __( 'There was an error creating this customer in FastBill:', 'edd-fastbill' ) . "\n" .
 			                __( 'Error: ', 'edd-fastbill' ) . $response->ERRORS->ERROR;
 
-			$this->addlog( $error_string );
+			$this->logger->add( $error_string );
 			throw new Exception( 'Unable to create client' . $response );
 		}
 
@@ -192,7 +194,7 @@ class FastBill {
 
 		} catch ( Exception $e ) {
 
-			$this->addlog( $e->getMessage() );
+			$this->logger->add( $e->getMessage() );
 
 			return;
 
@@ -213,7 +215,7 @@ class FastBill {
 			$error_string = __( 'There was an error looking up this customer in FastBill:', 'edd-fastbill' ) . "\n" .
 			                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
 
-			$this->addlog( $error_string );
+			$this->logger->add( $error_string );
 
 			return 0;
 		}
@@ -238,11 +240,11 @@ class FastBill {
 		$cart_items   = isset( $payment_meta['cart_details'] ) ? maybe_unserialize( $payment_meta['cart_details'] ) : false;
 		$user_country = isset( $user_info['address']['country'] ) ? maybe_unserialize( $user_info['address']['country'] ) : false;
 
-		$this->addlog( 'START - Creating invoice for order #' . $payment_id );
+		$this->logger->add( 'START - Creating invoice for order #' . $payment_id );
 
 		// Check if client exists with customer's email address
 
-		$this->addlog( 'Checking for client with email: ' . $user_info['email'] );
+		$this->logger->add( 'Checking for client with email: ' . $user_info['email'] );
 
 		$client_id = $this->customer_lookup( $user_info['email'] );
 
@@ -250,8 +252,8 @@ class FastBill {
 			// client doesn't exist, so create a client record in FastBill
 			$client_id = $this->customer_create( $payment_id, $client_id );
 		} catch ( Exception $e ) {
-			$this->addlog( $e->getMessage() );
-			$this->addlog( 'END - Creating invoice for order #' . $payment_id );
+			$this->logger->add( $e->getMessage() );
+			$this->logger->add( 'END - Creating invoice for order #' . $payment_id );
 
 			return;
 		}
@@ -336,7 +338,7 @@ class FastBill {
 		}
 
 		if ( ! $added_items ) {
-			$this->addlog( 'END - Invoice for order #' . $payment_id . ' was not created. Only free items included.' );
+			$this->logger->add( 'END - Invoice for order #' . $payment_id . ' was not created. Only free items included.' );
 
 			return;
 
@@ -355,7 +357,7 @@ class FastBill {
 
 		} catch ( Exception $e ) {
 
-			$this->addlog( print_r( $e, true ) );
+			$this->logger->add( print_r( $e, true ) );
 
 			return;
 
@@ -373,7 +375,7 @@ class FastBill {
 
 			$this->_add_invoice_url( $payment_id, $fb_invoice_id );
 
-			$this->addlog( 'END - Creating invoice for order #' . $payment_id );
+			$this->logger->add( 'END - Creating invoice for order #' . $payment_id );
 
 			if ( $edd_options['drubba_fb_fastbill_invoice_status'] == 'complete' ) {
 				$this->invoice_complete( $payment_id, $response->RESPONSE->INVOICE_ID );
@@ -383,8 +385,8 @@ class FastBill {
 			$error_string = __( 'There was an error adding the invocie to FastBill:', 'edd-fastbill' ) . "\n" .
 			                __( 'Error: ', 'edd-fastbill' ) . $response->ERRORS->ERROR;
 
-			$this->addlog( $error_string );
-			$this->addlog( 'END - Creating invoice for order #' . $payment_id );
+			$this->logger->add( $error_string );
+			$this->logger->add( 'END - Creating invoice for order #' . $payment_id );
 		}
 
 	}
@@ -403,7 +405,7 @@ class FastBill {
 		if ( $invoice_id > 0 ) {
 			// there is an invoice ID, so retrieve the invoice
 
-			$this->addlog( 'START - Get invoice in FastBill for invoice ID: ' . $invoice_id );
+			$this->logger->add( 'START - Get invoice in FastBill for invoice ID: ' . $invoice_id );
 
 			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 			$xml .= "<FBAPI>";
@@ -419,7 +421,7 @@ class FastBill {
 
 			} catch ( Exception $e ) {
 
-				$this->addlog( $e->getMessage() );
+				$this->logger->add( $e->getMessage() );
 
 				return;
 
@@ -428,14 +430,14 @@ class FastBill {
 			$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
 
 			if ( ! $is_error ) {
-				$this->addlog( 'END - Complete get invoice ID: ' . $invoice_id );
+				$this->logger->add( 'END - Complete get invoice ID: ' . $invoice_id );
 
 				return ( ! empty( $response->RESPONSE->INVOICES->INVOICE ) ) ? $response->RESPONSE->INVOICES->INVOICE : null;
 			} else {
 				// An error occured
 				$error_string = __( 'There was an error completing invoice in FastBill:', 'edd-fastbill' ) . "\n" .
 				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-				$this->addlog( $error_string );
+				$this->logger->add( $error_string );
 
 				return null;
 			}
@@ -459,7 +461,7 @@ class FastBill {
 		if ( $invoice_id > 0 ) {
 			// there is an invoice ID, so complete invoice
 
-			$this->addlog( 'START - Complete invoice in FastBill for invoice ID: ' . $invoice_id );
+			$this->logger->add( 'START - Complete invoice in FastBill for invoice ID: ' . $invoice_id );
 
 			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 			$xml .= "<FBAPI>";
@@ -475,7 +477,7 @@ class FastBill {
 
 			} catch ( Exception $e ) {
 
-				$this->addlog( $e->getMessage() );
+				$this->logger->add( $e->getMessage() );
 
 				return;
 
@@ -484,14 +486,14 @@ class FastBill {
 			$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
 
 			if ( ! $is_error ) {
-				$this->addlog( 'END - Complete invoice for order #' . $payment_id );
+				$this->logger->add( 'END - Complete invoice for order #' . $payment_id );
 				$fb_invoice_no = (string) $response->RESPONSE->INVOICE_NUMBER;
 				edd_insert_payment_note( $payment_id, 'FastBill Invoice Number: ' . $fb_invoice_no );
 			} else {
 				// An error occured
 				$error_string = __( 'There was an error completing invoice in FastBill:', 'edd-fastbill' ) . "\n" .
 				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-				$this->addlog( $error_string );
+				$this->logger->add( $error_string );
 			}
 		} else {
 			// no invoice id so exit.
@@ -515,7 +517,7 @@ class FastBill {
 		if ( $fb_invoice_id > 0 ) {
 			// there is an invoice ID, so cancel invoice
 
-			$this->addlog( 'START - Canceling invoice in FastBill for invoice ID: ' . $fb_invoice_id );
+			$this->logger->add( 'START - Canceling invoice in FastBill for invoice ID: ' . $fb_invoice_id );
 
 			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 			$xml .= "<FBAPI>";
@@ -531,7 +533,7 @@ class FastBill {
 
 			} catch ( Exception $e ) {
 
-				$this->addlog( $e->getMessage() );
+				$this->logger->add( $e->getMessage() );
 
 				return;
 
@@ -540,13 +542,13 @@ class FastBill {
 			$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
 
 			if ( ! $is_error ) {
-				$this->addlog( 'END - Canceling invoice for order #' . $payment_id );
+				$this->logger->add( 'END - Canceling invoice for order #' . $payment_id );
 				edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' canceled due to refunding purchase.' );
 			} else {
 				// An error occured
 				$error_string = __( 'There was an error canceling an invoice in FastBill:', 'edd-fastbill' ) . "\n" .
 				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-				$this->addlog( $error_string );
+				$this->logger->add( $error_string );
 			}
 		} else {
 			// no invoice id so exit.
@@ -570,7 +572,7 @@ class FastBill {
 		if ( $fb_invoice_id > 0 ) {
 			// there is an invoice ID, so cancel invoice
 
-			$this->addlog( 'START - Delete invoice in FastBill for invoice ID: ' . $fb_invoice_id );
+			$this->logger->add( 'START - Delete invoice in FastBill for invoice ID: ' . $fb_invoice_id );
 
 			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 			$xml .= "<FBAPI>";
@@ -586,7 +588,7 @@ class FastBill {
 
 			} catch ( Exception $e ) {
 
-				$this->addlog( $e->getMessage() );
+				$this->logger->add( $e->getMessage() );
 
 				return;
 
@@ -595,13 +597,13 @@ class FastBill {
 			$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
 
 			if ( ! $is_error ) {
-				$this->addlog( 'END - Delete invoice for order #' . $payment_id );
+				$this->logger->add( 'END - Delete invoice for order #' . $payment_id );
 				edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' deleted due to abandonded purchase.' );
 			} else {
 				// An error occured
 				$error_string = __( 'There was an error deleting an invoice in FastBill:', 'edd-fastbill' ) . "\n" .
 				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-				$this->addlog( $error_string );
+				$this->logger->add( $error_string );
 			}
 		} else {
 			// no invoice id so exit.
@@ -628,7 +630,7 @@ class FastBill {
 		}
 
 		// there is an invoice ID, send invoice to customer
-		$this->addlog( 'START - Sending invoice ID: ' . $fb_invoice_id . ' to customer by email.' );
+		$this->logger->add( 'START - Sending invoice ID: ' . $fb_invoice_id . ' to customer by email.' );
 
 		// Prepare email
 		$payment_meta   = get_post_meta( $payment_id, '_edd_payment_meta', true );
@@ -636,14 +638,14 @@ class FastBill {
 
 		// customer email not found
 		if ( ! $customer_email ) {
-			$this->addlog( __( 'Error: ', 'edd-fastbill' ) . 'Customer email address was not found.' );
+			$this->logger->add( __( 'Error: ', 'edd-fastbill' ) . 'Customer email address was not found.' );
 
 			return false;
 		}
 
 		// customer email not valid
 		if ( ! is_email( $customer_email ) ) {
-			$this->addlog( __( 'Error: ', 'edd-fastbill' ) . 'Customer email address is not valid.' );
+			$this->logger->add( __( 'Error: ', 'edd-fastbill' ) . 'Customer email address is not valid.' );
 
 			return false;
 		}
@@ -667,7 +669,7 @@ class FastBill {
 
 		} catch ( Exception $e ) {
 
-			$this->addlog( $e->getMessage() );
+			$this->logger->add( $e->getMessage() );
 
 			return false;
 
@@ -676,12 +678,12 @@ class FastBill {
 		$success  = isset( $response->RESPONSE->ERRORS ) ? false : true;
 
 		if ( $success ) {
-			$this->addlog( 'END - Invoice for order #' . $payment_id . ' sent to customer.' );
+			$this->logger->add( 'END - Invoice for order #' . $payment_id . ' sent to customer.' );
 		} else {
 			// An error occured
 			$error_string = __( 'There was an error sending an invoice via FastBill:', 'edd-fastbill' ) . "\n" .
 			                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-			$this->addlog( $error_string );
+			$this->logger->add( $error_string );
 		}
 
 		return $success;
@@ -703,7 +705,7 @@ class FastBill {
 		if ( $fb_invoice_id > 0 ) {
 			// there is an invoice ID, so create payment
 
-			$this->addlog( 'START - Creating payment in FastBill for invoice ID: ' . $fb_invoice_id );
+			$this->logger->add( 'START - Creating payment in FastBill for invoice ID: ' . $fb_invoice_id );
 
 			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 			$xml .= "<FBAPI>";
@@ -719,7 +721,7 @@ class FastBill {
 
 			} catch ( Exception $e ) {
 
-				$this->addlog( $e->getMessage() );
+				$this->logger->add( $e->getMessage() );
 
 				return;
 
@@ -728,12 +730,12 @@ class FastBill {
 			$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
 
 			if ( ! $is_error ) {
-				$this->addlog( 'END - Creating payment for order #' . $payment_id );
+				$this->logger->add( 'END - Creating payment for order #' . $payment_id );
 			} else {
 				// An error occured
 				$error_string = __( 'There was an error creating a payment in FastBill:', 'edd-fastbill' ) . "\n" .
 				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-				$this->addlog( $error_string );
+				$this->logger->add( $error_string );
 			}
 		} else {
 			// no invoice id so exit.
@@ -770,7 +772,7 @@ class FastBill {
 
 		} catch ( Exception $e ) {
 
-			$this->addlog( $e->getMessage() );
+			$this->logger->add( $e->getMessage() );
 
 			return false;
 		}
@@ -791,7 +793,7 @@ class FastBill {
 			$error_string = __( 'There was an error when receiving templates from FastBill:', 'edd-fastbill' ) . "\n" .
 			                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
 
-			$this->addlog( $error_string );
+			$this->logger->add( $error_string );
 
 			return 0;
 		}
@@ -871,7 +873,7 @@ class FastBill {
 			throw new Exception( 'An error occured: Credentials are not set' );
 		}
 
-		$this->addlog( "SENDING XML:\n" . $xml );
+		$this->logger->add( "SENDING XML:\n" . $xml );
 
 		$url = 'https://my.fastbill.com/api/1.0/api.php';
 
@@ -890,38 +892,14 @@ class FastBill {
 		);
 
 		if ( is_wp_error( $response ) ) {
-			$this->addlog( 'Something went wrong: ' . $response->get_error_message() );
+			$this->logger->add( 'Something went wrong: ' . $response->get_error_message() );
 			throw new Exception( 'An error occured: ' . wp_remote_retrieve_response_message( $response ) );
 		}
 
 		$result = wp_remote_retrieve_body( $response );
 
-		$this->addlog( "RESPONSE XML: " . $result );
+		$this->logger->add( "RESPONSE XML: " . $result );
 
 		return $result;
-	}
-
-	/**
-	 * Output data to a log
-	 *
-	 * @param  $log_string - The string to be appended to the log file.
-	 *
-	 * @access public
-	 * @return void
-	 *
-	 **/
-	public function addlog( $log_string ) {
-		global $edd_options;
-
-		if ( isset( $edd_options['drubba_fb_fastbill_debug_log'] ) && 1 == $edd_options['drubba_fb_fastbill_debug_log'] ) {
-
-			$current_log = get_option( 'edd_fastbill_error_log', '' );
-			$log_string  = "Log Date: " . date( "r" ) . "\n" . trim( $log_string ) . "\n\n";
-
-			$final_log = $current_log . $log_string;
-
-			update_option( 'edd_fastbill_error_log', $final_log );
-
-		}
 	}
 }
