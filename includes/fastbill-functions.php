@@ -35,6 +35,192 @@ class FastBill {
 	}
 
 	/**
+	 * Create a client record in FastBill for the given order.
+	 *
+	 * @param $payment_id
+	 *
+	 * @return mixed
+	 * @throws Exception
+	 *
+	 **/
+	public function customer_create( $payment_id, $client_id = false ) {
+
+		global $edd_options;
+
+		$payment         = get_post( $payment_id );
+		$payment_meta    = get_post_meta( $payment->ID, '_edd_payment_meta', true );
+		$user_info       = maybe_unserialize( $payment_meta['user_info'] );
+		$first_name      = ! empty( $user_info['first_name'] ) ? $user_info['first_name'] : 'unknown';
+		$last_name       = ! empty( $user_info['last_name'] ) ? $user_info['last_name'] : 'unknown';
+		$customer_action = $client_id > 0 ? 'customer.update' : 'customer.create';
+
+		$this->addlog( 'Creating customer record in FastBill for email: ' . $user_info['email'] );
+
+		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+		$xml .= "<FBAPI>";
+		$xml .= "<SERVICE>$customer_action</SERVICE>";
+		$xml .= "<DATA>";
+
+		if ( $client_id > 0 ) {
+			$xml .= "<CUSTOMER_ID>$client_id</CUSTOMER_ID>";
+		}
+
+		$xml .= "<FIRST_NAME>" . $first_name . "</FIRST_NAME>";
+		$xml .= "<LAST_NAME>" . $last_name . "</LAST_NAME>";
+		$xml .= "<EMAIL>" . $user_info['email'] . "</EMAIL>";
+
+		if ( isset( $user_info['address']['line1'] ) && trim( $user_info['address']['line1'] ) != '' ) {
+			$xml .= "<ADDRESS>" . $user_info['address']['line1'] . "</ADDRESS>";
+		}
+
+		if ( isset( $user_info['address']['line2'] ) && trim( $user_info['address']['line2'] ) != '' ) {
+			$xml .= "<ADDRESS_2>" . $user_info['address']['line2'] . "</ADDRESS_2>";
+		}
+
+		if ( isset( $user_info['address']['city'] ) && trim( $user_info['address']['city'] ) != '' ) {
+			$xml .= "<CITY>" . $user_info['address']['city'] . "</CITY>";
+		}
+
+		if ( isset( $user_info['address']['country'] ) && trim( $user_info['address']['country'] ) != '' ) {
+			$xml .= "<COUNTRY_CODE>" . $user_info['address']['country'] . "</COUNTRY_CODE>";
+		}
+
+		if ( isset( $user_info['address']['zip'] ) && trim( $user_info['address']['zip'] ) != '' ) {
+			$xml .= "<ZIPCODE>" . $user_info['address']['zip'] . "</ZIPCODE>";
+		}
+
+		if ( isset( $user_info['vat_number'] ) && trim( $user_info['vat_number'] ) != '' ) {
+			$xml .= "<VAT_ID>" . $user_info['vat_number'] . "</VAT_ID>";
+		}
+
+		if ( ! drubba_fb_cfm_active() ) {
+
+			$xml .= "<CUSTOMER_TYPE>consumer</CUSTOMER_TYPE>";
+
+		} else {
+
+			$orga = get_post_meta( $payment_id, $edd_options['drubba_fb_fastbill_ORGANIZATION'], true );
+			if ( isset( $orga ) && $orga != '' && ! is_array( $orga ) ) {
+				$xml .= "<CUSTOMER_TYPE>business</CUSTOMER_TYPE>";
+			} else {
+				$xml .= "<CUSTOMER_TYPE>consumer</CUSTOMER_TYPE>";
+			}
+
+			$customer_fields = drubba_fb_get_customer_fields();
+			foreach ( $customer_fields as $key => $value ) {
+
+				$fb_option   = $edd_options[ 'drubba_fb_fastbill_' . $key ];
+				$field_value = get_post_meta( $payment_id, $fb_option, true );
+
+				if ( ! is_array( $field_value ) ) {
+					if ( $key == 'SALUTATION' ) {
+						if ( in_array( $field_value, array( 'Herr', 'Hr.', 'Hr', 'Mister', 'Mr', 'Mr.' ) ) ) {
+							$field_value = 'mr';
+						} elseif ( in_array( $field_value, array( 'Frau', 'Fr.', 'Fr', 'Misses', 'Miss', 'Mrs.' ) ) ) {
+							$field_value = 'mrs';
+						} else {
+							$field_value = '';
+						}
+					}
+
+					$xml .= "<" . $key . ">" . $field_value . "</" . $key . ">";
+				}
+
+			}
+
+		}
+
+		$xml .= "</DATA>";
+		$xml .= "</FBAPI>";
+
+		try {
+
+			$result = $this->apicall( $xml );
+
+		} catch ( Exception $e ) {
+
+			$this->addlog( $e->getMessage() );
+
+			return;
+
+		}
+		$response = new SimpleXMLElement( $result );
+		$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+
+		if ( ! $is_error ) {
+			// get the first client
+			if ( isset( $response->RESPONSE->CUSTOMER_ID ) ) {
+				return $response->RESPONSE->CUSTOMER_ID;
+			} else {
+				$this->addlog( 'Unable to create client' . $response );
+				throw new Exception( 'Unable to create client' . $response );
+			}
+
+		} else {
+			// An error occured
+			$error_string = __( 'There was an error creating this customer in FastBill:', 'edd-fastbill' ) . "\n" .
+			                __( 'Error: ', 'edd-fastbill' ) . $response->ERRORS->ERROR;
+
+			$this->addlog( $error_string );
+			throw new Exception( 'Unable to create client' . $response );
+		}
+
+	}
+
+	/**
+	 * Check FastBill for a client record corresponding to the supplied email address.
+	 *
+	 * @param  $customer_email
+	 *
+	 * @access public
+	 * @return int|void customer_id or 0 if customer does not exist in FastBill
+	 *
+	 **/
+	public function customer_lookup( $customer_email ) {
+
+		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+		$xml .= "<FBAPI>";
+		$xml .= "<SERVICE>customer.get</SERVICE>";
+		$xml .= "<FILTER>";
+		$xml .= "<TERM>" . $customer_email . "</TERM>";
+		$xml .= "</FILTER>";
+		$xml .= "</FBAPI>";
+
+		try {
+
+			$result = $this->apicall( $xml );
+
+		} catch ( Exception $e ) {
+
+			$this->addlog( $e->getMessage() );
+
+			return;
+
+		}
+		$response = new SimpleXMLElement( $result );
+		$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+
+		if ( ! $is_error ) {
+			// get the first client
+			if ( isset( $response->RESPONSE->CUSTOMERS->CUSTOMER->CUSTOMER_ID ) ) {
+				return $response->RESPONSE->CUSTOMERS->CUSTOMER->CUSTOMER_ID;
+			} else {
+				return 0;
+			}
+
+		} else {
+			// An error occured
+			$error_string = __( 'There was an error looking up this customer in FastBill:', 'edd-fastbill' ) . "\n" .
+			                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+
+			$this->addlog( $error_string );
+
+			return 0;
+		}
+
+	}
+
+	/**
 	 * Create an invoice record in FastBill for the given order.
 	 *
 	 * @param  $payment_id
@@ -43,7 +229,7 @@ class FastBill {
 	 * @return void
 	 *
 	 **/
-	function invoice_create( $payment_id, $payment_type = 'direct' ) {
+	public function invoice_create( $payment_id, $payment_type = 'direct' ) {
 
 		global $edd_options;
 
@@ -204,33 +390,6 @@ class FastBill {
 	}
 
 	/**
-	 * save url to invoice
-	 *
-	 * @param $payment_id
-	 * @param $fb_invoice_id
-	 *
-	 * @return bool|string
-	 */
-	private function _add_invoice_url( $payment_id, $fb_invoice_id ) {
-		global $edd_options;
-
-		if ( ! isset( $edd_options['drubba_fb_fastbill_online_invoice'] ) ) {
-			return false;
-		}
-
-		$invoice = $this->invoice_get( $fb_invoice_id );
-		if ( empty( $invoice->DOCUMENT_URL ) ) {
-			return false;
-		}
-
-		$fb_document_url = (string) $invoice->DOCUMENT_URL;
-		update_post_meta( $payment_id, '_fastbill_document_url', $fb_document_url );
-		edd_insert_payment_note( $payment_id, 'FastBill Document URL: ' . $fb_document_url );
-
-		return $fb_document_url;
-	}
-
-	/**
 	 * Get an invoice record in FastBill for the invoice id.
 	 *
 	 * @param  $invoice_id
@@ -239,7 +398,7 @@ class FastBill {
 	 * @return object
 	 *
 	 **/
-	function invoice_get( $invoice_id ) {
+	public function invoice_get( $invoice_id ) {
 
 		if ( $invoice_id > 0 ) {
 			// there is an invoice ID, so retrieve the invoice
@@ -295,7 +454,7 @@ class FastBill {
 	 * @return void
 	 *
 	 **/
-	function invoice_complete( $payment_id, $invoice_id ) {
+	public function invoice_complete( $payment_id, $invoice_id ) {
 
 		if ( $invoice_id > 0 ) {
 			// there is an invoice ID, so complete invoice
@@ -341,60 +500,6 @@ class FastBill {
 	}
 
 	/**
-	 * Set invoice to payed in FastBill for the given order.
-	 *
-	 * @param  $payment_id
-	 *
-	 * @access public
-	 * @return void
-	 *
-	 **/
-	function payment_create( $payment_id ) {
-
-		$fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
-
-		if ( $fb_invoice_id > 0 ) {
-			// there is an invoice ID, so create payment
-
-			$this->addlog( 'START - Creating payment in FastBill for invoice ID: ' . $fb_invoice_id );
-
-			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-			$xml .= "<FBAPI>";
-			$xml .= "<SERVICE>invoice.setpaid</SERVICE>";
-			$xml .= "<DATA>";
-			$xml .= "<INVOICE_ID>" . $fb_invoice_id . "</INVOICE_ID>";
-			$xml .= "</DATA>";
-			$xml .= "</FBAPI>";
-
-			try {
-
-				$result = $this->apicall( $xml );
-
-			} catch ( Exception $e ) {
-
-				$this->addlog( $e->getMessage() );
-
-				return;
-
-			}
-			$response = new SimpleXMLElement( $result );
-			$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
-
-			if ( ! $is_error ) {
-				$this->addlog( 'END - Creating payment for order #' . $payment_id );
-			} else {
-				// An error occured
-				$error_string = __( 'There was an error creating a payment in FastBill:', 'edd-fastbill' ) . "\n" .
-				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-				$this->addlog( $error_string );
-			}
-		} else {
-			// no invoice id so exit.
-			return;
-		}
-	}
-
-	/**
 	 * Cancel invoice in FastBill for the given order.
 	 *
 	 * @param  $payment_id
@@ -403,7 +508,7 @@ class FastBill {
 	 * @return void
 	 *
 	 **/
-	function invoice_cancel( $payment_id ) {
+	public function invoice_cancel( $payment_id ) {
 
 		$fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
 
@@ -458,7 +563,7 @@ class FastBill {
 	 * @return void
 	 *
 	 **/
-	function invoice_delete( $payment_id ) {
+	public function invoice_delete( $payment_id ) {
 
 		$fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
 
@@ -514,7 +619,7 @@ class FastBill {
 	 * @return void
 	 *
 	 **/
-	function invoice_sendbyemail( $payment_id ) {
+	public function invoice_sendbyemail( $payment_id ) {
 		$fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
 
 		// no invoice id so exit.
@@ -583,189 +688,57 @@ class FastBill {
 	}
 
 	/**
-	 * Create a client record in FastBill for the given order.
+	 * Set invoice to payed in FastBill for the given order.
 	 *
-	 * @param $payment_id
-	 *
-	 * @return mixed
-	 * @throws Exception
-	 *
-	 **/
-	function customer_create( $payment_id, $client_id = false ) {
-
-		global $edd_options;
-
-		$payment         = get_post( $payment_id );
-		$payment_meta    = get_post_meta( $payment->ID, '_edd_payment_meta', true );
-		$user_info       = maybe_unserialize( $payment_meta['user_info'] );
-		$first_name      = ! empty( $user_info['first_name'] ) ? $user_info['first_name'] : 'unknown';
-		$last_name       = ! empty( $user_info['last_name'] ) ? $user_info['last_name'] : 'unknown';
-		$customer_action = $client_id > 0 ? 'customer.update' : 'customer.create';
-
-		$this->addlog( 'Creating customer record in FastBill for email: ' . $user_info['email'] );
-
-		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-		$xml .= "<FBAPI>";
-		$xml .= "<SERVICE>$customer_action</SERVICE>";
-		$xml .= "<DATA>";
-
-		if ( $client_id > 0 ) {
-			$xml .= "<CUSTOMER_ID>$client_id</CUSTOMER_ID>";
-		}
-
-		$xml .= "<FIRST_NAME>" . $first_name . "</FIRST_NAME>";
-		$xml .= "<LAST_NAME>" . $last_name . "</LAST_NAME>";
-		$xml .= "<EMAIL>" . $user_info['email'] . "</EMAIL>";
-
-		if ( isset( $user_info['address']['line1'] ) && trim( $user_info['address']['line1'] ) != '' ) {
-			$xml .= "<ADDRESS>" . $user_info['address']['line1'] . "</ADDRESS>";
-		}
-
-		if ( isset( $user_info['address']['line2'] ) && trim( $user_info['address']['line2'] ) != '' ) {
-			$xml .= "<ADDRESS_2>" . $user_info['address']['line2'] . "</ADDRESS_2>";
-		}
-
-		if ( isset( $user_info['address']['city'] ) && trim( $user_info['address']['city'] ) != '' ) {
-			$xml .= "<CITY>" . $user_info['address']['city'] . "</CITY>";
-		}
-
-		if ( isset( $user_info['address']['country'] ) && trim( $user_info['address']['country'] ) != '' ) {
-			$xml .= "<COUNTRY_CODE>" . $user_info['address']['country'] . "</COUNTRY_CODE>";
-		}
-
-		if ( isset( $user_info['address']['zip'] ) && trim( $user_info['address']['zip'] ) != '' ) {
-			$xml .= "<ZIPCODE>" . $user_info['address']['zip'] . "</ZIPCODE>";
-		}
-
-		if ( isset( $user_info['vat_number'] ) && trim( $user_info['vat_number'] ) != '' ) {
-			$xml .= "<VAT_ID>" . $user_info['vat_number'] . "</VAT_ID>";
-		}
-
-		if ( ! drubba_fb_cfm_active() ) {
-
-			$xml .= "<CUSTOMER_TYPE>consumer</CUSTOMER_TYPE>";
-
-		} else {
-
-			$orga = get_post_meta( $payment_id, $edd_options['drubba_fb_fastbill_ORGANIZATION'], true );
-			if ( isset( $orga ) && $orga != '' && ! is_array( $orga ) ) {
-				$xml .= "<CUSTOMER_TYPE>business</CUSTOMER_TYPE>";
-			} else {
-				$xml .= "<CUSTOMER_TYPE>consumer</CUSTOMER_TYPE>";
-			}
-
-			$customer_fields = drubba_fb_get_customer_fields();
-			foreach ( $customer_fields as $key => $value ) {
-
-				$fb_option   = $edd_options[ 'drubba_fb_fastbill_' . $key ];
-				$field_value = get_post_meta( $payment_id, $fb_option, true );
-
-				if ( ! is_array( $field_value ) ) {
-					if ( $key == 'SALUTATION' ) {
-						if ( in_array( $field_value, array( 'Herr', 'Hr.', 'Hr', 'Mister', 'Mr', 'Mr.' ) ) ) {
-							$field_value = 'mr';
-						} elseif ( in_array( $field_value, array( 'Frau', 'Fr.', 'Fr', 'Misses', 'Miss', 'Mrs.' ) ) ) {
-							$field_value = 'mrs';
-						} else {
-							$field_value = '';
-						}
-					}
-
-					$xml .= "<" . $key . ">" . $field_value . "</" . $key . ">";
-				}
-
-			}
-
-		}
-
-		$xml .= "</DATA>";
-		$xml .= "</FBAPI>";
-
-		try {
-
-			$result = $this->apicall( $xml );
-
-		} catch ( Exception $e ) {
-
-			$this->addlog( $e->getMessage() );
-
-			return;
-
-		}
-		$response = new SimpleXMLElement( $result );
-		$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
-
-		if ( ! $is_error ) {
-			// get the first client
-			if ( isset( $response->RESPONSE->CUSTOMER_ID ) ) {
-				return $response->RESPONSE->CUSTOMER_ID;
-			} else {
-				$this->addlog( 'Unable to create client' . $response );
-				throw new Exception( 'Unable to create client' . $response );
-			}
-
-		} else {
-			// An error occured
-			$error_string = __( 'There was an error creating this customer in FastBill:', 'edd-fastbill' ) . "\n" .
-			                __( 'Error: ', 'edd-fastbill' ) . $response->ERRORS->ERROR;
-
-			$this->addlog( $error_string );
-			throw new Exception( 'Unable to create client' . $response );
-		}
-
-	}
-
-	/**
-	 * Check FastBill for a client record corresponding to the supplied email address.
-	 *
-	 * @param  $customer_email
+	 * @param  $payment_id
 	 *
 	 * @access public
-	 * @return int|void customer_id or 0 if customer does not exist in FastBill
+	 * @return void
 	 *
 	 **/
-	function customer_lookup( $customer_email ) {
+	public function payment_create( $payment_id ) {
 
-		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-		$xml .= "<FBAPI>";
-		$xml .= "<SERVICE>customer.get</SERVICE>";
-		$xml .= "<FILTER>";
-		$xml .= "<TERM>" . $customer_email . "</TERM>";
-		$xml .= "</FILTER>";
-		$xml .= "</FBAPI>";
+		$fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
 
-		try {
+		if ( $fb_invoice_id > 0 ) {
+			// there is an invoice ID, so create payment
 
-			$result = $this->apicall( $xml );
+			$this->addlog( 'START - Creating payment in FastBill for invoice ID: ' . $fb_invoice_id );
 
-		} catch ( Exception $e ) {
+			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+			$xml .= "<FBAPI>";
+			$xml .= "<SERVICE>invoice.setpaid</SERVICE>";
+			$xml .= "<DATA>";
+			$xml .= "<INVOICE_ID>" . $fb_invoice_id . "</INVOICE_ID>";
+			$xml .= "</DATA>";
+			$xml .= "</FBAPI>";
 
-			$this->addlog( $e->getMessage() );
+			try {
 
-			return;
+				$result = $this->apicall( $xml );
 
-		}
-		$response = new SimpleXMLElement( $result );
-		$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+			} catch ( Exception $e ) {
 
-		if ( ! $is_error ) {
-			// get the first client
-			if ( isset( $response->RESPONSE->CUSTOMERS->CUSTOMER->CUSTOMER_ID ) ) {
-				return $response->RESPONSE->CUSTOMERS->CUSTOMER->CUSTOMER_ID;
-			} else {
-				return 0;
+				$this->addlog( $e->getMessage() );
+
+				return;
+
 			}
+			$response = new SimpleXMLElement( $result );
+			$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
 
+			if ( ! $is_error ) {
+				$this->addlog( 'END - Creating payment for order #' . $payment_id );
+			} else {
+				// An error occured
+				$error_string = __( 'There was an error creating a payment in FastBill:', 'edd-fastbill' ) . "\n" .
+				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+				$this->addlog( $error_string );
+			}
 		} else {
-			// An error occured
-			$error_string = __( 'There was an error looking up this customer in FastBill:', 'edd-fastbill' ) . "\n" .
-			                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-
-			$this->addlog( $error_string );
-
-			return 0;
+			// no invoice id so exit.
+			return;
 		}
-
 	}
 
 	/**
@@ -775,7 +748,7 @@ class FastBill {
 	 * @return array
 	 *
 	 **/
-	function templates_get() {
+	public function templates_get() {
 
 		$cache_key        = 'edd_fastbill_templates';
 		$cache_time       = 60 * 60;
@@ -825,6 +798,33 @@ class FastBill {
 	}
 
 	/**
+	 * save url to invoice
+	 *
+	 * @param $payment_id
+	 * @param $fb_invoice_id
+	 *
+	 * @return bool|string
+	 */
+	private function _add_invoice_url( $payment_id, $fb_invoice_id ) {
+		global $edd_options;
+
+		if ( ! isset( $edd_options['drubba_fb_fastbill_online_invoice'] ) ) {
+			return false;
+		}
+
+		$invoice = $this->invoice_get( $fb_invoice_id );
+		if ( empty( $invoice->DOCUMENT_URL ) ) {
+			return false;
+		}
+
+		$fb_document_url = (string) $invoice->DOCUMENT_URL;
+		update_post_meta( $payment_id, '_fastbill_document_url', $fb_document_url );
+		edd_insert_payment_note( $payment_id, 'FastBill Document URL: ' . $fb_document_url );
+
+		return $fb_document_url;
+	}
+
+	/**
 	 * Get selected template id by looping the available templates
 	 *
 	 * @access private
@@ -863,7 +863,7 @@ class FastBill {
 	 * @throws Exception
 	 *
 	 **/
-	function apicall( $xml ) {
+	public function apicall( $xml ) {
 
 		global $edd_options;
 
@@ -910,7 +910,7 @@ class FastBill {
 	 * @return void
 	 *
 	 **/
-	function addlog( $log_string ) {
+	public function addlog( $log_string ) {
 		global $edd_options;
 
 		if ( isset( $edd_options['drubba_fb_fastbill_debug_log'] ) && 1 == $edd_options['drubba_fb_fastbill_debug_log'] ) {
