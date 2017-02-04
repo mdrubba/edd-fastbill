@@ -348,9 +348,6 @@ class FastBill {
 		$xml .= "</DATA>";
 		$xml .= "</FBAPI>";
 
-
-//	$invoice_status = ( $edd_options['drubba_fb_fastbill_invoice_status'] == '' ) ? 'sent' : $edd_options['drubba_fb_fastbill_invoice_status'];
-
 		try {
 
 			$result = $this->apicall( $xml );
@@ -377,9 +374,8 @@ class FastBill {
 
 			$this->logger->add( 'END - Creating invoice for order #' . $payment_id );
 
-			if ( $edd_options['drubba_fb_fastbill_invoice_status'] == 'complete' ) {
-				$this->invoice_complete( $payment_id, $response->RESPONSE->INVOICE_ID );
-			}
+			// finish invoice (publish no draft anymore)
+			$this->invoice_complete( $payment_id, $response->RESPONSE->INVOICE_ID );
 		} else {
 			// An error occured
 			$error_string = __( 'There was an error adding the invocie to FastBill:', 'edd-fastbill' ) . "\n" .

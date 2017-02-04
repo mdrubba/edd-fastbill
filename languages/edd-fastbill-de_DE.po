@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EDD - FastBill\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-07 00:29+0100\n"
-"PO-Revision-Date: 2016-12-07 00:41+0100\n"
+"POT-Creation-Date: 2017-02-04 14:33+0100\n"
+"PO-Revision-Date: 2017-02-04 14:34+0100\n"
 "Last-Translator: Markus Drubba <kontakt@markusdrubba.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.8.5\n"
+"X-Generator: Poedit 1.8.11\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
 "_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
@@ -19,60 +19,68 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: .\n"
 
-# @ edd-fastbill
-#: includes/fastbill-functions.php:70
-msgid "Discount used: "
-msgstr "Verwendeter Gutschein-Code: "
-
-#: includes/fastbill-functions.php:103
-msgid "renewal"
-msgstr "Lizenzverlängerung"
+#: includes/fastbill-functions.php:35
+msgid "Invalid FastBill credentials supplied"
+msgstr "Scheinbar stimmen deine FastBill Zugangsdaten nicht"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:176
-msgid "There was an error adding the invocie to FastBill:"
-msgstr "Es gab einen Fehler beim Erstellen der Rechnung bei FastBill:"
-
-# @ edd-fastbill
-#: includes/fastbill-functions.php:177 includes/fastbill-functions.php:261
-#: includes/fastbill-functions.php:319 includes/fastbill-functions.php:375
-#: includes/fastbill-functions.php:431 includes/fastbill-functions.php:469
-#: includes/fastbill-functions.php:476 includes/fastbill-functions.php:513
-#: includes/fastbill-functions.php:642 includes/fastbill-functions.php:696
-#: includes/fastbill-functions.php:755
-msgid "Error: "
-msgstr "Fehler: "
-
-# @ edd-fastbill
-#: includes/fastbill-functions.php:260 includes/fastbill-functions.php:318
-msgid "There was an error completing invoice in FastBill:"
-msgstr "Es gab einen Fehler beim finalen Erstellen der Rechnung:"
-
-# @ edd-fastbill
-#: includes/fastbill-functions.php:374
-msgid "There was an error creating a payment in FastBill:"
-msgstr "Es gab einen Fehler beim setzen der Rechnung als bezahlt:"
-
-#: includes/fastbill-functions.php:430
-msgid "There was an error canceling an invoice in FastBill:"
-msgstr "Es gab einen Fehler beim canceln der Rechnung in FastBill:"
-
-#: includes/fastbill-functions.php:512
-msgid "There was an error sending an invoice via FastBill:"
-msgstr "Es gab einen Fehler beim senden der Rechnung via FastBill:"
-
-# @ edd-fastbill
-#: includes/fastbill-functions.php:641
+#: includes/fastbill-functions.php:163
 msgid "There was an error creating this customer in FastBill:"
 msgstr "Es gab einen Fehler beim Erstellen des Kunden bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:695
+#: includes/fastbill-functions.php:164 includes/fastbill-functions.php:216
+#: includes/fastbill-functions.php:382 includes/fastbill-functions.php:435
+#: includes/fastbill-functions.php:491 includes/fastbill-functions.php:546
+#: includes/fastbill-functions.php:601 includes/fastbill-functions.php:637
+#: includes/fastbill-functions.php:644 includes/fastbill-functions.php:681
+#: includes/fastbill-functions.php:733 includes/fastbill-functions.php:790
+msgid "Error: "
+msgstr "Fehler: "
+
+# @ edd-fastbill
+#: includes/fastbill-functions.php:215
 msgid "There was an error looking up this customer in FastBill:"
 msgstr "Es gab einen Fehler beim Suchen des Kunden bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:754
+#: includes/fastbill-functions.php:279
+msgid "Discount used: "
+msgstr "Verwendeter Gutschein-Code: "
+
+#: includes/fastbill-functions.php:312
+msgid "renewal"
+msgstr "Lizenzverlängerung"
+
+# @ edd-fastbill
+#: includes/fastbill-functions.php:381
+msgid "There was an error adding the invocie to FastBill:"
+msgstr "Es gab einen Fehler beim Erstellen der Rechnung bei FastBill:"
+
+# @ edd-fastbill
+#: includes/fastbill-functions.php:434 includes/fastbill-functions.php:490
+msgid "There was an error completing invoice in FastBill:"
+msgstr "Es gab einen Fehler beim finalen Erstellen der Rechnung:"
+
+#: includes/fastbill-functions.php:545
+msgid "There was an error canceling an invoice in FastBill:"
+msgstr "Es gab einen Fehler beim canceln der Rechnung in FastBill:"
+
+#: includes/fastbill-functions.php:600
+msgid "There was an error deleting an invoice in FastBill:"
+msgstr "Es gab einen Fehler beim löschen der Rechnung in FastBill:"
+
+#: includes/fastbill-functions.php:680
+msgid "There was an error sending an invoice via FastBill:"
+msgstr "Es gab einen Fehler beim senden der Rechnung via FastBill:"
+
+# @ edd-fastbill
+#: includes/fastbill-functions.php:732
+msgid "There was an error creating a payment in FastBill:"
+msgstr "Es gab einen Fehler beim setzen der Rechnung als bezahlt:"
+
+# @ edd-fastbill
+#: includes/fastbill-functions.php:789
 msgid "There was an error when receiving templates from FastBill:"
 msgstr ""
 "Es gab einen Fehler bei der Abfrage der Rechnungs-Vorlagen von Fastbild:"
@@ -129,12 +137,11 @@ msgstr "FastBill E-Mail"
 msgid "FastBill API Key"
 msgstr "FastBill API-Key"
 
-# @ edd-fastbill
-#: includes/register-settings.php:50
-msgid "Invoice Template"
-msgstr "Rechnungsvorlage"
+#: includes/register-settings.php:49
+msgid "Direct payment invoice template"
+msgstr "Direktzahlen Rechnungsvorlage"
 
-#: includes/register-settings.php:51
+#: includes/register-settings.php:50 includes/register-settings.php:58
 msgid ""
 "Choose invoice template. If you edit a Template in FastBill, you have to "
 "reassign it here."
@@ -142,50 +149,23 @@ msgstr ""
 "Rechnungstemplate auswählen. Wenn du ein Template in FastBill bearbeitest, "
 "musst du es hier erneut zuweisen."
 
-# @ edd-fastbill
-#: includes/register-settings.php:59
-msgid "Invoice Status"
-msgstr "Rechnungsstatus"
+#: includes/register-settings.php:57
+msgid "Advance payment invoice template"
+msgstr "Vorkasse Rechnungsvorlage"
 
-#: includes/register-settings.php:60
-msgid "Status for invoices being created in FastBill"
-msgstr "Status für Rechnungen in FastBill"
-
-# @ edd-fastbill
-#: includes/register-settings.php:64
-msgid "Draft"
-msgstr "Entwurf"
-
-# @ edd-fastbill
 #: includes/register-settings.php:65
-msgid "Complete"
-msgstr "Abgeschlossen"
-
-# @ edd-fastbill
-#: includes/register-settings.php:71
-msgid "Auto create payment"
-msgstr "Zahlungseingang erfassen"
-
-#: includes/register-settings.php:72
-msgid ""
-"Create payment in FastBill when order is placed, requires invoice status "
-"COMPLETE"
-msgstr ""
-"Rechnung als bezahlt markieren, setzt Rechnungsstatus ABGESCHLOSSEN voraus"
-
-#: includes/register-settings.php:78
 msgid "Send invoice"
 msgstr "Rechnung versenden"
 
-#: includes/register-settings.php:79
+#: includes/register-settings.php:66
 msgid "Send invoice to customer via email (is sent via FastBill)"
 msgstr "Rechnung per E-Mail an Käufer senden (wird über FastBill gesendet)"
 
-#: includes/register-settings.php:85
+#: includes/register-settings.php:71
 msgid "Online invoice"
 msgstr "Online-Rechnung"
 
-#: includes/register-settings.php:86
+#: includes/register-settings.php:72
 msgid ""
 "I activated the online invoice functionalty within my Fastbill account to "
 "accessing the generated invoice."
@@ -195,70 +175,115 @@ msgstr ""
 "target=_blank>Online-Rechnung</a> in meinem Fastbill-Konto aktiviert um auf "
 "verlinkten Rechnungen zugreifen zu können."
 
+#: includes/register-settings.php:77
+msgid ""
+"For <em>advance payment</em> methods it's sometimes needed to send the "
+"invoice to the custumer before he/she can process the payment. In the "
+"following settings you can activate those payment gateways that are not "
+"sending the money directly to your account (like PayPal does)."
+msgstr ""
+"Für Zahlungen per <em>Vorkasse</em> ist es manchmal nötig die Rechnung zu "
+"erstellen bevor die Zahlung eingegangen ist. In der folgende Einstellung "
+"aktivierst du die Zahlungsweisen die keine Direktzahlung erlauben (bspw. "
+"Bezahlung per Banküberweisung)."
+
+#: includes/register-settings.php:82
+msgid "Advance payment gateways"
+msgstr "Vorkasse Zahlungsmethoden"
+
 # @ edd-fastbill
-#: includes/register-settings.php:97
+#: includes/register-settings.php:94
 msgid "FastBill Customer Fields"
 msgstr "FastBill Kunden-Details"
 
-#: includes/register-settings.php:123
+#: includes/register-settings.php:120
 msgid "Debug mode"
 msgstr "Debug Modus"
 
-#: includes/register-settings.php:124
+#: includes/register-settings.php:121
 msgid "Write debug logs into the database."
 msgstr "Debug Einträge in Datenbank schreiben"
 
-#: includes/register-settings.php:130
+#: includes/register-settings.php:127
 msgid "Reset debug entries"
 msgstr "Debug Einträge löschen"
 
-#: includes/register-settings.php:131
+#: includes/register-settings.php:128
 msgid "Remove debug logs from database."
 msgstr "Debug Einträge aus Datenbank löschen"
 
 # @ edd-fastbill
-#: includes/register-settings.php:192
+#: includes/register-settings.php:189
 msgid "Organization"
 msgstr "Firmenname"
 
 # @ edd-fastbill
-#: includes/register-settings.php:193
+#: includes/register-settings.php:190
 msgid "If set by customer, than Business"
 msgstr "Wenn vom Kunden gesetzt, dann Geschäftskonto"
 
 # @ edd-fastbill
-#: includes/register-settings.php:196
+#: includes/register-settings.php:193
 msgid "Salutation"
 msgstr "Anrede"
 
 # @ edd-fastbill
-#: includes/register-settings.php:197
+#: includes/register-settings.php:194
 msgid "Use Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs."
 msgstr ""
 "Verwende Herr, Hr., Hr, Mister, Mr, Mr. & Frau, Fr., Fr, Misses, Miss, Mrs."
 
 # @ edd-fastbill
-#: includes/register-settings.php:199
+#: includes/register-settings.php:196
 msgid "Phone"
 msgstr "Telefonnummer"
 
 # @ edd-fastbill
-#: includes/register-settings.php:200
+#: includes/register-settings.php:197
 msgid "Fax"
 msgstr "Telefaxnummer"
 
 # @ edd-fastbill
-#: includes/register-settings.php:201
+#: includes/register-settings.php:198
 msgid "Mobile"
 msgstr "Mobiltelefonnummer"
 
-#: includes/register-settings.php:215
+#: includes/register-settings.php:212
 msgid "Default"
 msgstr "Standard"
 
 #: includes/template-tags.php:28
 msgid "Creates a link to the downloadable Fastbill invoice"
 msgstr "Erzeugt einen Link zur FastBill PDF Rechnung"
+
+# @ edd-fastbill
+#~ msgid "Invoice Template"
+#~ msgstr "Rechnungsvorlage"
+
+# @ edd-fastbill
+#~ msgid "Invoice Status"
+#~ msgstr "Rechnungsstatus"
+
+#~ msgid "Status for invoices being created in FastBill"
+#~ msgstr "Status für Rechnungen in FastBill"
+
+# @ edd-fastbill
+#~ msgid "Draft"
+#~ msgstr "Entwurf"
+
+# @ edd-fastbill
+#~ msgid "Complete"
+#~ msgstr "Abgeschlossen"
+
+# @ edd-fastbill
+#~ msgid "Auto create payment"
+#~ msgstr "Zahlungseingang erfassen"
+
+#~ msgid ""
+#~ "Create payment in FastBill when order is placed, requires invoice status "
+#~ "COMPLETE"
+#~ msgstr ""
+#~ "Rechnung als bezahlt markieren, setzt Rechnungsstatus ABGESCHLOSSEN voraus"
 
 #~ msgid "Choose invoice template"
 #~ msgstr "Rechnungstemplate auswählen"
