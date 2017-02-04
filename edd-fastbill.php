@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Easy Digital Downloads - FastBill Integration
-Plugin URI: https://easydigitaldownloads.com/extensions/fastbill-integration/?ref=2325
-Description: Integrates <a href="https://easydigitaldownloads.com/" target="_blank">Easy Digital Downloads</a> with the <a href="http://www.fastbill.com" target="_blank">FastBill - fast money</a> accounting software. 
+Plugin URI: https://wordpress.org/plugins/edd-fastbill/
+Description: Integrates <a href="https://easydigitaldownloads.com/?ref=2325" target="_blank">Easy Digital Downloads</a> with the <a href="http://www.fastbill.com" target="_blank">FastBill - fast money</a> accounting software.
 Author: Markus Drubba
 Author URI: http://markusdrubba.de
-Version: 1.4.4
+Version: 1.5.0
 Text Domain: edd-fastbill
 Domain Path: /languages
 
