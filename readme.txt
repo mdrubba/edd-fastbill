@@ -1,10 +1,10 @@
 === EDD - FastBill Integration ===
 Contributors: drumba
 Donate link: https://www.paypal.me/markusdrubba
-Tags: Digital Downloads, EDD, Fastbill, Accounting, Invoice
+Tags: Easy Digital Downloads, EDD, Fastbill, Accounting, Invoice
 Requires at least: 4.5
-Tested up to: 4.7
-Stable tag: 1.4.4
+Tested up to: 4.7.2
+Stable tag: 1.5.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -16,7 +16,7 @@ Automatically create invoices, clients, and payments in your FastBill account wh
 This extension connects an EDD store to a FastBill account. When a download is purchased an Invoice, Payment and Client are created in FastBill.
 With this integration, you will save a significant amount of time on keeping your records up to date.
 
-Store owners can set the status of the FastBill invoice to draft or completed, sending Email with the invoice, let users Download the invoice from there Users Account..
+Store owners can create FastBill incoices, sending Email with the invoice, let users Download the invoice from there Users Account..
 
 == Installation ==
 
@@ -38,6 +38,17 @@ Store owners can set the status of the FastBill invoice to draft or completed, s
 
 
 == Changelog ==
+
+= 2017-02-04 1.5.0 =
+
+* New: Logging class
+* New: Setting option for advance payment methods to create invoices before payment is set (you have to set the advance payment methods in the settings to benefit from it)
+* Removed: Setting option for invoice status
+* Removed: Setting option for payment creation
+* Tweak: Code cleaning, introduced namespaces
+* Tweak: Added some more payment notes for error cases
+
+* Whats coming up next? - Feel free to share your ideas.
 
 = 2016-12-07 1.4.4 =
 
