@@ -30,7 +30,7 @@ function drubba_fb_register_settings( $settings ) {
 	$fastbill_settings = array(
 		array(
 			'id'   => 'drubba_fastbill',
-			'name' => '<strong>' . __( 'FastBill Settings', 'edd-fastbill' ) . '</strong>',
+			'name' => '<h3>' . __( 'FastBill Settings', 'edd-fastbill' ) . '</h3>',
 			'desc' => '',
 			'type' => 'header',
 		),
@@ -44,47 +44,44 @@ function drubba_fb_register_settings( $settings ) {
 			'name' => __( 'FastBill API Key', 'edd-fastbill' ),
 			'type' => 'text',
 		),
-
 		array(
 			'id'      => 'drubba_fb_fastbill_invoice_template',
-			'name'    => __( 'Invoice Template', 'edd-fastbill' ),
+			'name'    => __( 'Direct payment invoice template', 'edd-fastbill' ),
 			'desc'    => __( 'Choose invoice template. If you edit a Template in FastBill, you have to reassign it here.', 'edd-fastbill' ),
 			'std'     => '',
 			'type'    => 'select',
 			'options' => drubba_fb_get_invoice_templates()
 		),
-
 		array(
-			'id'      => 'drubba_fb_fastbill_invoice_status',
-			'name'    => __( 'Invoice Status', 'edd-fastbill' ),
-			'desc'    => __( 'Status for invoices being created in FastBill', 'edd-fastbill' ),
-			'std'     => 'draft',
+			'id'      => 'drubba_fb_fastbill_invoice_template_advance_payment',
+			'name'    => __( 'Advance payment invoice template', 'edd-fastbill' ),
+			'desc'    => __( 'Choose invoice template. If you edit a Template in FastBill, you have to reassign it here.', 'edd-fastbill' ),
+			'std'     => '',
 			'type'    => 'select',
-			'options' => array(
-				'draft'    => __( 'Draft', 'edd-fastbill' ),
-				'complete' => __( 'Complete', 'edd-fastbill' )
-			)
+			'options' => drubba_fb_get_invoice_templates()
 		),
-
-		array(
-			'id'   => 'drubba_fb_fastbill_payments',
-			'name' => __( 'Auto create payment', 'edd-fastbill' ),
-			'desc' => __( 'Create payment in FastBill when order is placed, requires invoice status COMPLETE', 'edd-fastbill' ),
-			'type' => 'checkbox',
-		),
-
 		array(
 			'id'   => 'drubba_fb_fastbill_sendbyemail',
 			'name' => __( 'Send invoice', 'edd-fastbill' ),
 			'desc' => __( 'Send invoice to customer via email (is sent via FastBill)', 'edd-fastbill' ),
 			'type' => 'checkbox',
 		),
-
 		array(
 			'id'   => 'drubba_fb_fastbill_online_invoice',
 			'name' => __( 'Online invoice', 'edd-fastbill' ),
 			'desc' => __( 'I activated the online invoice functionalty within my Fastbill account to accessing the generated invoice.', 'edd-fastbill' ),
 			'type' => 'checkbox',
+		),
+		array(
+			'id'   => 'drubba_fb_fastbill_advance_payment_gateways_headline',
+			'desc' => __( 'For <em>advance payment</em> methods it\'s sometimes needed to send the invoice to the custumer before he/she can process the payment. In the following settings you can activate those payment gateways that are not sending the money directly to your account (like PayPal does).', 'edd-fastbill' ),
+			'type' => 'descriptive_text',
+		),
+		array(
+			'id'      => 'drubba_fb_fastbill_advance_payment_gateways',
+			'name'    => __( 'Advance payment gateways', 'edd-fastbill' ),
+			'type'    => 'gateways',
+			'options' => edd_get_payment_gateways(),
 		),
 	);
 
@@ -94,7 +91,7 @@ function drubba_fb_register_settings( $settings ) {
 
 		$fastbill_settings[] = array( // @since 1.1.0
 			'id'   => 'drubba_fastbill_fields',
-			'name' => '<strong>' . __( 'FastBill Customer Fields', 'edd-fastbill' ) . '</strong>',
+			'name' => '<h3>' . __( 'FastBill Customer Fields', 'edd-fastbill' ) . '</h3>',
 			'desc' => '',
 			'type' => 'header',
 		);
@@ -215,7 +212,8 @@ function drubba_fb_get_invoice_templates() {
 		'' => __( 'Default', 'edd-fastbill' )
 	);
 
-	$templates_array = drubba_fastbill_get_templates();
+	$fastbill        = new \drumba\EDD\FastBill\FastBill();
+	$templates_array = $fastbill->templates_get();
 
 	if ( ! isset( $templates_array['TEMPLATE'] ) ) {
 		return $templates;
