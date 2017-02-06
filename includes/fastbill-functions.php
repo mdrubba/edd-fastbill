@@ -399,47 +399,46 @@ class FastBill {
 	 **/
 	public function invoice_get( $invoice_id ) {
 
-		if ( $invoice_id > 0 ) {
-			// there is an invoice ID, so retrieve the invoice
-
-			$this->logger->add( 'START - Get invoice in FastBill for invoice ID: ' . $invoice_id );
-
-			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-			$xml .= "<FBAPI>";
-			$xml .= "<SERVICE>invoice.get</SERVICE>";
-			$xml .= "<FILTER>";
-			$xml .= "<INVOICE_ID>" . $invoice_id . "</INVOICE_ID>";
-			$xml .= "</FILTER>";
-			$xml .= "</FBAPI>";
-
-			try {
-
-				$result = $this->apicall( $xml );
-
-			} catch ( Exception $e ) {
-
-				$this->logger->add( $e->getMessage() );
-
-				return;
-
-			}
-			$response = new SimpleXMLElement( $result );
-			$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
-
-			if ( ! $is_error ) {
-				$this->logger->add( 'END - Complete get invoice ID: ' . $invoice_id );
-
-				return ( ! empty( $response->RESPONSE->INVOICES->INVOICE ) ) ? $response->RESPONSE->INVOICES->INVOICE : null;
-			} else {
-				// An error occured
-				$error_string = __( 'There was an error completing invoice in FastBill:', 'edd-fastbill' ) . "\n" .
-				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-				$this->logger->add( $error_string );
-
-				return null;
-			}
-		} else {
+		if ( $invoice_id < 1 ) {
 			// no invoice id so exit.
+			return null;
+		}
+
+		// there is an invoice ID, so retrieve the invoice
+		$this->logger->add( 'START - Get invoice in FastBill for invoice ID: ' . $invoice_id );
+
+		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+		$xml .= "<FBAPI>";
+		$xml .= "<SERVICE>invoice.get</SERVICE>";
+		$xml .= "<FILTER>";
+		$xml .= "<INVOICE_ID>" . $invoice_id . "</INVOICE_ID>";
+		$xml .= "</FILTER>";
+		$xml .= "</FBAPI>";
+
+		try {
+
+			$result = $this->apicall( $xml );
+
+		} catch ( Exception $e ) {
+
+			$this->logger->add( $e->getMessage() );
+
+			return;
+
+		}
+		$response = new SimpleXMLElement( $result );
+		$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+
+		if ( ! $is_error ) {
+			$this->logger->add( 'END - Complete get invoice ID: ' . $invoice_id );
+
+			return ( ! empty( $response->RESPONSE->INVOICES->INVOICE ) ) ? $response->RESPONSE->INVOICES->INVOICE : null;
+		} else {
+			// An error occured
+			$error_string = __( 'There was an error completing invoice in FastBill:', 'edd-fastbill' ) . "\n" .
+			                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+			$this->logger->add( $error_string );
+
 			return null;
 		}
 	}
@@ -455,46 +454,45 @@ class FastBill {
 	 **/
 	public function invoice_complete( $payment_id, $invoice_id ) {
 
-		if ( $invoice_id > 0 ) {
-			// there is an invoice ID, so complete invoice
-
-			$this->logger->add( 'START - Complete invoice in FastBill for invoice ID: ' . $invoice_id );
-
-			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-			$xml .= "<FBAPI>";
-			$xml .= "<SERVICE>invoice.complete</SERVICE>";
-			$xml .= "<DATA>";
-			$xml .= "<INVOICE_ID>" . $invoice_id . "</INVOICE_ID>";
-			$xml .= "</DATA>";
-			$xml .= "</FBAPI>";
-
-			try {
-
-				$result = $this->apicall( $xml );
-
-			} catch ( Exception $e ) {
-
-				$this->logger->add( $e->getMessage() );
-
-				return;
-
-			}
-			$response = new SimpleXMLElement( $result );
-			$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
-
-			if ( ! $is_error ) {
-				$this->logger->add( 'END - Complete invoice for order #' . $payment_id );
-				$fb_invoice_no = (string) $response->RESPONSE->INVOICE_NUMBER;
-				edd_insert_payment_note( $payment_id, 'FastBill Invoice Number: ' . $fb_invoice_no );
-			} else {
-				// An error occured
-				$error_string = __( 'There was an error completing invoice in FastBill:', 'edd-fastbill' ) . "\n" .
-				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-				$this->logger->add( $error_string );
-			}
-		} else {
+		if ( $invoice_id < 1 ) {
 			// no invoice id so exit.
 			return;
+		}
+
+		// there is an invoice ID, so complete invoice
+		$this->logger->add( 'START - Complete invoice in FastBill for invoice ID: ' . $invoice_id );
+
+		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+		$xml .= "<FBAPI>";
+		$xml .= "<SERVICE>invoice.complete</SERVICE>";
+		$xml .= "<DATA>";
+		$xml .= "<INVOICE_ID>" . $invoice_id . "</INVOICE_ID>";
+		$xml .= "</DATA>";
+		$xml .= "</FBAPI>";
+
+		try {
+
+			$result = $this->apicall( $xml );
+
+		} catch ( Exception $e ) {
+
+			$this->logger->add( $e->getMessage() );
+
+			return;
+
+		}
+		$response = new SimpleXMLElement( $result );
+		$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+
+		if ( ! $is_error ) {
+			$this->logger->add( 'END - Complete invoice for order #' . $payment_id );
+			$fb_invoice_no = (string) $response->RESPONSE->INVOICE_NUMBER;
+			edd_insert_payment_note( $payment_id, 'FastBill Invoice Number: ' . $fb_invoice_no );
+		} else {
+			// An error occured
+			$error_string = __( 'There was an error completing invoice in FastBill:', 'edd-fastbill' ) . "\n" .
+			                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+			$this->logger->add( $error_string );
 		}
 	}
 
@@ -511,46 +509,45 @@ class FastBill {
 
 		$fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
 
-		if ( $fb_invoice_id > 0 ) {
-			// there is an invoice ID, so cancel invoice
-
-			$this->logger->add( 'START - Canceling invoice in FastBill for invoice ID: ' . $fb_invoice_id );
-
-			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-			$xml .= "<FBAPI>";
-			$xml .= "<SERVICE>invoice.cancel</SERVICE>";
-			$xml .= "<DATA>";
-			$xml .= "<INVOICE_ID>" . $fb_invoice_id . "</INVOICE_ID>";
-			$xml .= "</DATA>";
-			$xml .= "</FBAPI>";
-
-			try {
-
-				$result = $this->apicall( $xml );
-
-			} catch ( Exception $e ) {
-
-				$this->logger->add( $e->getMessage() );
-
-				return;
-
-			}
-			$response = new SimpleXMLElement( $result );
-			$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
-
-			if ( ! $is_error ) {
-				$this->logger->add( 'END - Canceling invoice for order #' . $payment_id );
-				edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' canceled due to refunding purchase.' );
-			} else {
-				// An error occured
-				$error_string = __( 'There was an error canceling an invoice in FastBill:', 'edd-fastbill' ) . "\n" .
-				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-				$this->logger->add( $error_string );
-				edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' cancelation failed as FastBill.' );
-			}
-		} else {
+		if ( $fb_invoice_id <= 0 ) {
 			// no invoice id so exit.
 			return;
+		}
+		// there is an invoice ID, so cancel invoice
+
+		$this->logger->add( 'START - Canceling invoice in FastBill for invoice ID: ' . $fb_invoice_id );
+
+		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+		$xml .= "<FBAPI>";
+		$xml .= "<SERVICE>invoice.cancel</SERVICE>";
+		$xml .= "<DATA>";
+		$xml .= "<INVOICE_ID>" . $fb_invoice_id . "</INVOICE_ID>";
+		$xml .= "</DATA>";
+		$xml .= "</FBAPI>";
+
+		try {
+
+			$result = $this->apicall( $xml );
+
+		} catch ( Exception $e ) {
+
+			$this->logger->add( $e->getMessage() );
+
+			return;
+
+		}
+		$response = new SimpleXMLElement( $result );
+		$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+
+		if ( ! $is_error ) {
+			$this->logger->add( 'END - Canceling invoice for order #' . $payment_id );
+			edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' canceled due to refunding purchase.' );
+		} else {
+			// An error occured
+			$error_string = __( 'There was an error canceling an invoice in FastBill:', 'edd-fastbill' ) . "\n" .
+			                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+			$this->logger->add( $error_string );
+			edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' cancelation failed as FastBill.' );
 		}
 	}
 
@@ -567,46 +564,45 @@ class FastBill {
 
 		$fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
 
-		if ( $fb_invoice_id > 0 ) {
-			// there is an invoice ID, so cancel invoice
-
-			$this->logger->add( 'START - Delete invoice in FastBill for invoice ID: ' . $fb_invoice_id );
-
-			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-			$xml .= "<FBAPI>";
-			$xml .= "<SERVICE>invoice.delete</SERVICE>";
-			$xml .= "<DATA>";
-			$xml .= "<INVOICE_ID>" . $fb_invoice_id . "</INVOICE_ID>";
-			$xml .= "</DATA>";
-			$xml .= "</FBAPI>";
-
-			try {
-
-				$result = $this->apicall( $xml );
-
-			} catch ( Exception $e ) {
-
-				$this->logger->add( $e->getMessage() );
-
-				return;
-
-			}
-			$response = new SimpleXMLElement( $result );
-			$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
-
-			if ( ! $is_error ) {
-				$this->logger->add( 'END - Delete invoice for order #' . $payment_id );
-				edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' deleted due to abandonded purchase.' );
-			} else {
-				// An error occured
-				$error_string = __( 'There was an error deleting an invoice in FastBill:', 'edd-fastbill' ) . "\n" .
-				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-				$this->logger->add( $error_string );
-				edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' deletion failed at FastBill.' );
-			}
-		} else {
+		if ( $fb_invoice_id <= 0 ) {
 			// no invoice id so exit.
 			return;
+		}
+
+		// there is an invoice ID, so cancel invoice
+		$this->logger->add( 'START - Delete invoice in FastBill for invoice ID: ' . $fb_invoice_id );
+
+		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+		$xml .= "<FBAPI>";
+		$xml .= "<SERVICE>invoice.delete</SERVICE>";
+		$xml .= "<DATA>";
+		$xml .= "<INVOICE_ID>" . $fb_invoice_id . "</INVOICE_ID>";
+		$xml .= "</DATA>";
+		$xml .= "</FBAPI>";
+
+		try {
+
+			$result = $this->apicall( $xml );
+
+		} catch ( Exception $e ) {
+
+			$this->logger->add( $e->getMessage() );
+
+			return;
+
+		}
+		$response = new SimpleXMLElement( $result );
+		$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+
+		if ( ! $is_error ) {
+			$this->logger->add( 'END - Delete invoice for order #' . $payment_id );
+			edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' deleted due to abandonded purchase.' );
+		} else {
+			// An error occured
+			$error_string = __( 'There was an error deleting an invoice in FastBill:', 'edd-fastbill' ) . "\n" .
+			                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+			$this->logger->add( $error_string );
+			edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' deletion failed at FastBill.' );
 		}
 	}
 
@@ -701,44 +697,43 @@ class FastBill {
 
 		$fb_invoice_id = (int) get_post_meta( $payment_id, '_fastbill_invoice_id', true );
 
-		if ( $fb_invoice_id > 0 ) {
-			// there is an invoice ID, so create payment
-
-			$this->logger->add( 'START - Creating payment in FastBill for invoice ID: ' . $fb_invoice_id );
-
-			$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
-			$xml .= "<FBAPI>";
-			$xml .= "<SERVICE>invoice.setpaid</SERVICE>";
-			$xml .= "<DATA>";
-			$xml .= "<INVOICE_ID>" . $fb_invoice_id . "</INVOICE_ID>";
-			$xml .= "</DATA>";
-			$xml .= "</FBAPI>";
-
-			try {
-
-				$result = $this->apicall( $xml );
-
-			} catch ( Exception $e ) {
-
-				$this->logger->add( $e->getMessage() );
-
-				return;
-
-			}
-			$response = new SimpleXMLElement( $result );
-			$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
-
-			if ( ! $is_error ) {
-				$this->logger->add( 'END - Creating payment for order #' . $payment_id );
-			} else {
-				// An error occured
-				$error_string = __( 'There was an error creating a payment in FastBill:', 'edd-fastbill' ) . "\n" .
-				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
-				$this->logger->add( $error_string );
-			}
-		} else {
+		if ( $fb_invoice_id <= 0 ) {
 			// no invoice id so exit.
 			return;
+		}
+
+		// there is an invoice ID, so create payment
+		$this->logger->add( 'START - Creating payment in FastBill for invoice ID: ' . $fb_invoice_id );
+
+		$xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+		$xml .= "<FBAPI>";
+		$xml .= "<SERVICE>invoice.setpaid</SERVICE>";
+		$xml .= "<DATA>";
+		$xml .= "<INVOICE_ID>" . $fb_invoice_id . "</INVOICE_ID>";
+		$xml .= "</DATA>";
+		$xml .= "</FBAPI>";
+
+		try {
+
+			$result = $this->apicall( $xml );
+
+		} catch ( Exception $e ) {
+
+			$this->logger->add( $e->getMessage() );
+
+			return;
+
+		}
+		$response = new SimpleXMLElement( $result );
+		$is_error = isset( $response->RESPONSE->ERRORS ) ? true : false;
+
+		if ( ! $is_error ) {
+			$this->logger->add( 'END - Creating payment for order #' . $payment_id );
+		} else {
+			// An error occured
+			$error_string = __( 'There was an error creating a payment in FastBill:', 'edd-fastbill' ) . "\n" .
+			                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
+			$this->logger->add( $error_string );
 		}
 	}
 

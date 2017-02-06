@@ -46,6 +46,7 @@ Store owners can create FastBill incoices, sending Email with the invoice, let u
 * Removed: Setting option for invoice status
 * Removed: Setting option for payment creation
 * Tweak: Code cleaning, introduced namespaces
+* Tweak: Added some more payment notes for error cases
 
 * Whats coming up next? - Feel free to share your ideas.
 
