@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EDD - FastBill\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-04 14:34+0100\n"
+"POT-Creation-Date: 2017-02-06 21:01+0100\n"
 "PO-Revision-Date: 2016-12-07 00:33+0100\n"
 "Last-Translator: Markus Drubba <kontakt@markusdrubba.de>\n"
 "Language-Team: \n"
@@ -31,9 +31,9 @@ msgid "There was an error creating this customer in FastBill:"
 msgstr ""
 
 #: includes/fastbill-functions.php:164 includes/fastbill-functions.php:216 includes/fastbill-functions.php:382
-#: includes/fastbill-functions.php:435 includes/fastbill-functions.php:491 includes/fastbill-functions.php:546
-#: includes/fastbill-functions.php:601 includes/fastbill-functions.php:637 includes/fastbill-functions.php:644
-#: includes/fastbill-functions.php:681 includes/fastbill-functions.php:733 includes/fastbill-functions.php:790
+#: includes/fastbill-functions.php:436 includes/fastbill-functions.php:492 includes/fastbill-functions.php:547
+#: includes/fastbill-functions.php:603 includes/fastbill-functions.php:640 includes/fastbill-functions.php:647
+#: includes/fastbill-functions.php:684 includes/fastbill-functions.php:736 includes/fastbill-functions.php:793
 msgid "Error: "
 msgstr ""
 
@@ -53,27 +53,27 @@ msgstr ""
 msgid "There was an error adding the invocie to FastBill:"
 msgstr ""
 
-#: includes/fastbill-functions.php:434 includes/fastbill-functions.php:490
+#: includes/fastbill-functions.php:435 includes/fastbill-functions.php:491
 msgid "There was an error completing invoice in FastBill:"
 msgstr ""
 
-#: includes/fastbill-functions.php:545
+#: includes/fastbill-functions.php:546
 msgid "There was an error canceling an invoice in FastBill:"
 msgstr ""
 
-#: includes/fastbill-functions.php:600
+#: includes/fastbill-functions.php:602
 msgid "There was an error deleting an invoice in FastBill:"
 msgstr ""
 
-#: includes/fastbill-functions.php:680
+#: includes/fastbill-functions.php:683
 msgid "There was an error sending an invoice via FastBill:"
 msgstr ""
 
-#: includes/fastbill-functions.php:732
+#: includes/fastbill-functions.php:735
 msgid "There was an error creating a payment in FastBill:"
 msgstr ""
 
-#: includes/fastbill-functions.php:789
+#: includes/fastbill-functions.php:792
 msgid "There was an error when receiving templates from FastBill:"
 msgstr ""
 

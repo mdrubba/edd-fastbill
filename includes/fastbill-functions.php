@@ -383,6 +383,7 @@ class FastBill {
 
 			$this->logger->add( $error_string );
 			$this->logger->add( 'END - Creating invoice for order #' . $payment_id );
+			edd_insert_payment_note( $payment_id, 'FastBill Invoice was not created.' );
 		}
 
 	}
@@ -545,6 +546,7 @@ class FastBill {
 				$error_string = __( 'There was an error canceling an invoice in FastBill:', 'edd-fastbill' ) . "\n" .
 				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
 				$this->logger->add( $error_string );
+				edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' cancelation failed as FastBill.' );
 			}
 		} else {
 			// no invoice id so exit.
@@ -600,6 +602,7 @@ class FastBill {
 				$error_string = __( 'There was an error deleting an invoice in FastBill:', 'edd-fastbill' ) . "\n" .
 				                __( 'Error: ', 'edd-fastbill' ) . $response->RESPONSE->ERRORS->ERROR;
 				$this->logger->add( $error_string );
+				edd_insert_payment_note( $payment_id, 'FastBill Invoice ID: ' . $fb_invoice_id . ' deletion failed at FastBill.' );
 			}
 		} else {
 			// no invoice id so exit.
