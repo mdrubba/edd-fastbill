@@ -11,7 +11,6 @@
 
 namespace drumba\EDD\FastBill;
 
-
 class Payment_Actions {
 
 	private $edd_options;
@@ -112,6 +111,10 @@ class Payment_Actions {
 	 * @return bool
 	 */
 	private function _checkout_with_advance_payment_gateway() {
+		if ( ! isset( $this->edd_options['drubba_fb_fastbill_advance_payment_gateways'] ) || ! is_array( $this->edd_options['drubba_fb_fastbill_advance_payment_gateways'] ) ) {
+			return false;
+		}
+
 		$gateway = edd_get_payment_gateway( $this->payment_id );
 
 		return array_key_exists( $gateway, $this->edd_options['drubba_fb_fastbill_advance_payment_gateways'] );
@@ -119,5 +122,11 @@ class Payment_Actions {
 
 }
 
-$payment_actions = new Payment_Actions( new FastBill() );
-$payment_actions->load();
+try {
+
+	$fastbill        = new FastBill();
+	$payment_actions = new Payment_Actions( $fastbill );
+	$payment_actions->load();
+
+} catch ( \Exception $e ) {
+}

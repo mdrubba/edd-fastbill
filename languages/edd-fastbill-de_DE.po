@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: EDD - FastBill\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-06 21:07+0100\n"
-"PO-Revision-Date: 2017-02-06 21:07+0100\n"
+"POT-Creation-Date: 2017-02-09 22:36+0100\n"
+"PO-Revision-Date: 2017-02-09 22:36+0100\n"
 "Last-Translator: Markus Drubba <kontakt@markusdrubba.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -19,68 +19,68 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: includes/fastbill-functions.php:35
+#: includes/fastbill-functions.php:32
 msgid "Invalid FastBill credentials supplied"
 msgstr "Scheinbar stimmen deine FastBill Zugangsdaten nicht"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:163
+#: includes/fastbill-functions.php:166
 msgid "There was an error creating this customer in FastBill:"
 msgstr "Es gab einen Fehler beim Erstellen des Kunden bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:164 includes/fastbill-functions.php:216
-#: includes/fastbill-functions.php:382 includes/fastbill-functions.php:439
-#: includes/fastbill-functions.php:494 includes/fastbill-functions.php:548
-#: includes/fastbill-functions.php:603 includes/fastbill-functions.php:636
-#: includes/fastbill-functions.php:643 includes/fastbill-functions.php:680
-#: includes/fastbill-functions.php:735 includes/fastbill-functions.php:788
+#: includes/fastbill-functions.php:167 includes/fastbill-functions.php:219
+#: includes/fastbill-functions.php:385 includes/fastbill-functions.php:442
+#: includes/fastbill-functions.php:497 includes/fastbill-functions.php:551
+#: includes/fastbill-functions.php:606 includes/fastbill-functions.php:639
+#: includes/fastbill-functions.php:646 includes/fastbill-functions.php:683
+#: includes/fastbill-functions.php:738 includes/fastbill-functions.php:791
 msgid "Error: "
 msgstr "Fehler: "
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:215
+#: includes/fastbill-functions.php:218
 msgid "There was an error looking up this customer in FastBill:"
 msgstr "Es gab einen Fehler beim Suchen des Kunden bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:279
+#: includes/fastbill-functions.php:282
 msgid "Discount used: "
 msgstr "Verwendeter Gutschein-Code: "
 
-#: includes/fastbill-functions.php:312
+#: includes/fastbill-functions.php:315
 msgid "renewal"
 msgstr "Lizenzverlängerung"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:381
+#: includes/fastbill-functions.php:384
 msgid "There was an error adding the invocie to FastBill:"
 msgstr "Es gab einen Fehler beim Erstellen der Rechnung bei FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:438 includes/fastbill-functions.php:493
+#: includes/fastbill-functions.php:441 includes/fastbill-functions.php:496
 msgid "There was an error completing invoice in FastBill:"
 msgstr "Es gab einen Fehler beim finalen Erstellen der Rechnung:"
 
-#: includes/fastbill-functions.php:547
+#: includes/fastbill-functions.php:550
 msgid "There was an error canceling an invoice in FastBill:"
 msgstr "Es gab einen Fehler beim canceln der Rechnung in FastBill:"
 
-#: includes/fastbill-functions.php:602
+#: includes/fastbill-functions.php:605
 msgid "There was an error deleting an invoice in FastBill:"
 msgstr "Es gab einen Fehler beim löschen der Rechnung in FastBill:"
 
-#: includes/fastbill-functions.php:679
+#: includes/fastbill-functions.php:682
 msgid "There was an error sending an invoice via FastBill:"
 msgstr "Es gab einen Fehler beim senden der Rechnung via FastBill:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:734
+#: includes/fastbill-functions.php:737
 msgid "There was an error creating a payment in FastBill:"
 msgstr "Es gab einen Fehler beim setzen der Rechnung als bezahlt:"
 
 # @ edd-fastbill
-#: includes/fastbill-functions.php:787
+#: includes/fastbill-functions.php:790
 msgid "There was an error when receiving templates from FastBill:"
 msgstr ""
 "Es gab einen Fehler bei der Abfrage der Rechnungs-Vorlagen von Fastbild:"

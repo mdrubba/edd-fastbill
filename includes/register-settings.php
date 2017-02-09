@@ -212,7 +212,16 @@ function drubba_fb_get_invoice_templates() {
 		'' => __( 'Default', 'edd-fastbill' )
 	);
 
-	$fastbill        = new \drumba\EDD\FastBill\FastBill();
+	try {
+
+		$fastbill = new \drumba\EDD\FastBill\FastBill();
+
+	} catch ( \Exception $e ) {
+
+		return $templates;
+
+	}
+
 	$templates_array = $fastbill->templates_get();
 
 	if ( ! isset( $templates_array['TEMPLATE'] ) ) {

@@ -39,6 +39,11 @@ Store owners can create FastBill incoices, sending Email with the invoice, let u
 
 == Changelog ==
 
+= 2017-02-09 1.5.1 =
+
+* Fixed: Fatal Error on plugin activation or when the FastBill credentials are not saved
+* Fixed: Fixed a PHP Notice when no advanced payment gateways is selected
+
 = 2017-02-04 1.5.0 =
 
 * New: Logging class

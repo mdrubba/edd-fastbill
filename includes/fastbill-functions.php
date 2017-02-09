@@ -13,6 +13,7 @@ namespace drumba\EDD\FastBill;
 
 use drumba\EDD\FastBill\Helper\Logger;
 use SimpleXMLElement;
+use Exception;
 
 class FastBill {
 
@@ -22,24 +23,26 @@ class FastBill {
 	/**
 	 * Create a new instance
 	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function __construct() {
 		global $edd_options;
+
+		if ( ! isset( $edd_options['drubba_fb_fastbill_api_key'] ) || ! isset( $edd_options['drubba_fb_fastbill_email'] ) ) {
+			throw new Exception( __( 'Invalid FastBill credentials supplied', 'edd-fastbill' ) );
+		}
 
 		$this->api_key   = $edd_options['drubba_fb_fastbill_api_key'];
 		$this->api_email = $edd_options['drubba_fb_fastbill_email'];
 		$this->logger    = new Logger( 'edd_fastbill_error_log' );
 
-		if ( empty( $this->api_key ) || empty( $this->api_email ) ) {
-			throw new \Exception( __( 'Invalid FastBill credentials supplied', 'edd-fastbill' ) );
-		}
 	}
 
 	/**
 	 * Create a client record in FastBill for the given order.
 	 *
-	 * @param $payment_id
+	 * @param         $payment_id
+	 * @param boolean $client_id
 	 *
 	 * @return mixed
 	 * @throws Exception
