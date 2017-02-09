@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/markusdrubba
 Tags: Easy Digital Downloads, EDD, Fastbill, Accounting, Invoice
 Requires at least: 4.5
 Tested up to: 4.7.2
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
