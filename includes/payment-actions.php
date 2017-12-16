@@ -29,8 +29,8 @@ class Payment_Actions {
 
 		$this->edd_options    = $edd_options;
 		$this->fastbill       = $fastbill;
-		$this->create_payment = isset( $this->edd_options['drubba_fb_fastbill_payments'] ) ? $this->edd_options['drubba_fb_fastbill_payments'] : 0;
-		$this->invoice_status = isset( $this->edd_options['drubba_fb_fastbill_invoice_status'] ) ? $this->edd_options['drubba_fb_fastbill_invoice_status'] : 'draft';
+		$this->create_payment = 1;
+		$this->invoice_status = 'complete';
 		$this->send_invoice   = isset( $this->edd_options['drubba_fb_fastbill_sendbyemail'] ) ? $this->edd_options['drubba_fb_fastbill_sendbyemail'] : 0;
 
 	}
