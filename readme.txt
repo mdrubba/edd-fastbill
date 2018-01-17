@@ -3,8 +3,8 @@ Contributors: drumba
 Donate link: https://www.paypal.me/markusdrubba
 Tags: Easy Digital Downloads, EDD, Fastbill, Accounting, Invoice
 Requires at least: 4.5
-Tested up to: 4.7.2
-Stable tag: 1.5.1
+Tested up to: 4.9.2
+Stable tag: 1.6.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -38,6 +38,11 @@ Store owners can create FastBill incoices, sending Email with the invoice, let u
 
 
 == Changelog ==
+
+= 2018-01-17 1.6.0 =
+
+* New: added support for EDD Reccuring Payments addon (props to @flowdee)
+* Fixed: removed no longer existent dependency for creating payment and invoice status settings (props to @flowdee)
 
 = 2017-02-09 1.5.1 =
 
