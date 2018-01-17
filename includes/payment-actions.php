@@ -29,8 +29,8 @@ class Payment_Actions {
 
 		$this->edd_options    = $edd_options;
 		$this->fastbill       = $fastbill;
-		$this->create_payment = isset( $this->edd_options['drubba_fb_fastbill_payments'] ) ? $this->edd_options['drubba_fb_fastbill_payments'] : 0;
-		$this->invoice_status = isset( $this->edd_options['drubba_fb_fastbill_invoice_status'] ) ? $this->edd_options['drubba_fb_fastbill_invoice_status'] : 'draft';
+		$this->create_payment = 1;
+		$this->invoice_status = 'complete';
 		$this->send_invoice   = isset( $this->edd_options['drubba_fb_fastbill_sendbyemail'] ) ? $this->edd_options['drubba_fb_fastbill_sendbyemail'] : 0;
 
 	}
@@ -38,6 +38,7 @@ class Payment_Actions {
 	public function load() {
 		add_action( 'edd_update_payment_status', [ $this, 'on_update_payment_status' ], 10, 3 );
 		add_action( 'edd_insert_payment', [ $this, 'on_insert_payment' ], 10, 2 );
+		add_action( 'edd_recurring_record_payment', [ $this, 'on_record_reccuring_payment' ], 10, 4 );
 	}
 
 	public function on_insert_payment( $payment_id, $payment_data ) {
@@ -63,6 +64,32 @@ class Payment_Actions {
 			$this->_on_payment_status_canceled();
 		}
 	}
+
+    /**
+     * Support for "EDD Recurring Payments" addon
+     *
+     * @param $payment_id
+     * @param $parent_id
+     * @param $amount
+     * @param $txn_id
+     */
+	public function on_record_reccuring_payment( $payment_id, $parent_id, $amount, $txn_id ) {
+
+        $this->payment_id = $payment_id;
+
+        // create invoice for $payment_id
+        $this->fastbill->invoice_create( $this->payment_id, 'direct' );
+
+        // create payment if activated
+        if ( $this->create_payment == 1 ) {
+            $this->fastbill->payment_create( $this->payment_id );
+        }
+
+        // send invoice by email if activated
+        if ( $this->send_invoice == 1 ) {
+            $this->fastbill->invoice_sendbyemail( $this->payment_id );
+        }
+    }
 
 	private function _on_payment_status_pending() {
 		if ( $this->_checkout_with_advance_payment_gateway() ) {
