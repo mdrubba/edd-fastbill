@@ -68,6 +68,8 @@ class Payment_Actions {
     /**
      * Support for "EDD Recurring Payments" addon
      *
+     * @since 1.6.0
+     *
      * @param $payment_id
      * @param $parent_id
      * @param $amount

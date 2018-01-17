@@ -5,7 +5,7 @@ Plugin URI: https://wordpress.org/plugins/edd-fastbill/
 Description: Integrates <a href="https://easydigitaldownloads.com/?ref=2325" target="_blank">Easy Digital Downloads</a> with the <a href="http://www.fastbill.com" target="_blank">FastBill - fast money</a> accounting software.
 Author: Markus Drubba
 Author URI: http://markusdrubba.de
-Version: 1.5.1
+Version: 1.6.0
 Text Domain: edd-fastbill
 Domain Path: /languages
 
